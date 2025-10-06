@@ -4,7 +4,7 @@ const pathConfigs = [
   {
     path: "/",
     allowed_methods: ["GET"],
-    handler: (req, res) => {
+    handler(req, res) {
       res.writeHead(404, { 'Content-Type': 'text/html' });
       res.end(index_html);
     }
@@ -12,7 +12,7 @@ const pathConfigs = [
   {
     path: "/hello",
     allowed_methods: ["GET"],
-    handler: (req, res) => {
+    handler(req, res) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end("hello word \n");
     }
