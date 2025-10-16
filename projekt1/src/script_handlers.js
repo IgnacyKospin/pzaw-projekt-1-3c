@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
-const index_html = readFileSync(`html/index.html`);
-const favicon = readFileSync(`favicon.ico`);
+const index_html = readFileSync(`projekt1/html/index.html`);
+const favicon = readFileSync(`projekt1/favicon.ico`);
 const pathConfigs = [
   {
     path: "/",
