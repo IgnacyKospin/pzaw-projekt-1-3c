@@ -1,20 +1,21 @@
 import { readFileSync } from "node:fs";
 const index_html = readFileSync(`html/index.html`);
+const favicon = readFileSync(`favicon.ico`);
 const pathConfigs = [
   {
     path: "/",
     allowed_methods: ["GET"],
     handler(req, res) {
-      res.writeHead(404, { 'Content-Type': 'text/html' });
+      res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(index_html);
     }
   },
   {
-    path: "/hello",
+    path: "/favicon.ico",
     allowed_methods: ["GET"],
     handler(req, res) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end("hello word \n");
+      res.writeHead(200, { 'Content-Type': 'image/vnd.microsoft.icon' });
+      res.end(favicon);
     }
   },
 ];
