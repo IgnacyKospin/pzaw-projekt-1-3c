@@ -2,11 +2,11 @@
 
 <main>
     <h1><%= title %></h1>
-    <ul id="categories">
-        <% categories.forEach(function(category){ %>
-        <li><%= category %></li>
+    <ul id="flashcards">
+        <% categories.forEach(function(card){ %>
+        <li><a href="/cards/<%= card.id %>"><%= card.name %></a></li>
         <% }) %>
-    </ul>
+  </ul>
 </main>
 
 <%- include("foot.partial.ejs") %>
