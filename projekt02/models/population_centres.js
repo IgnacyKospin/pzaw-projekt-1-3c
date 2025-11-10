@@ -1,18 +1,12 @@
-import "production_methods.js";
+
+import { getStatistics } from "./production_methods.js";
+import { updateYearlyProduction } from "./goods.js";
 const population_centres = {
-    "Warszawa": {
+    "warszawa": {
         name: "Warszawa",
         population: 1860000,
-        employed: 10,
-        dependants: 10,
-        detailed_employment: [
-            {
-                job: "Labourer",
-                amount: 10
-            }
-        ],
         facilities: [
-            { facility_name: "Steel Mill", facility_amount: 1, production_method: "Bessemer Process", employees: 10 }
+            { facility_name: "Steel Mill", facility_amount: 1, production_method: "Bessemer Process"}
         ],
         goods_production: [
             {
@@ -26,28 +20,59 @@ const population_centres = {
         ]
     }
 }
-function updateProduction(productionSum){
-    //todo: have this collect all the production methods production times facility_amount for all in facilities, sum up for all goods, update goods_production
-}
-function updateConsumption(consumptionSum){
-    //todo: do what updateProduction but for consumtion instead of production
-}
-export function updateEconomicStatistics(populationCentre){
-    //collect both production and consumption sum from production methods times facility amoutn for all in facilites, pass to updateProduction and updateConsumption.
-    productionSum = [];
-    consumptionSum = [];
-    for(let facilities_loop of population_centres[populationCentre].facilities){
-        current_pm = getStatistics(facilities_loop.production_method);
-        for(let input_loop of current_pm.input_goods){
-            consumptionSum.append() = input_loop;
+function updateProduction() {
+    for (cityName in population_centres) {
+        city = population_centres[cityName];
+        arrayProd = {};
+        for (facLoop of city.facilities) {
+            statistics = getStatistics(facLoop.production_method.toLowerCase().replaceAll(" ", "_"));
+            if (!statistics || !statistics.output_goods) continue;
+            for (statLoop of statistics.output_goods) {
+                totalAmount = statLoop.amount * facLoop.facility_amount;
+                arrayProd[statLoop.name] = (arrayProd[statLoop.name] || 0) + totalAmount;
+            }
         }
-        for(let output_loop of current_pm.output_goods){
-            productionSum.append() = output_loop;
-        }
+        city.goods_production = Object.entries(arrayProd).map(([good_name, amount]) => ({
+            good_name,
+            amount
+        }));
     }
-    //todo: remove duplicate key objects, sum their values for both arrays then call both updateProduction and updateConsumption.
-    //todo add lodash if can
 }
-export function updateEmployment(){
-    //todo: have this collect all employment stats from all the production methods times facilities for all in facilities, sum up, update employed and detailed_employment
+function updateConsumption(){
+        for (cityName in population_centres) {
+        city = population_centres[cityName];
+        arrayProd = {};
+        for (facLoop of city.facilities) {
+            statistics = getStatistics(facLoop.production_method.toLowerCase().replaceAll(" ", "_"));
+            if (!statistics || !statistics.input_goods) continue;
+            for ( tatLoop of statistics.input_goods) {
+                totalAmount = statLoop.amount * facLoop.facility_amount;
+                arrayProd[statLoop.name] = (arrayProd[statLoop.name] || 0) + totalAmount;
+            }
+        }
+        city.goods_consumption = Object.entries(arrayProd).map(([good_name, amount]) => ({
+            good_name,
+            amount
+        }));
+    }
+}
+export function exportViews(){
+    var toReturn = [];
+    for(let loopCentres in population_centres){
+        toReturn.push(        
+            {
+                id: loopCentres,
+                name: population_centres[loopCentres].name 
+            }
+        )
+    }
+    return toReturn;
+}
+export function updateEconomicStatistics(populationCentre) {
+    updateProduction();
+    updateConsumption();
+    updateYearlyProduction()
+}
+export default {
+    exportViews
 }

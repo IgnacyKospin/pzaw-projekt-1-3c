@@ -33,3 +33,18 @@ const production_methods = {
 export function getStatistics(processName){
     return production_methods[processName];
 }
+export function exportViews(){
+    var toReturn = [];
+    for(let loopMethods in production_methods){
+        toReturn.push(        
+            {
+                id: loopMethods,
+                name: production_methods[loopMethods].name 
+            }
+        )
+    }
+    return toReturn;
+}
+export default {
+    exportViews
+}
