@@ -1,25 +1,15 @@
 import goodsImport from "./goods.js";
 import populationCentresImport from "./population_centres.js";
-function hasTab(tabId) {
-    const collections = [
-        goodsImport.exportViews(),
-        populationCentresImport.exportViews()
-    ];
-    for (const collection of collections) {
-        if (collection.some(item => item.id === tabId)) {
-            return true;
-        }
-    }
-    return false;
-}
+import productionMethodsImport from "./production_methods.js";
 export function getTab(tabId) {
     const allTabs = [
         ...goodsImport.exportViews(),
-        ...populationCentresImport.exportViews()
+        ...populationCentresImport.exportViews(),
+        ...productionMethodsImport.exportViews()
     ];
-    const found = allTabs.find(tab => tab.id === tabId);
+    const found = allTabs.find(tab => tab.id == tabId);
     return found || null;
 }
 export default {
-    getTab
+    getTab,
 }

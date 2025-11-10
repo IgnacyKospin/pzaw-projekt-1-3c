@@ -33,10 +33,11 @@ app.get("/tabs", (req, res) => {
 });
 
 app.get("/tabs/:tab_id", (req, res) => {
-    const tab = masterUtil.getTab(req.params.tab_id);
-    if (tab) {
+    const tabs = masterUtil.getTab(req.params.tab_id);
+    if (tabs) {
         res.render("tab", {
-            title: tab.name,
+            title: tabs.name,
+            contents: tabs.contents
         });
     } else {
         res.sendStatus(404);

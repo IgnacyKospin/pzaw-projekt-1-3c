@@ -4,7 +4,12 @@ import { updateYearlyProduction } from "./goods.js";
 const population_centres = {
     "warszawa": {
         name: "Warszawa",
-        population: 1860000,
+        data: [
+            {
+                population: 1960000,
+                unemployed: 1000
+            }
+        ],
         facilities: [
             { facility_name: "Steel Mill", facility_amount: 1, production_method: "Bessemer Process"}
         ],
@@ -58,12 +63,21 @@ function updateConsumption(){
 }
 export function exportViews(){
     var toReturn = [];
-    for(let loopCentres in population_centres){
+
+    for(let loopHighLevel in population_centres){
+        let returnFormatted = {};
+        for(let loopElements in loopHighLevel){
+            if(Array.isArray(population_centres[loopHighLevel][loopElements])){
+                returnFormatted.loopElements = population_centres[loopHighLevel][loopElements];
+            }
+        }
         toReturn.push(        
             {
-                id: loopCentres,
-                name: population_centres[loopCentres].name 
+                id: loopHighLevel,
+                name: population_centres[loopHighLevel].name,
+                contents: returnFormatted
             }
+            
         )
     }
     return toReturn;

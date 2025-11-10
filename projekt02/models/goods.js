@@ -80,12 +80,20 @@ exterior server utility below
 */ 
 export function exportViews(){
     var toReturn = [];
-    for(let loopGoods in goods){
+    for(let loopHighLevel in goods){
+        let returnFormatted = {};
+        for(let loopElements in loopHighLevel){
+            if(Array.isArray(goods[loopHighLevel][loopElements])){
+                returnFormatted.loopElements = goods[loopHighLevel][loopElements];
+            }
+        }
         toReturn.push(        
             {
-                id: loopGoods,
-                name: goods[loopGoods].name 
+                id: loopHighLevel,
+                name: goods[loopHighLevel].name,
+                contents: returnFormatted
             }
+            
         )
     }
     return toReturn;

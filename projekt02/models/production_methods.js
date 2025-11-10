@@ -35,12 +35,20 @@ export function getStatistics(processName){
 }
 export function exportViews(){
     var toReturn = [];
-    for(let loopMethods in production_methods){
+    for(let loopHighLevel in production_methods){
+        let returnFormatted = {};
+        for(let loopElements in loopHighLevel){
+            if(Array.isArray(production_methods[loopHighLevel][loopElements])){
+                returnFormatted.loopElements = production_methods[loopHighLevel][loopElements];
+            }
+        }
         toReturn.push(        
             {
-                id: loopMethods,
-                name: production_methods[loopMethods].name 
+                id: loopHighLevel,
+                name: production_methods[loopHighLevel].name,
+                contents: returnFormatted
             }
+            
         )
     }
     return toReturn;
