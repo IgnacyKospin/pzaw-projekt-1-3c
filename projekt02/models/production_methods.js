@@ -1,3 +1,4 @@
+import masterUtil from "./masterUtil.js";
 const production_methods = {
     "bessemer_process": {
         name: "Bessemer Process",
@@ -34,24 +35,7 @@ export function getStatistics(processName){
     return production_methods[processName];
 }
 export function exportViews(){
-    var toReturn = [];
-    for(let loopHighLevel in production_methods){
-        let returnFormatted = {};
-        for(let loopElements in loopHighLevel){
-            if(Array.isArray(production_methods[loopHighLevel][loopElements])){
-                returnFormatted.loopElements = production_methods[loopHighLevel][loopElements];
-            }
-        }
-        toReturn.push(        
-            {
-                id: loopHighLevel,
-                name: production_methods[loopHighLevel].name,
-                contents: returnFormatted
-            }
-            
-        )
-    }
-    return toReturn;
+    return masterUtil.viewFormatter(production_methods);
 }
 export default {
     exportViews

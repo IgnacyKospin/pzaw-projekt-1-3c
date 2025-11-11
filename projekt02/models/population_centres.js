@@ -1,6 +1,7 @@
 
 import { getStatistics } from "./production_methods.js";
 import { updateYearlyProduction } from "./goods.js";
+import masterUtil from "./masterUtil.js";
 const population_centres = {
     "warszawa": {
         name: "Warszawa",
@@ -62,25 +63,7 @@ function updateConsumption(){
     }
 }
 export function exportViews(){
-    var toReturn = [];
-
-    for(let loopHighLevel in population_centres){
-        let returnFormatted = {};
-        for(let loopElements in loopHighLevel){
-            if(Array.isArray(population_centres[loopHighLevel][loopElements])){
-                returnFormatted.loopElements = population_centres[loopHighLevel][loopElements];
-            }
-        }
-        toReturn.push(        
-            {
-                id: loopHighLevel,
-                name: population_centres[loopHighLevel].name,
-                contents: returnFormatted
-            }
-            
-        )
-    }
-    return toReturn;
+    return masterUtil.viewFormatter(population_centres);
 }
 export function updateEconomicStatistics(populationCentre) {
     updateProduction();

@@ -1,12 +1,16 @@
 <%- include("head.part.ejs") %> 
 <main> 
-    <h1><%= title %></h1> 
-    <ul id="contents"> 
-        <%contents.forEach(function(tabs){ %>
-            <h2><%= tabs.title %></h1>
-            <% tabs.forEach(function(cat){ %>
-            <li><%= cat %></li>
-            <% }) %>
-        <%})%>
-    </ul> 
+<!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
+<ul id="contents">
+    <% for (let key in contents) { %>
+        <h2><%= key %></h2>
+        <% contents[key].forEach(function(highObject) { %>
+            <li>
+                <% for (let lowObject in highObject) { %>
+                    <%= lowObject %>: <%= highObject[lowObject] %><br>
+                <% } %>
+            </li>
+        <% }) %>
+    <% } %>
+</ul>
 </main>

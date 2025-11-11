@@ -10,6 +10,24 @@ export function getTab(tabId) {
     const found = allTabs.find(tab => tab.id == tabId);
     return found || null;
 }
+export function viewFormatter(objectName) {
+    const toReturn = [];
+    for (let loopHighLevel in objectName) {
+        const returnFormatted = {};
+        for (let loopElements in objectName[loopHighLevel]) {
+            if (Array.isArray(objectName[loopHighLevel][loopElements])) {
+                returnFormatted[loopElements] = objectName[loopHighLevel][loopElements];
+            }
+        }
+        toReturn.push({
+            id: loopHighLevel,
+            name: objectName[loopHighLevel].name,
+            contents: returnFormatted
+        });
+    }
+    return toReturn;
+}
 export default {
     getTab,
+    viewFormatter
 }

@@ -1,4 +1,4 @@
-
+import masterUtil from "./masterUtil.js";
 const goods = {
     "industrial_goods" : {
         name: "Industrial Goods",
@@ -72,32 +72,15 @@ export function updateYearlyProduction() {
         }
     }
 }
-
+export function exportViews(){
+    return masterUtil.viewFormatter(goods);
+}
 /*
 
 exterior server utility below
 
 */ 
-export function exportViews(){
-    var toReturn = [];
-    for(let loopHighLevel in goods){
-        let returnFormatted = {};
-        for(let loopElements in loopHighLevel){
-            if(Array.isArray(goods[loopHighLevel][loopElements])){
-                returnFormatted.loopElements = goods[loopHighLevel][loopElements];
-            }
-        }
-        toReturn.push(        
-            {
-                id: loopHighLevel,
-                name: goods[loopHighLevel].name,
-                contents: returnFormatted
-            }
-            
-        )
-    }
-    return toReturn;
-}
+
 export default {
     getBalance,
     updateYearlyProduction,
