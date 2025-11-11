@@ -1,43 +1,47 @@
 import masterUtil from "./masterUtil.js";
 const goods = {
-    "industrial_goods" : {
-        name: "Industrial Goods",
-        goods: [
-            {
-                name: "Steel",
-                yearly_production: 100,
-                yearly_consumption: 50,
-                kilogram_price: 0.16
-            },
-            {
-                name: "Coal",
-                yearly_production: 50,
-                yearly_consumption: 25,
-                kilogram_price: 10
-            }
-        ]
-    },
-    "agrarian_goods" : {
-        name: "Agrarian Goods",
-        goods: [
-            {
-                name: "Grain",
-                yearly_production: 100,
-                yearly_consumption: 50,
-                kilogram_price: 0.16
-            },
-            {
-                name: "Meat",
-                yearly_production: 50,
-                yearly_consumption: 25,
-                kilogram_price: 10
-            }
-        ]
+    name: "Goods",
+    id: "goods",
+    contents: {
+        "industrial_goods" : {
+            name: "Industrial Goods",
+            goods: [
+                {
+                    name: "Steel",
+                    yearly_production: 100,
+                    yearly_consumption: 50,
+                    kilogram_price: 0.16
+                },
+                {
+                    name: "Coal",
+                    yearly_production: 50,
+                    yearly_consumption: 25,
+                    kilogram_price: 10
+                }
+            ]
+        },
+        "agrarian_goods" : {
+            name: "Agrarian Goods",
+            goods: [
+                {
+                    name: "Grain",
+                    yearly_production: 100,
+                    yearly_consumption: 50,
+                    kilogram_price: 0.16
+                },
+                {
+                    name: "Meat",
+                    yearly_production: 50,
+                    yearly_consumption: 25,
+                    kilogram_price: 10
+                }
+            ]
+        }
     }
 }
 function getGoodCategory(good_name) {
     for (const categoryKey of Object.keys(goods)) {
-        const category = goods[categoryKey];
+        const category = goods.contents[categoryKey];
         if (category.goods.some(g => g.name.toLowerCase() === good_name.toLowerCase())) {
             return categoryKey;
         }
@@ -47,27 +51,27 @@ function getGoodCategory(good_name) {
 //production minus consumption
 export function getBalance(good_name) {
     const categoryKey = getGoodCategory(good_name);
-    const good = goods[categoryKey].goods.find(g => g.name.toLowerCase() === good_name.toLowerCase());
+    const good = goods.contents[categoryKey].goods.find(g => g.name.toLowerCase() === good_name.toLowerCase());
     return good.yearly_production - good.yearly_consumption;
 }
 
 //counts from population centres the total production
 export function updateYearlyProduction() {
     for (const categoryKey in goods) {
-        for (const g of goods[categoryKey].goods) {
+        for (const g of goods.contents[categoryKey].goods) {
             g.yearly_production = 0;
         }
     }
-    for (cityName in population_centres) {
-        city = population_centres[cityName];
+    for (cityName in population_centres.contents) {
+        city = population_centres.contents[cityName];
         if (!city.goods_production) continue;
 
         for (prod of city.goods_production) {
             goodKey = Object.keys(industrial_goods).find(
-                key => industrial_goods[key].name.toLowerCase() === prod.good_name.toLowerCase()
+                key => industrial_goods.contents[key].name.toLowerCase() === prod.good_name.toLowerCase()
             );
             if (goodKey) {
-                industrial_goods[goodKey].yearly_production += prod.amount;
+                industrial_goods.contents[goodKey].yearly_production += prod.amount;
             }
         }
     }

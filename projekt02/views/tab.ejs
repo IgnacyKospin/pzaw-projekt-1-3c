@@ -2,6 +2,7 @@
 <main> 
 <!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
 <ul id="contents">
+            <%= category %>
     <% for (let key in contents) { %>
         <h2><%= key %></h2>
         <% contents[key].forEach(function(highObject) { %>

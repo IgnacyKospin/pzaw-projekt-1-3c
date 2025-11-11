@@ -5,7 +5,7 @@
     <ul id="econCategories">
         <%listOfTabs.forEach(function(tabs){ %>
             <h2><%= tabs.title %></h1>
-            <% tabs.categories.forEach(function(cat){ %>
+            <% tabs.contents.forEach(function(cat){ %>
             <li><a href="/tabs/<%= cat.id %>"><%= cat.name %></a></li>
             <% }) %>
         <%})%>

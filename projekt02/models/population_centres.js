@@ -3,32 +3,36 @@ import { getStatistics } from "./production_methods.js";
 import { updateYearlyProduction } from "./goods.js";
 import masterUtil from "./masterUtil.js";
 const population_centres = {
-    "warszawa": {
-        name: "Warszawa",
-        data: [
-            {
-                population: 1960000,
-                unemployed: 1000
-            }
-        ],
-        facilities: [
-            { facility_name: "Steel Mill", facility_amount: 1, production_method: "Bessemer Process"}
-        ],
-        goods_production: [
-            {
-                good_name: "Steel", amount: 10
-            }   
-        ],
-        goods_consumption: [
-            {
-                good_name: "Coal", amount: 30
-            }
-        ]
+    name: "Population Centres",
+    id: "population_centres",
+    contents: {
+        "warszawa": {
+            name: "Warszawa",
+            data: [
+                {
+                    population: 1960000,
+                    unemployed: 1000
+                }
+            ],
+            facilities: [
+                { facility_name: "Steel Mill", facility_amount: 1, production_method: "Bessemer Process"}
+            ],
+            goods_production: [
+                {
+                    good_name: "Steel", amount: 10
+                }   
+            ],
+            goods_consumption: [
+                {
+                    good_name: "Coal", amount: 30
+                }
+            ]
+        }
     }
 }
 function updateProduction() {
-    for (cityName in population_centres) {
-        city = population_centres[cityName];
+    for (cityName in population_centres.contents) {
+        city = population_centres.contents[cityName];
         arrayProd = {};
         for (facLoop of city.facilities) {
             statistics = getStatistics(facLoop.production_method.toLowerCase().replaceAll(" ", "_"));
@@ -45,8 +49,8 @@ function updateProduction() {
     }
 }
 function updateConsumption(){
-        for (cityName in population_centres) {
-        city = population_centres[cityName];
+        for (cityName in population_centres.contents) {
+        city = population_centres.contents[cityName];
         arrayProd = {};
         for (facLoop of city.facilities) {
             statistics = getStatistics(facLoop.production_method.toLowerCase().replaceAll(" ", "_"));

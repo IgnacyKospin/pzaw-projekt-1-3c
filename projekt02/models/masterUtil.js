@@ -12,16 +12,17 @@ export function getTab(tabId) {
 }
 export function viewFormatter(objectName) {
     const toReturn = [];
-    for (let loopHighLevel in objectName) {
+    for (let loopHighLevel in objectName.contents) {
         const returnFormatted = {};
-        for (let loopElements in objectName[loopHighLevel]) {
-            if (Array.isArray(objectName[loopHighLevel][loopElements])) {
-                returnFormatted[loopElements] = objectName[loopHighLevel][loopElements];
+        for (let loopElements in objectName.contents[loopHighLevel]) {
+            if (Array.isArray(objectName.contents[loopHighLevel][loopElements])) {
+                returnFormatted[loopElements] = objectName.contents[loopHighLevel][loopElements];
             }
         }
         toReturn.push({
             id: loopHighLevel,
-            name: objectName[loopHighLevel].name,
+            name: objectName.contents[loopHighLevel].name,
+            category: objectName.id,
             contents: returnFormatted
         });
     }
