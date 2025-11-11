@@ -2,6 +2,7 @@ import masterUtil from "./masterUtil.js";
 const production_methods = {
     name: "Production Methods",
     id: "production_methods",
+    supportsAdding: false,
     contents: {
         "bessemer_process": {
             name: "Bessemer Process",

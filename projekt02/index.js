@@ -38,41 +38,19 @@ app.get("/tabs/:tab_id", (req, res) => {
         res.render("tab", {
             category: tabs.category,
             title: tabs.name,
+            tab_id: tabs.id,
+            supportAdding: tabs.supportAdding,
             contents: tabs.contents
         });
     } else {
         res.sendStatus(404);
     }
 });
-/*app.post("/tabs:/:tab_id/addData", (req, res) => {
+app.post("/tabs/:tab_id/addData", (req, res) => {
     const tabs = masterUtil.getTab(req.params.tab_id);
-    if (!tabs) {
-        res.sendStatus(404);
-    } 
-    else {
-        let card_data = {
-            front: req.body.front,
-            back: req.body.back,
-            category_id: category_id
-        };
-        var errors = masterUtil.validateData(card_data, category_id);
-        if(errors.length == 0){
-            res.redirect(`/tabs/${tabs.id}`);
-        }
-        else{
-            res.status(400);
-            res.render("new_card", {
-                errors,
-                title: "Nowa fiszka",
-                front: req.body.front,
-                back: req.body.back,
-                category: {
-                    id: category_id,
-                },
-            });
-        }
-    }
-});*/
+    if (!tabs) return res.sendStatus(404);
+    masterUtil.handleNew(tabs, req.body, res);
+});
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);
 });

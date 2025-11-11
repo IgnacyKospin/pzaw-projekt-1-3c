@@ -2,6 +2,7 @@ import masterUtil from "./masterUtil.js";
 const goods = {
     name: "Goods",
     id: "goods",
+    supportsAdding: true,
     contents: {
         "industrial_goods" : {
             name: "Industrial Goods",
@@ -79,14 +80,34 @@ export function updateYearlyProduction() {
 export function exportViews(){
     return masterUtil.viewFormatter(goods);
 }
-/*
-
-exterior server utility below
-
-*/ 
-
+function validateNewObject(newGood) {
+    let errors = [];
+    const fields = ["name", "kilogram_price", "category"];
+    for (let field of fields) {
+        if (!newGood[field]) {
+            errors.push(`Missing ${field}`);
+        } else if (field == "kilogram_price" && Number(newGood.kilogram_price) == NaN) {
+            errors.push("Kilogram price not a number");
+        }
+    }
+    const category = goods.contents[newGood.category];
+    if (category) {
+        const exists = category.goods.some(g => g.name === newGood.name);
+        if (exists) {
+            errors.push(`${newGood.name} already exists in ${category.name}`);
+        }
+    } else {
+        errors.push(`Invalid category: ${newGood.category}`);
+    }
+    return errors;
+}
+export function addNewObject(newObj){
+    goods.contents[newObj.category].goods.push(newObj.contents);
+}
 export default {
     getBalance,
     updateYearlyProduction,
-    exportViews
+    exportViews,
+    validateNewObject,
+    addNewObject
 }

@@ -5,6 +5,7 @@ import masterUtil from "./masterUtil.js";
 const population_centres = {
     name: "Population Centres",
     id: "population_centres",
+    supportsAdding: false,
     contents: {
         "warszawa": {
             name: "Warszawa",

@@ -28,7 +28,33 @@ export function viewFormatter(objectName) {
     }
     return toReturn;
 }
+export function handleNew(tab, newData, res) {
+    let totalHandler = {};
+    switch (tab.category) {
+        case "goods":
+            totalHandler.errors = goodsImport.validateNewObject(newData);
+            break;
+    }
+    if (totalHandler.errors.length === 0) {
+        switch (tab.category) {
+            case "goods":
+                goodsImport.addNewObject(newData);
+                break;
+        }
+        res.redirect(`/tabs/${tab.id}`);
+    } else {
+        res.status(400).render("add_new", {
+            errors: totalHandler.errors,
+            title: "New Obj",
+            contents: tab.contents,
+            category: tab.category,
+            tab_id: tab.id
+        });
+    }
+}
+
 export default {
     getTab,
-    viewFormatter
+    viewFormatter,
+    handleNew
 }
