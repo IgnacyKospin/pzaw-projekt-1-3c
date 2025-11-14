@@ -86,7 +86,7 @@ function validateNewObject(newGood) {
     for (let field of fields) {
         if (!newGood[field]) {
             errors.push(`Missing ${field}`);
-        } else if (field == "kilogram_price" && Number(newGood.kilogram_price) == NaN) {
+        } else if (field == "kilogram_price" && isNaN(Number(newGood.kilogram_price))) {
             errors.push("Kilogram price not a number");
         }
     }
@@ -102,7 +102,14 @@ function validateNewObject(newGood) {
     return errors;
 }
 export function addNewObject(newObj){
-    goods.contents[newObj.category].goods.push(newObj.contents);
+    const newCategory = newObj.category;
+    const toStore = {
+        name: newObj.name,
+        kilogram_price: Number(newObj.kilogram_price),
+        yearly_production: 0,
+        yearly_consumption: 0
+    };
+    goods.contents[newCategory].goods.push(toStore);
 }
 export default {
     getBalance,

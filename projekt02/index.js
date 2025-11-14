@@ -9,7 +9,6 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
-
 app.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
@@ -39,7 +38,7 @@ app.get("/tabs/:tab_id", (req, res) => {
             category: tabs.category,
             title: tabs.name,
             tab_id: tabs.id,
-            supportAdding: tabs.supportAdding,
+            supportAdding: tabs.supportsAdding,
             contents: tabs.contents
         });
     } else {
