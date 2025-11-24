@@ -1,4 +1,6 @@
 import masterUtil from "./masterUtil.js";
+import { DatabaseSync } from "node:sqlite";
+
 const goods = {
     name: "Goods",
     id: "goods",
