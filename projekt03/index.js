@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import goods from "./models/goods.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
@@ -9,6 +10,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
+app.use(morgan("dev"));
 app.get("/tabs", (req, res) => {
     res.render("tabs", 
     {

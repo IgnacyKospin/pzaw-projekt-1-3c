@@ -105,9 +105,9 @@ export function addNewObject(newObj){
     const newCategory = newObj.category;
     const toStore = {
         name: newObj.name,
-        kilogram_price: Number(newObj.kilogram_price),
         yearly_production: 0,
-        yearly_consumption: 0
+        yearly_consumption: 0,
+        kilogram_price: Number(newObj.kilogram_price)
     };
     goods.contents[newCategory].goods.push(toStore);
 }
