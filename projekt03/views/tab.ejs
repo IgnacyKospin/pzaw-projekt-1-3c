@@ -1,0 +1,20 @@
+<%- include("head.part.ejs") %> 
+<main> 
+<!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
+<ul id="contents">
+    <% for (let key in contents) { %>
+        <h2><%= key %></h2>
+        <% contents[key].forEach(function(highObject) { %>
+            <li>
+                <% for (let lowObject in highObject) { %>
+                    <%= lowObject %>: <%= highObject[lowObject] %><br>
+                <% } %>
+            </li>
+        <% }) %>
+    <% } %>
+    <div>
+        <h1>new</h1>
+        <%- include("forms/add_to_category.ejs") %>
+    </div>
+</ul>
+</main>
