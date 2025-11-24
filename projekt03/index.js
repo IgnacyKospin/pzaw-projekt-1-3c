@@ -11,6 +11,13 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
 app.use(morgan("dev"));
+
+function log_request(req, res, next) {
+  console.log(`Request ${req.method} ${req.path}`);
+  next();
+}
+app.use(log_request);
+
 app.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
@@ -52,6 +59,7 @@ app.post("/tabs/:tab_id/addData", (req, res) => {
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
+
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);
 });
