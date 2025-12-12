@@ -1,7 +1,11 @@
 import masterUtil from "./masterUtil.js";
 import { DatabaseSync } from "node:sqlite";
-const db_path = "./komandkalkulator.sqlite";
+const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
+
+
+
+
 const goods = {
     name: "Goods",
     id: "goods",
