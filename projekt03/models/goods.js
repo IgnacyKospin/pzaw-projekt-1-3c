@@ -3,9 +3,18 @@ import { DatabaseSync } from "node:sqlite";
 const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
 
+/*const internal_dboperations = {
+    insert_good_category: db.prepare(
+        `
+            INSERT INTO 
+        `
 
+    ),
+    insert_good: db.prepare(
 
-
+    )
+}
+*/
 const goods = {
     name: "Goods",
     id: "goods",

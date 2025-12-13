@@ -11,6 +11,7 @@ function createCategories(){
         "id"	INTEGER NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT)
     );`;
+    db.exec(queryCategories);
     const querySubcategories = `
     DROP TABLE IF EXISTS "subcategories";
     CREATE TABLE "subcategories" (
@@ -29,6 +30,7 @@ function createGoods(){
         "category_key"	TEXT,
         "subcategory_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
+        "key" TEXT NOT NULL,
         "yearly_production"	NUMERIC,
         "yearly_consumption"	NUMERIC,
         "perKilogram_price"	NUMERIC NOT NULL,
@@ -53,6 +55,8 @@ function createPopulationCentres(){
     DROP TABLE IF EXISTS "facilities";
     CREATE TABLE "facilities" (
         "city_id"	INTEGER NOT NULL,
+        "facility_key" TEXT NOT NULL,
+        "facility_name" TEXT NOT NULL,
         "production_method_key"	TEXT NOT NULL,
         "facility_amount"	INTEGER NOT NULL,
         CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "cities"("id"),

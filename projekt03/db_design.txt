@@ -1,0 +1,28 @@
+cities:
+- category_key = should connect to economic_categories, with the key corresponding to population centres
+- name - city name
+- key - name of the city without spaces
+- id - id
+
+economic categories - to store the containers (population centres, goods, etc)
+- contents are self explainable by name i think
+
+facilities - to store facilities in cities
+- city_id = connects to id from cities, which city is the facility in
+- facility key and name - name of facility
+- production_method_key - connects to production_methods key column to connect the type of pm used
+
+goods - it stores goods
+- category key - to connect to economic_categories, key of goods
+- subcategory_key - to connect to subcategories, key of subcat (example: connect to industrial_goods which has a category key for goods)
+- name and key - name and key
+- per kilogram price - read name
+- yearly prod and consumption - in kg, the respective thing. to be only set by the dashboard calculation methods based off facilities and pms, not off user input
+
+production methods
+- category key - connect to econ categories key production method
+- nam key - name and key
+- input goods and output goods - what it says, in kg (for a fiscal year to match goods column).
+- expected employment - how much workers it needs. no sense in splitting it further because I dont think it would be worth trying to make the database model that
+
+subcategories - it stores subcategories when needed (such as internal categories of goods)
