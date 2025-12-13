@@ -4,8 +4,7 @@ import { DatabaseSync } from "node:sqlite";
 const db = new DatabaseSync(db_path);
 function createCategories(){
     const queryCategories = `
-    DROP TABLE IF EXISTS "economic_categories";
-    CREATE TABLE "economic_categories" (
+    CREATE TABLE IF NOT EXISTS "economic_categories" (
         "name"	TEXT NOT NULL,
         "key"	TEXT NOT NULL UNIQUE,
         "id"	INTEGER NOT NULL,
@@ -13,8 +12,7 @@ function createCategories(){
     );`;
     db.exec(queryCategories);
     const querySubcategories = `
-    DROP TABLE IF EXISTS "subcategories";
-    CREATE TABLE "subcategories" (
+    CREATE TABLE IF NOT EXISTS "subcategories" (
         "category_key"	TEXT NOT NULL,
         "subcategory_key"	TEXT NOT NULL,
         "subcategory_name"	TEXT NOT NULL,
@@ -25,8 +23,7 @@ function createCategories(){
 }
 function createGoods(){
     const queryCreateGoods = `
-    DROP TABLE IF EXISTS "goods";
-    CREATE TABLE "goods" (
+    CREATE TABLE IF NOT EXISTS "goods" (
         "category_key"	TEXT,
         "subcategory_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
@@ -41,8 +38,7 @@ function createGoods(){
 }
 function createPopulationCentres(){
     const queryCreateCities = `
-    DROP TABLE IF EXISTS "cities";
-    CREATE TABLE "cities" (
+    CREATE TABLE IF NOT EXISTS "cities" (
         "category_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
         "id"	INTEGER NOT NULL,
@@ -52,8 +48,7 @@ function createPopulationCentres(){
     );`;
     db.exec(queryCreateCities);
     const queryCreateFacilities = `
-    DROP TABLE IF EXISTS "facilities";
-    CREATE TABLE "facilities" (
+    CREATE TABLE IF NOT EXISTS "facilities" (
         "city_id"	INTEGER NOT NULL,
         "facility_key" TEXT NOT NULL,
         "facility_name" TEXT NOT NULL,
@@ -66,8 +61,7 @@ function createPopulationCentres(){
 }
 function createProductionMethods(){
     const queryCreateProductionMethods = `
-    DROP TABLE IF EXISTS "production_methods";
-    CREATE TABLE "production_methods" (
+    CREATE TABLE IF NOT EXISTS "production_methods" (
         "category_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
         "key"	TEXT NOT NULL,
