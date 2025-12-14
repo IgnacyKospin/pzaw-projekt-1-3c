@@ -1,7 +1,5 @@
 import masterUtil from "./masterUtil.js";
-import { DatabaseSync } from "node:sqlite";
-const db_path = "./db.sqlite";
-const db = new DatabaseSync(db_path);
+import db from "./database.js";
 const internal_dboperations = {
     insert_good: db.prepare(
         `INSERT INTO goods (category_key, subcategory_key, name, key, perKilogram_price) VALUES ('goods', ?, ?, ?, ?);`
@@ -10,21 +8,32 @@ const internal_dboperations = {
         `SELECT subcategory_key FROM goods WHERE name LIKE ?;`
     ),
     does_category_exist: db.prepare(`
-        SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_KEY LIKE GOODS;
+        SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_key = 'goods';
         `),
     get_everything: db.prepare(`SELECT * FROM goods`)
 }
 function getGoodCategory(good_name) {
     return internal_dboperations.get_good_category.get(good_name);
 }
-export function formatContents(){
-    const returned = internal_dboperations.get_everything.all();
-    const toReturn = {};
-    for(resultLoop in returned){
-        toReturn.
+export function formatContents() {
+    const rows = internal_dboperations.get_everything.all();
+    const contents = {};
+    for (const row of rows) {
+        const subcategory = row.subcategory_key;
+        if (!contents[subcategory]) {
+            contents[subcategory] = [];
+        }
+        contents[subcategory].push({
+            name: row.name,
+            key: row.key,
+            yearly_production: row.yearly_production,
+            yearly_consumption: row.yearly_consumption,
+            perKilogram_price: row.perKilogram_price
+        });
     }
-    return toReturn;
+    return contents;
 }
+
 function validateNewObject(newGood) {
     let errors = [];
     const fields = ["name", "kilogram_price", "category"];
@@ -59,7 +68,6 @@ export function goodsConstructor(){
     db.exec(prepareGoods);
 }
 export default {
-    exportViews,
     validateNewObject,
     addNewObject,
     goodsConstructor

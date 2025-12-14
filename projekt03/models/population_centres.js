@@ -1,6 +1,7 @@
 
 import { getStatistics } from "./production_methods.js";
 import masterUtil from "./masterUtil.js";
+import db from "./database.js";
 export function populationCentresConstructor(){
     const preparePopCent = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;

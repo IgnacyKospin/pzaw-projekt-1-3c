@@ -1,4 +1,5 @@
 import masterUtil from "./masterUtil.js";
+import db from "./database.js";
 export function productionMethodsConstructor(){
     const prepareProdMet = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;

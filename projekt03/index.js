@@ -1,7 +1,10 @@
 import express from "express";
 import morgan from "morgan";
-import databaseOps from "./models/database.js";
-databaseOps.createDatabases(); //create the databases
+import createDatabase from "./models/database_creation.js";
+createDatabase.createDatabases();
+import databaseOps from "./models/database_fill.js";
+databaseOps.fillDatabasesWithBaseInfo(); //create the databases
+
 import goods from "./models/goods.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
