@@ -22,7 +22,7 @@ goods - it stores goods
 production methods
 - category key - connect to econ categories key production method
 - nam key - name and key
-- input goods and output goods - what it says, in kg (for a fiscal year to match goods column).
-- expected employment - how much workers it needs. no sense in splitting it further because I dont think it would be worth trying to make the database model that
+- input goods and output goods - what it says, in kg (for a fiscal year to match goods column). because there's no way to do an array in sqlite i've decided that it stores a csv-like format of ; separated blocks of "[good_key]:[amount]"
+- expected employment - how much workers it needs. no sense in splitting it further because I dont think it would be worth trying to make the database model that and it would require doing the same thing as input-output
 
 subcategories - it stores subcategories when needed (such as internal categories of goods)

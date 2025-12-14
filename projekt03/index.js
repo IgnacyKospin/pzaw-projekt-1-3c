@@ -1,10 +1,11 @@
 import express from "express";
 import morgan from "morgan";
+import databaseOps from "./models/database.js";
+databaseOps.createDatabases(); //create the databases
 import goods from "./models/goods.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
-import databaseOps from "./models/database.js";
 const port = 8000;
 const app = express();
 app.set("view engine", "ejs");
@@ -17,7 +18,6 @@ function log_request(req, res, next) {
   next();
 }
 app.use(log_request);
-databaseOps.createDatabases(); //create the databases
 app.get("/tabs", (req, res) => {
     res.render("tabs", 
     {

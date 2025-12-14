@@ -1,5 +1,8 @@
 //the database creation is stored here because i think it is too complex for it to be in several files spread out so i'll just call it 
 const db_path = "./db.sqlite";
+import goods from "./goods.js";
+import population_centres from "./population_centres.js";
+import production_methods from "./production_methods.js";
 import { DatabaseSync } from "node:sqlite";
 const db = new DatabaseSync(db_path);
 function createCategories(){
@@ -14,7 +17,7 @@ function createCategories(){
     const querySubcategories = `
     CREATE TABLE IF NOT EXISTS "subcategories" (
         "category_key"	TEXT NOT NULL,
-        "subcategory_key"	TEXT NOT NULL,
+        "subcategory_key"	TEXT NOT NULL UNIQUE,
         "subcategory_name"	TEXT NOT NULL,
         PRIMARY KEY("subcategory_key"),
         CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key")
@@ -26,8 +29,8 @@ function createGoods(){
     CREATE TABLE IF NOT EXISTS "goods" (
         "category_key"	TEXT,
         "subcategory_key"	TEXT NOT NULL,
-        "name"	TEXT NOT NULL,
-        "key" TEXT NOT NULL,
+        "name"	TEXT NOT NULL UNIQUE,
+        "key" TEXT NOT NULL UNIQUE,
         "yearly_production"	NUMERIC,
         "yearly_consumption"	NUMERIC,
         "perKilogram_price"	NUMERIC NOT NULL,
@@ -42,7 +45,7 @@ function createPopulationCentres(){
         "category_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
         "id"	INTEGER NOT NULL,
-        "key"	TEXT NOT NULL,
+        "key"	TEXT NOT NULL UNIQUE,
         PRIMARY KEY("id"),
         CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES ""
     );`;
@@ -64,7 +67,7 @@ function createProductionMethods(){
     CREATE TABLE IF NOT EXISTS "production_methods" (
         "category_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
-        "key"	TEXT NOT NULL,
+        "key"	TEXT NOT NULL UNIQUE,
         "input_goods"	TEXT,
         "output_goods"	TEXT,
         "expected_employment"	TEXT,
@@ -78,6 +81,10 @@ export function createDatabases(){
     createCategories();
     createGoods();
     createProductionMethods();
+    //here below lie the dummy constructors for the 'container' entries.
+    goods.goodsConstructor(); 
+    population_centres.populationCentresConstructor();
+    production_methods.productionMethodsConstructor();
 }
 export default{
     createDatabases

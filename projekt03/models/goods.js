@@ -2,99 +2,28 @@ import masterUtil from "./masterUtil.js";
 import { DatabaseSync } from "node:sqlite";
 const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
-
-/*const internal_dboperations = {
-    insert_good_category: db.prepare(
-        `
-            INSERT INTO 
-        `
-
-    ),
+const internal_dboperations = {
     insert_good: db.prepare(
-
-    )
-}
-*/
-const goods = {
-    name: "Goods",
-    id: "goods",
-    supportsAdding: true,
-    contents: {
-        "industrial_goods" : {
-            name: "Industrial Goods",
-            goods: [
-                {
-                    name: "Steel",
-                    yearly_production: 100,
-                    yearly_consumption: 50,
-                    kilogram_price: 0.16
-                },
-                {
-                    name: "Coal",
-                    yearly_production: 50,
-                    yearly_consumption: 25,
-                    kilogram_price: 10
-                }
-            ]
-        },
-        "agrarian_goods" : {
-            name: "Agrarian Goods",
-            goods: [
-                {
-                    name: "Grain",
-                    yearly_production: 100,
-                    yearly_consumption: 50,
-                    kilogram_price: 0.16
-                },
-                {
-                    name: "Meat",
-                    yearly_production: 50,
-                    yearly_consumption: 25,
-                    kilogram_price: 10
-                }
-            ]
-        }
-    }
+        `INSERT INTO goods (category_key, subcategory_key, name, key, perKilogram_price) VALUES ('goods', ?, ?, ?, ?);`
+    ),
+    get_good_category: db.prepare(
+        `SELECT subcategory_key FROM goods WHERE name LIKE ?;`
+    ),
+    does_category_exist: db.prepare(`
+        SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_KEY LIKE GOODS;
+        `),
+    get_everything: db.prepare(`SELECT * FROM goods`)
 }
 function getGoodCategory(good_name) {
-    for (const categoryKey of Object.keys(goods)) {
-        const category = goods.contents[categoryKey];
-        if (category.goods.some(g => g.name.toLowerCase() === good_name.toLowerCase())) {
-            return categoryKey;
-        }
-    }
-    return null;
+    return internal_dboperations.get_good_category.get(good_name);
 }
-//production minus consumption
-export function getBalance(good_name) {
-    const categoryKey = getGoodCategory(good_name);
-    const good = goods.contents[categoryKey].goods.find(g => g.name.toLowerCase() === good_name.toLowerCase());
-    return good.yearly_production - good.yearly_consumption;
-}
-
-//counts from population centres the total production
-export function updateYearlyProduction() {
-    for (const categoryKey in goods) {
-        for (const g of goods.contents[categoryKey].goods) {
-            g.yearly_production = 0;
-        }
+export function formatContents(){
+    const returned = internal_dboperations.get_everything.all();
+    const toReturn = {};
+    for(resultLoop in returned){
+        toReturn.
     }
-    for (cityName in population_centres.contents) {
-        city = population_centres.contents[cityName];
-        if (!city.goods_production) continue;
-
-        for (prod of city.goods_production) {
-            goodKey = Object.keys(industrial_goods).find(
-                key => industrial_goods.contents[key].name.toLowerCase() === prod.good_name.toLowerCase()
-            );
-            if (goodKey) {
-                industrial_goods.contents[goodKey].yearly_production += prod.amount;
-            }
-        }
-    }
-}
-export function exportViews(){
-    return masterUtil.viewFormatter(goods);
+    return toReturn;
 }
 function validateNewObject(newGood) {
     let errors = [];
@@ -106,7 +35,7 @@ function validateNewObject(newGood) {
             errors.push("Kilogram price not a number");
         }
     }
-    const category = goods.contents[newGood.category];
+    const category = internal_dboperations.does_category_exist.get(newGood.categoryKey);
     if (category) {
         const exists = category.goods.some(g => g.name === newGood.name);
         if (exists) {
@@ -118,19 +47,20 @@ function validateNewObject(newGood) {
     return errors;
 }
 export function addNewObject(newObj){
-    const newCategory = newObj.category;
-    const toStore = {
-        name: newObj.name,
-        yearly_production: 0,
-        yearly_consumption: 0,
-        kilogram_price: Number(newObj.kilogram_price)
-    };
-    goods.contents[newCategory].goods.push(toStore);
+    internal_dboperations.insert_good.get(newObj.categoryKey, newObj.name, newObj.key, newObj.kilogram_price);
+}
+export function goodsConstructor(){
+    /*
+    trying to call this creation in this file resulted in errors so I have decided to outsource category creation to the master db file
+    */
+    const prepareGoods = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
+    INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
+    db.exec(prepareGoods);
 }
 export default {
-    getBalance,
-    updateYearlyProduction,
     exportViews,
     validateNewObject,
-    addNewObject
+    addNewObject,
+    goodsConstructor
 }

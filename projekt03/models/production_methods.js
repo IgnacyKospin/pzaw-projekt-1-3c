@@ -1,4 +1,9 @@
 import masterUtil from "./masterUtil.js";
+export function productionMethodsConstructor(){
+    const prepareProdMet = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;
+    db.exec(prepareProdMet);
+}
 const production_methods = {
     name: "Production Methods",
     id: "production_methods",
@@ -43,5 +48,6 @@ export function exportViews(){
     return masterUtil.viewFormatter(production_methods);
 }
 export default {
-    exportViews
+    exportViews,
+    productionMethodsConstructor
 }

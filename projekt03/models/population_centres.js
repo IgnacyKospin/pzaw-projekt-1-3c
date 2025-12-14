@@ -1,7 +1,11 @@
 
 import { getStatistics } from "./production_methods.js";
-import { updateYearlyProduction } from "./goods.js";
 import masterUtil from "./masterUtil.js";
+export function populationCentresConstructor(){
+    const preparePopCent = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;
+    db.exec(preparePopCent);
+}
 const population_centres = {
     name: "Population Centres",
     id: "population_centres",
@@ -31,50 +35,15 @@ const population_centres = {
         }
     }
 }
-function updateProduction() {
-    for (cityName in population_centres.contents) {
-        city = population_centres.contents[cityName];
-        arrayProd = {};
-        for (facLoop of city.facilities) {
-            statistics = getStatistics(facLoop.production_method.toLowerCase().replaceAll(" ", "_"));
-            if (!statistics || !statistics.output_goods) continue;
-            for (statLoop of statistics.output_goods) {
-                totalAmount = statLoop.amount * facLoop.facility_amount;
-                arrayProd[statLoop.name] = (arrayProd[statLoop.name] || 0) + totalAmount;
-            }
-        }
-        city.goods_production = Object.entries(arrayProd).map(([good_name, amount]) => ({
-            good_name,
-            amount
-        }));
-    }
-}
-function updateConsumption(){
-        for (cityName in population_centres.contents) {
-        city = population_centres.contents[cityName];
-        arrayProd = {};
-        for (facLoop of city.facilities) {
-            statistics = getStatistics(facLoop.production_method.toLowerCase().replaceAll(" ", "_"));
-            if (!statistics || !statistics.input_goods) continue;
-            for ( tatLoop of statistics.input_goods) {
-                totalAmount = statLoop.amount * facLoop.facility_amount;
-                arrayProd[statLoop.name] = (arrayProd[statLoop.name] || 0) + totalAmount;
-            }
-        }
-        city.goods_consumption = Object.entries(arrayProd).map(([good_name, amount]) => ({
-            good_name,
-            amount
-        }));
-    }
-}
 export function exportViews(){
     return masterUtil.viewFormatter(population_centres);
 }
 export function updateEconomicStatistics(populationCentre) {
     updateProduction();
     updateConsumption();
-    updateYearlyProduction()
+
 }
 export default {
-    exportViews
+    exportViews,
+    populationCentresConstructor
 }
