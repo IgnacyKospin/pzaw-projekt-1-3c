@@ -10,8 +10,7 @@ export function getTab(tabId) {
     const found = allTabs.find(tab => tab.id == tabId);
     return found || null;
 }
-export function viewFormatter(category) {
-    /*
+export function viewFormatter(objectName) {
     const toReturn = [];
     for (let loopHighLevel in objectName.contents) {
         const returnFormatted = {};
@@ -28,11 +27,6 @@ export function viewFormatter(category) {
         });
     }
     return toReturn;
-    */
-    switch(category){
-        case 'goods':
-            return goods.formatContents();
-    }
 }
 export function handleNew(tab, newData, res) {
     let totalHandler = {};

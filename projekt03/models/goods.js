@@ -15,23 +15,9 @@ const internal_dboperations = {
 function getGoodCategory(good_name) {
     return internal_dboperations.get_good_category.get(good_name);
 }
-export function formatContents() {
+export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
-    const contents = {};
-    for (const row of rows) {
-        const subcategory = row.subcategory_key;
-        if (!contents[subcategory]) {
-            contents[subcategory] = [];
-        }
-        contents[subcategory].push({
-            name: row.name,
-            key: row.key,
-            yearly_production: row.yearly_production,
-            yearly_consumption: row.yearly_consumption,
-            perKilogram_price: row.perKilogram_price
-        });
-    }
-    return contents;
+    return rows;
 }
 
 function validateNewObject(newGood) {
@@ -65,10 +51,15 @@ export function goodsConstructor(){
     const prepareGoods = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
     INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
+    //this is temporary so i can see how this shit works
+    const InsertTempData = `
+    INSERT OR IGNORE INTO goods VALUES ('goods', 'industrial_goods', 'coal', 'coal', 0, 0, 1); `
+    db.exec(InsertTempData);
     db.exec(prepareGoods);
 }
 export default {
     validateNewObject,
     addNewObject,
-    goodsConstructor
+    goodsConstructor,
+    exportViews
 }

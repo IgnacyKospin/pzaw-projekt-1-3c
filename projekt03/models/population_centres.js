@@ -7,37 +7,15 @@ export function populationCentresConstructor(){
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;
     db.exec(preparePopCent);
 }
-const population_centres = {
-    name: "Population Centres",
-    id: "population_centres",
-    supportsAdding: false,
-    contents: {
-        "warszawa": {
-            name: "Warszawa",
-            data: [
-                {
-                    population: 1960000,
-                    unemployed: 1000
-                }
-            ],
-            facilities: [
-                { facility_name: "Steel Mill", facility_amount: 1, production_method: "Bessemer Process"}
-            ],
-            goods_production: [
-                {
-                    good_name: "Steel", amount: 10
-                }   
-            ],
-            goods_consumption: [
-                {
-                    good_name: "Coal", amount: 30
-                }
-            ]
-        }
-    }
+const internal_dboperations = {
+    insert_pop_centre: db.prepare(
+        `INSERT INTO cities (category_key, name, key) VALUES ('population_centres', ?, ?);`
+    ),
+    get_everything: db.prepare(`SELECT * FROM cities`)
 }
 export function exportViews(){
-    return masterUtil.viewFormatter(population_centres);
+        const rows = internal_dboperations.get_everything.all();
+        return rows;
 }
 export function updateEconomicStatistics(populationCentre) {
     updateProduction();

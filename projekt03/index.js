@@ -30,14 +30,17 @@ app.get("/tabs", (req, res) => {
                 title: "Goods",
                 contents: goods.exportViews()
             },
+            
             {
                 title: "Population Centres",
                 contents: populationCentres.exportViews()
             },
+            
             {
                 title: "Production Methods",
                 contents: productionMethods.exportViews()
             }
+                
         ]
     }
     );

@@ -5,48 +5,18 @@ export function productionMethodsConstructor(){
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;
     db.exec(prepareProdMet);
 }
-const production_methods = {
-    name: "Production Methods",
-    id: "production_methods",
-    supportsAdding: false,
-    contents: {
-        "bessemer_process": {
-            name: "Bessemer Process",
-            input_goods: [
-                {
-                    name: "Iron", amount: 60
-                },
-                {
-                    name: "Coal", amount: 30
-                }
-            ],
-            output_goods: [
-                {
-                    name: "Steel", amount: 90
-                }
-            ],
-            expected_employment: [
-                {
-                    position: "Shopkeeper", amount: 500
-                },
-                {
-                    position: "Labourer", amount: 3000
-                },
-                {
-                    position: "Machinist", amount: 1250
-                },
-                {
-                    position: "Engineer", amount: 750
-                }
-            ]
-        }
-    }
+const internal_dboperations = {
+    insert_pm: db.prepare(
+        `INSERT INTO production_methods (category_key, name, key, input_goods, output_goods, expected_employment) VALUES ('production_methods', ?, ?, ?, ?, ?);`
+    ),
+    get_everything: db.prepare(`SELECT * FROM production_methods`)
 }
 export function getStatistics(processName){
     return production_methods.contents[processName];
 }
-export function exportViews(){
-    return masterUtil.viewFormatter(production_methods);
+export function exportViews() {
+    const rows = internal_dboperations.get_everything.all();
+    return rows;
 }
 export default {
     exportViews,
