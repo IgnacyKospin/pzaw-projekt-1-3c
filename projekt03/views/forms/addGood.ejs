@@ -1,4 +1,16 @@
   <form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
+        <div>
+      <label for="good_kru">Good Key</label>
+      <input
+        type="text"
+        name="key"
+        id="good_key"
+        required
+        minlength="1"
+        maxlength="500"
+        value="<%= locals.name || '' %>"
+      />
+    </div>
     <div>
       <label for="good_name">Good Name</label>
       <input

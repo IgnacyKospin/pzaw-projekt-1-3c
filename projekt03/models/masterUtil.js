@@ -35,17 +35,18 @@ export function handleNew(tab, newData, res) {
     console.log(newData);
     switch (newData.category) {
         case "goods":
-            totalHandler.errors = goodsImport.validateNewObject(newData, tab);
+            newData.subcategory_key = tab.subcategory_key;
+            totalHandler.errors = goodsImport.validateNewObject(newData);
             break;
     }
     if (totalHandler.errors.length === 0) {
         switch (newData.category) {
             case "goods":
-                newData.subcategory_key = tab.subcategory_key;
                 goodsImport.addNewObject(newData);
                 break;
         }
-        res.redirect(`/tabs/${tabId}/${tab.id}`);
+        
+        res.redirect(`/tabs/${newData.category}/${newData.key}`);
     } else {
         res.status(400).render("add_new", {
             errors: totalHandler.errors,

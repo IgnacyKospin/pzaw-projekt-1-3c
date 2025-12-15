@@ -23,9 +23,9 @@ export function exportViews() {
     return rows;
 }
 
-function validateNewObject(newGood, oldGood) {
+function validateNewObject(newGood) {
     let errors = [];
-    const fields = ["name", "kilogram_price", "category"];
+    const fields = ["name", "key", "kilogram_price", "category"];
     for (let field of fields) {
         if (!newGood[field]) {
             errors.push(`Missing ${field}`);
@@ -34,9 +34,9 @@ function validateNewObject(newGood, oldGood) {
         }
     }
     console.log(newGood);
-    const category = internal_dboperations.does_category_exist.get(oldGood.subcategory_key);
+    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
     if (category[1] == 1) {
-        const exists = internal_dboperations.does_something_like_this_exist.get(oldGood.subcategory_key, newGood.name);
+        const exists = internal_dboperations.does_something_like_this_exist.get(newGood.subcategory_key, newGood.name);
         console.log(exists);
         if (exists == null) {
         }
@@ -50,8 +50,8 @@ function validateNewObject(newGood, oldGood) {
     return errors;
 }
 export function addNewObject(newObj){
-    console.log(newObj.category_key, newObj.name, newObj.key, newObj.kilogram_price);
-    internal_dboperations.insert_good.get(newObj.category_key, newObj.name, newObj.key, newObj.kilogram_price);
+    console.log(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
+    internal_dboperations.insert_good.get(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
     console.log("now obj:" + newObj);
 }
 export function goodsConstructor(){
