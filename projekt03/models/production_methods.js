@@ -99,7 +99,7 @@ export function validateNewObject(newMethod) {
 }
 export function validateEditObject(newMethod) {
     let errors = [];
-    const fields = ["prodMed_name", "key", "prodMed_employment"];
+    const fields = ["prodMed_name", "prodMed_employment"];
     const specialFields = ["outputAmount", "inputAmount"];
     for (let field of fields) {
         if (!newMethod[field]) {
@@ -133,10 +133,10 @@ export function addNewObject(newObj){
     internal_dboperations.insert_pm.get(newObj.prodMed_name, newObj.key, inputFormat, outputFormat, newObj.prodMed_employment);
     //console.log("now obj:" + newObj);
 }
-export function editObject(newObj){
+export function editObject(newObj, key){
     let inputFormat = formatInputOutput(newObj.inputGoods, newObj.inputAmount);
     let outputFormat = formatInputOutput(newObj.outputGoods, newObj.outputAmount);
-    internal_dboperations.edit.get(newObj.prodMed_name, inputFormat, outputFormat, newObj.prodMed_employment);
+    const res = internal_dboperations.edit.get(newObj.prodMed_name, inputFormat, outputFormat, newObj.prodMed_employment, key);
 }
 export default {
     exportViews,
