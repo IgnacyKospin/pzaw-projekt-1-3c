@@ -1,5 +1,7 @@
 
-  <form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
+<details name="addEdit">
+  <summary><h1>Add New Good</h1></summary>
+<form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
     <div id="inputs">
       <h2>Inputs</h1>
       <button type="button" id="addInput">Add another input</button>
@@ -81,7 +83,7 @@
       <button type="submit">Add this good...</button>
     </div>
   </form>
-
+</details>
 
   <template id="inputTemplate">  <!--i think this was the simplest way to do this. many such cases.-->
     <div>

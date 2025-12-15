@@ -46,8 +46,8 @@ function formatInputOutput(arrNames, arrNumbers){
     });
     return result;
 }
-export function getStatistics(processName){
-    return production_methods.contents[processName];
+export function deletePM(idToKill){
+    internal_dboperations.kill.get(idToKill);
 }
 export function parseInputsOutputs(contents){
     //storage format -> object
@@ -110,5 +110,6 @@ export default {
     productionMethodsConstructor,
     addNewObject,
     validateNewObject,
-    parseInputsOutputs
+    parseInputsOutputs,
+    deletePM
 }

@@ -71,8 +71,6 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
                 });
                 break;
             case("production_methods"):
-            console.log("Tabs:");
-            console.log(tabs);
                 res.render("tabProductionMethods", {
                     category: tabs.category_key,
                     title: tabs.name,
@@ -88,6 +86,27 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
         res.sendStatus(404);
     }
 
+})
+app.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided to do this by get
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    if (tabs) {
+        switch(tabs.category_key){
+            case("goods"):
+                goods.deleteGD(req.params.tab_id);
+                res.redirect(`/tabs`);
+                break;
+            case("population_centres"):
+                populationCentres.deletePC(req.params.tab_id);
+                res.redirect(`/tabs`);
+                break;
+            case("production_methods"):
+                productionMethods.deletePM(req.params.tab_id);
+                res.redirect(`/tabs`);
+                break;
+        }
+    } else{
+        res.sendStatus(404);
+    }
 })
 app.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);

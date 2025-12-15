@@ -1,5 +1,4 @@
 
-import { getStatistics } from "./production_methods.js";
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 export function populationCentresConstructor(){
@@ -15,11 +14,15 @@ const internal_dboperations = {
         `INSERT INTO population_centres (category_key, name, key, population) VALUES ('population_centres', ?, ?, ?);`
     ),
     get_everything: db.prepare(`SELECT * FROM population_centres`),
-    does_something_like_this_already_exist: db.prepare(`SELECT 1 from population_centres WHERE key = ?`)
+    does_something_like_this_already_exist: db.prepare(`SELECT 1 from population_centres WHERE key = ?`),
+    kill: db.prepare(`DELETE FROM population_centres WHERE key = ?`)
 }
 export function exportViews(){
         const rows = internal_dboperations.get_everything.all();
         return rows;
+}
+export function deletePC(idToKill){
+    internal_dboperations.kill.get(idToKill);
 }
 export function validateNewObject(newCentre) {
     let errors = [];
@@ -52,5 +55,6 @@ export default {
     exportViews,
     populationCentresConstructor,
     validateNewObject,
-    addNewObject
+    addNewObject,
+    deletePC
 }

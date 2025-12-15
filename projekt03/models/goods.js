@@ -14,10 +14,11 @@ const internal_dboperations = {
     does_something_like_this_exist: db.prepare(`
         SELECT 1 FROM goods WHERE key LIKE ?;
         `),
-    get_all_names: db.prepare(`SELECT name, key FROM goods;`)
+    get_all_names: db.prepare(`SELECT name, key FROM goods;`),
+    kill: db.prepare(`DELETE FROM goods WHERE key = ?;`)
 }
-function getGoodCategory(good_name) {
-    return internal_dboperations.get_good_category.get(good_name);
+export function deleteGD(idToKill){
+    internal_dboperations.kill.get(idToKill);
 }
 export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
@@ -70,5 +71,6 @@ export default {
     addNewObject,
     goodsConstructor,
     exportViews,
-    getAllGoods
+    getAllGoods,
+    deleteGD
 }

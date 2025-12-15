@@ -23,7 +23,7 @@ function createGoods(){
     CREATE TABLE IF NOT EXISTS "goods" (
         "category_key"	TEXT,
         "subcategory_key"	TEXT NOT NULL,
-        "name"	TEXT NOT NULL UNIQUE,
+        "name"	TEXT NOT NULL,
         "key" TEXT NOT NULL UNIQUE,
         "yearly_production"	NUMERIC,
         "yearly_consumption"	NUMERIC,
@@ -52,8 +52,8 @@ function createPopulationCentres(){
         "facility_name" TEXT NOT NULL,
         "production_method_key"	TEXT NOT NULL,
         "facility_amount"	INTEGER NOT NULL,
-        CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "population_centres"("id"),
-        CONSTRAINT "connectToProductionMethod" FOREIGN KEY("production_method_key") REFERENCES "production_methods"("key")
+        CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "population_centres"("id") on delete cascade on update cascade, 
+        CONSTRAINT "connectToProductionMethod" FOREIGN KEY("production_method_key") REFERENCES "production_methods"("key") on delete cascade on update cascade 
     );`;
     db.exec(queryCreateFacilities);
 }
