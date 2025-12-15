@@ -82,10 +82,6 @@ export function goodsConstructor(){
     const prepareGoods = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
     INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
-    //this is temporary so i can see how this very nice thing works
-    const InsertTempData = `
-    INSERT OR IGNORE INTO goods VALUES ('goods', 'industrial_goods', 'coal', 'coal', 0, 0, 1); `
-    db.exec(InsertTempData);
     db.exec(prepareGoods);
 }
 export default {

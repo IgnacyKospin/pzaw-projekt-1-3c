@@ -1,7 +1,8 @@
 <%- include("head.part.ejs") %> 
 <main> 
 <!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
-<ul id="contents">
+<div>
+    <div class="contentsPop">
     <details >
         <summary>
             <p>Good Name: <%=contents.name%></p>
@@ -13,11 +14,29 @@
             <% } %>
         </div>
     </details>
+        <div class="subContentsPOp">
+            <details id="facilities">
+                <summary>
+                    <p>Facilities in this Population Centre</p>
+                </summary>
+                <!--these are undeletable because this is a planned economy and everything is subsidized (aka i didnt have time)-->
+                <div class="smallTextForMetaData">
+                        <% facilities.forEach(function(facilities) { %>
+                            <h1>Facility Name: <%=facilities.facility_name%></h1>
+                            <p>Production Method Key: <%=facilities.production_method_key%></p>
+                            <p>Facility Amount: <%=facilities.facility_amount%></p>
+                        <% }); %>
+                </div>
+                <%-include ("forms/addFacility.ejs")%>
+            </details>
+        </div>
+    </div>
+    <br>
     <div>
         <a href="/tabs/<%=category%>/<%=contents.key%>/delete" onclick="return confirm('are you sure?')">KILL(this population centre)</a>
         <h1>new</h1>
                <%- include("forms/add_to_category.ejs") %>
         <%- include("forms/edit/edit_category.ejs") %>
     </div>
-</ul>
+</div>
 </main>

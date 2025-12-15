@@ -4,9 +4,6 @@ import db from "./database.js";
 export function populationCentresConstructor(){
     const preparePopCent = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;
-    const InsertTempData = `
-    INSERT OR IGNORE INTO population_centres (category_key, name, key, population) VALUES ('population_centres', 'Testowo','testowo', 1000000); `
-    db.exec(InsertTempData);
     db.exec(preparePopCent);
 }
 const internal_dboperations = {
@@ -16,11 +13,17 @@ const internal_dboperations = {
     get_everything: db.prepare(`SELECT * FROM population_centres`),
     does_something_like_this_already_exist: db.prepare(`SELECT 1 from population_centres WHERE key = ?`),
     kill: db.prepare(`DELETE FROM population_centres WHERE key = ?`),
-    edit: db.prepare(`UPDATE population_centres SET name = ?, population = ? WHERE key = ?`)
+    edit: db.prepare(`UPDATE population_centres SET name = ?, population = ? WHERE key = ?`),
+    get_matching_facilities: db.prepare(`SELECT * FROM facilities where city_id = ?`),
+    get_city_by_key: db.prepare(`SELECT id from population_centres WHERE key = ?`),
+    insert_facility: db.prepare(`INSERT INTO facilities VALUES (?, ?, ?, ?, ?)`) //ive decided to have it here since its only used for pop centres
 }
 export function exportViews(){
         const rows = internal_dboperations.get_everything.all();
         return rows;
+}
+export function getFacilities(cityId){
+    return internal_dboperations.get_matching_facilities.all(cityId);
 }
 export function deletePC(idToKill){
     internal_dboperations.kill.get(idToKill);
@@ -63,10 +66,16 @@ export function editObject(newObj, key){
 
     internal_dboperations.edit.get(newObj.popCentre_name, newObj.popCentre_population, key)
 }
-export function updateEconomicStatistics(populationCentre) {
-    updateProduction();
-    updateConsumption();
-
+export function handleNewFacility(parameters, newObj, res){
+    /**
+     * this doesn't have verification because i managed my time very badly
+     */
+    console.log(newObj);
+    console.log(parameters);
+    const targetCity = internal_dboperations.get_city_by_key.get(parameters.tab_id);
+    console.log(targetCity);
+    internal_dboperations.insert_facility.get(targetCity.id, newObj.key, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
+    res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
 }
 export default {
     exportViews,
@@ -75,5 +84,7 @@ export default {
     addNewObject,
     deletePC,
     validateEditObject,
-    editObject
+    editObject,
+    getFacilities,
+    handleNewFacility
 }

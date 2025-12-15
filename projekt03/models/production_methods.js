@@ -3,9 +3,6 @@ import db from "./database.js";
 export function productionMethodsConstructor(){
     const prepareProdMet = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;
-    const insertTestData = `
-    INSERT OR IGNORE INTO production_methods VALUES ('production_methods', 'testPM', 'testPMkey', 'coal:60;', 'steel:20;', 20)`;
-    db.exec(insertTestData);
     db.exec(prepareProdMet);
 }
 const internal_dboperations = {

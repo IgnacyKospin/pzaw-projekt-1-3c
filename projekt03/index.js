@@ -67,7 +67,9 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
-                    contents: tabs
+                    contents: tabs,
+                    PMList: productionMethods.exportViews(), //so you can have a dropdown.
+                    facilities: populationCentres.getFacilities(tabs.id)
                 });
                 break;
             case("production_methods"):
@@ -117,6 +119,10 @@ app.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleEdit(tabs, req.body, res);
+});
+app.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
+    console.log("youre here");
+    populationCentres.handleNewFacility(req.params, req.body, res);
 });
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);

@@ -22,3 +22,18 @@ summary {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+.newFacility {
+    margin: 15px;
+}
+.contentsPop{
+    background-color: grey;
+    padding: 15px;
+}
+.subContentsPOp{
+    background-color: rgb(114, 108, 101);
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+
+}

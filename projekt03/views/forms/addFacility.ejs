@@ -1,0 +1,53 @@
+<details name="addEdit" class="newFacility">
+  <summary><h1>Add New Facility</h1></summary>
+  <form action="/tabs/<%=category%>/<%=tab_id%>/addFacilityData" method="POST">
+        <div>
+      <label for="facility_key">Facility Key</label>
+      <input
+        type="text"
+        name="key"
+        id="facility_key"
+        required
+        minlength="1"
+        maxlength="500"
+      />
+    </div>
+    <div>
+      <label for="facility_name">Facility Name</label>
+      <input
+        type="text"
+        name="name"
+        id="facility_name"
+        required
+        minlength="1"
+        maxlength="500"
+      />
+    </div>
+    <div>
+      <div>
+        <label for="productionMethod_key">Production Method</label>
+        <select name="productionMethod_key">
+          <% PMList.forEach(function(cat){ %>
+            <option value="<%= cat.key %>"><%= cat.name %></option>
+          <% }) %>
+          </select>
+          <br>
+          <label for="facility_amount">Facility Levels</label>
+          <input
+            type="number"
+            name="facility_amount"
+            step="any"
+            id="facility_amount"
+            required
+          />
+          </div>
+    </div>
+
+    <!--there is not meant to be anything else to be added here insofar due to the fact that production and consmuption should be handled by the calculation features-->
+    <input type="hidden" name="category" value="<%= category %>">
+
+    <div>
+      <button type="submit">Add this good...</button>
+    </div>
+  </form>
+</details>  
