@@ -15,8 +15,13 @@ const internal_dboperations = {
     get_everything: db.prepare(`SELECT * FROM production_methods`)
 }
 function formatInputOutput(arrNames, arrNumbers){
+    //arrays -> storage format
+    console.log(arrNumbers);
+    if(typeof arrNames !== 'object'){
+        arrNames = [arrNames];
+        arrNumbers = [arrNumbers];
+    }
     let formatted = {};
-    console.log(arrNames);
     for (let i = 0; i < arrNames.length; i++) {
         const name = arrNames[i];
         const value = Number(arrNumbers[i]);
@@ -27,14 +32,26 @@ function formatInputOutput(arrNames, arrNumbers){
         }
     }
     let result = "";
-    console.log(formatted);
     Object.keys(formatted).forEach(function(cat){
-        result += (cat + ":" + result[cat] + ";");
+        result += (cat + ":" + formatted[cat] + ";");
     });
     return result;
 }
 export function getStatistics(processName){
     return production_methods.contents[processName];
+}
+export function parseInputsOutputs(contents){
+    //storage format -> object
+    console.log("kont" + contents);
+    const array = contents.split(";");
+    console.log(array);
+    array.pop();
+    let objectToReturn = {}
+    for(let i = 0; i < array.length; i++){
+            let temp = array[i].split(":");
+            objectToReturn[temp[0]] = temp[1];
+    }
+    return objectToReturn;
 }
 export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
@@ -66,5 +83,6 @@ export default {
     exportViews,
     productionMethodsConstructor,
     addNewObject,
-    validateNewObject
+    validateNewObject,
+    parseInputsOutputs
 }

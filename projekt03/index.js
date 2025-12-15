@@ -71,10 +71,14 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
                 });
                 break;
             case("production_methods"):
+            console.log("Tabs:");
+            console.log(tabs);
                 res.render("tabProductionMethods", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
+                    formattedInputs: productionMethods.parseInputsOutputs(tabs.input_goods),
+                    formattedOutputs: productionMethods.parseInputsOutputs(tabs.output_goods),
                     goodsList: goods.getAllGoods(), //so that i didnt have to check in the new pm wether the goods existed it will provide a dropdown. might be inconvenient when its a bigger scale. Too Bad!
                     contents: tabs
                 });

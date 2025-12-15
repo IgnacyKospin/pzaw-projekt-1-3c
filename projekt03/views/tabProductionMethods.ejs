@@ -4,7 +4,17 @@
 <ul id="contents">
     <details >
         <summary>
-            <p>Good Name: <%=contents.name%></p>
+            <p>Production Method: <%=contents.name%></p>
+            <h2>Inputs:</h2>
+            <% for (let key in formattedInputs) { %>
+                <p><%= key %>: <%=formattedInputs[key]%></p>
+            <% } %>
+            <h2>Outputs:</h2>
+            <% for (let key in formattedOutputs) { %>
+                <p><%= key %>: <%=formattedOutputs[key]%></p>
+            <% } %>
+            <h2>Expected employment:</h2>
+            <%=contents.expected_employment%>
         </summary>
         <div class="smallTextForMetaData">
             <p style="font-weight: bolder;">technical information</p>
