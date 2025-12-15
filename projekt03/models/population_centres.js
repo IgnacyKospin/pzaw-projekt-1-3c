@@ -14,7 +14,8 @@ const internal_dboperations = {
     insert_pop_centre: db.prepare(
         `INSERT INTO population_centres (category_key, name, key, population) VALUES ('population_centres', ?, ?, ?);`
     ),
-    get_everything: db.prepare(`SELECT * FROM population_centres`)
+    get_everything: db.prepare(`SELECT * FROM population_centres`),
+    does_something_like_this_already_exist: db.prepare(`SELECT 1 from population_centres WHERE key = ?`)
 }
 export function exportViews(){
         const rows = internal_dboperations.get_everything.all();
@@ -23,6 +24,9 @@ export function exportViews(){
 export function validateNewObject(newCentre) {
     let errors = [];
     const fields = ["popCentre_name", "key", "popCentre_population"];
+    if((internal_dboperations.does_something_like_this_already_exist.get(newCentre.key))[1] !== undefined){
+        errors.push("A key like this already exists");
+    }
     for (let field of fields) {
         if (!newCentre[field]) {
             errors.push(`Missing ${field}`);

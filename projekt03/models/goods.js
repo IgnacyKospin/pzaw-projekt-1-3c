@@ -12,7 +12,7 @@ const internal_dboperations = {
         `),
     get_everything: db.prepare(`SELECT * FROM goods`),
     does_something_like_this_exist: db.prepare(`
-        SELECT 1 FROM goods WHERE subcategory_key LIKE ? and key LIKE ?;
+        SELECT 1 FROM goods WHERE key LIKE ?;
         `),
     get_all_names: db.prepare(`SELECT name, key FROM goods;`)
 }
@@ -29,6 +29,9 @@ export function getAllGoods(){
 function validateNewObject(newGood) {
     let errors = [];
     const fields = ["name", "key", "kilogram_price", "category"];
+    if((internal_dboperations.does_something_like_this_exist.get(newGood.key)) !== undefined){
+        errors.push("A key like this already exists");
+    }
     for (let field of fields) {
         if (!newGood[field]) {
             errors.push(`Missing ${field}`);
@@ -39,13 +42,6 @@ function validateNewObject(newGood) {
     //console.log(newGood);
     const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
     if (category[1] == 1) {
-        const exists = internal_dboperations.does_something_like_this_exist.get(newGood.subcategory_key, newGood.name);
-        //console.log(exists);
-        if (exists == null) {
-        }
-        else{
-            errors.push(`${newGood.name} already exists in ${category.name}`);
-        }
     } else {
         errors.push(`Invalid category: ${newGood.category}`);
     }

@@ -12,7 +12,16 @@ const internal_dboperations = {
     insert_pm: db.prepare(
         `INSERT INTO production_methods (category_key, name, key, input_goods, output_goods, expected_employment) VALUES ('production_methods', ?, ?, ?, ?, ?);`
     ),
-    get_everything: db.prepare(`SELECT * FROM production_methods`)
+    get_everything: db.prepare(`SELECT * FROM production_methods`),
+    does_something_like_this_exist: db.prepare(`SELECT 1 FROM production_methods WHERE key = ?`),
+    kill: db.prepare(
+        `DELETE FROM production_methods WHERE key = ?;`
+    ),
+    edit: db.prepare(
+        `
+        UPDATE production_methods SET name = ?, input_goods = ?, output_goods = ?, expected_employment = ? WHERE key = ?;
+        `
+    )
 }
 function formatInputOutput(arrNames, arrNumbers){
     //arrays -> storage format
@@ -57,18 +66,35 @@ export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
     return rows;
 }
-export function validateNewObject(newCentre) {
+export function validateNewObject(newMethod) {
     let errors = [];
-    /*
-    const fields = ["popCentre_name", "key", "popCentre_population"];
+    const fields = ["prodMed_name", "key", "prodMed_employment"];
+    const specialFields = ["outputAmount", "inputAmount"];
+    if((internal_dboperations.does_something_like_this_exist.get(newMethod.key)[1]) !== undefined){
+        errors.push("A key like this already exists");
+        }
     for (let field of fields) {
-        if (!newCentre[field]) {
+        if (!newMethod[field]) {
             errors.push(`Missing ${field}`);
-        } else if (field == "popCentre_population" && isNaN(Number(newCentre.popCentre_population))) {
-            errors.push("Population not a number");
+        } else if (field == "prodMed_employment" && isNaN(Number(newMethod.prodMed_employment))) {
+            errors.push("Employment not a number");
         }
     }
-        */
+    for(let field of specialFields){
+        if(Array.isArray(newMethod[field])){
+            for(let x = 0; x < newMethod[field].length; x++){
+                if(isNaN(Number(newMethod[field][x]))){
+                    console.log(newMethod[field][x]);
+                    errors.push("A good input or output value is not a number")
+                }
+            }
+        }
+        else{
+            if(isNaN(Number(newMethod[field]))){
+                errors.push("A good input or output value is not a number")
+            }
+        }
+    }
     return errors;
 }
 export function addNewObject(newObj){
