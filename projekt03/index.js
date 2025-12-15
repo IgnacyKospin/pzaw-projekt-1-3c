@@ -121,7 +121,6 @@ app.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
     masterUtil.handleEdit(tabs, req.body, res);
 });
 app.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
-    console.log("youre here");
     populationCentres.handleNewFacility(req.params, req.body, res);
 });
 app.listen(port, () => {

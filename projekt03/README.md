@@ -1,3 +1,3 @@
 To install:
 - run "npm install" in the "projekt02" folder
-- if this line is here, then the project isnt done yet
+- to fill with dummy data run 'node utils/fillDB.js' in the terminal

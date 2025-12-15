@@ -1,30 +1,30 @@
-import goods from "../models/goods";
+import goods from "../models/goods.js";
 import population_centres from "../models/population_centres.js";
 import production_methods from "../models/production_methods.js";
 const test_goods = {
     coal: {
-        subcategory: "industrial_goods",
+        subcategory_key: "industrial_goods",
         name: "Coal",
         key: "coal",
-        perKilogramPrice: 6
+        kilogram_price: 6
     },
     steel: {
-        subcategory: "industrial_goods",
+        subcategory_key: "industrial_goods",
         name: "Steel",
         key: "steel",
-        perKilogramPrice: 20
+        kilogram_price: 20
     },
     iron: {
-        subcategory: "industrial_goods",
+        subcategory_key: "industrial_goods",
         name: "Iron",
         key: "iron",
-        perkilogramPrice: 5
+        kilogram_price: 5
     },
     grain: {
-        subcategory: "agrarian_goods",
+        subcategory_key: "agrarian_goods",
         name: "Grain",
         key: "grain",
-        perKilogramPrice: 5
+        kilogram_price: 5
     }
 };
 const test_population_centres = {
@@ -36,7 +36,7 @@ const test_population_centres = {
 }
 const test_production_methods = {
     bessemer_process: {
-        name: "Bessemer Process",
+        prodMed_name: "Bessemer Process",
         key: "bessemer_process",
         inputGoods: ['coal', 'iron'],
         inputAmount: [20, 40],
@@ -45,11 +45,10 @@ const test_production_methods = {
         prodMed_employment: 20
     }
 }
-if (process.env.POPULATE_DB) {
     console.log("Populating with test data");
     Object.keys(test_goods).forEach(element => {
         const elementToBrowse = test_goods[element];
-        goods.addNewObject(elementToBrowse.subcategory, elementToBrowse.name, elementToBrowse.key, elementToBrowse.perKilogramPrice);
+        goods.addNewObject(elementToBrowse);
     });
     Object.keys(test_population_centres).forEach(element => {
         const elementToBrowse = test_population_centres[element];
@@ -59,4 +58,3 @@ if (process.env.POPULATE_DB) {
         const elementToBrowse = test_production_methods[element];
         production_methods.addNewObject(elementToBrowse);
     });
-}

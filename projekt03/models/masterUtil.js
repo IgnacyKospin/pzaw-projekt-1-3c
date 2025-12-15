@@ -51,11 +51,9 @@ export function handleNew(tab, newData, res) {
                 goodsImport.addNewObject(newData);
                 break;
             case "population_centres":
-                console.log(newData);
                 populationCentresImport.addNewObject(newData);
                 break;
             case "production_methods":
-                console.log(newData);
                 productionMethodsImport.addNewObject(newData);
                 break;
         }
@@ -91,11 +89,9 @@ export function handleEdit(tab, newData, res) {
                 goodsImport.editObject(newData, tab.key);
                 break;
             case "population_centres":
-                console.log(newData);
                 populationCentresImport.editObject(newData, tab.key);
                 break;
             case "production_methods":
-                console.log(newData);
                 productionMethodsImport.editObject(newData, tab.key);
                 break;
         }

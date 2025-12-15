@@ -70,10 +70,7 @@ export function handleNewFacility(parameters, newObj, res){
     /**
      * this doesn't have verification because i managed my time very badly
      */
-    console.log(newObj);
-    console.log(parameters);
     const targetCity = internal_dboperations.get_city_by_key.get(parameters.tab_id);
-    console.log(targetCity);
     internal_dboperations.insert_facility.get(targetCity.id, newObj.key, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
     res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
 }

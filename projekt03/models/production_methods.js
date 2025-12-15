@@ -22,7 +22,6 @@ const internal_dboperations = {
 }
 function formatInputOutput(arrNames, arrNumbers){
     //arrays -> storage format
-    console.log(arrNumbers);
     if(typeof arrNames !== 'object'){
         arrNames = [arrNames];
         arrNumbers = [arrNumbers];
@@ -48,9 +47,7 @@ export function deletePM(idToKill){
 }
 export function parseInputsOutputs(contents){
     //storage format -> object
-    console.log("kont" + contents);
     const array = contents.split(";");
-    console.log(array);
     array.pop();
     let objectToReturn = {}
     for(let i = 0; i < array.length; i++){
@@ -123,8 +120,6 @@ export function validateEditObject(newMethod) {
     return errors;
 }
 export function addNewObject(newObj){
-    console.log("Nowy obj");
-    console.log(newObj);
     let inputFormat = formatInputOutput(newObj.inputGoods, newObj.inputAmount);
     let outputFormat = formatInputOutput(newObj.outputGoods, newObj.outputAmount);
     internal_dboperations.insert_pm.get(newObj.prodMed_name, newObj.key, inputFormat, outputFormat, newObj.prodMed_employment);
