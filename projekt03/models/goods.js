@@ -13,7 +13,8 @@ const internal_dboperations = {
     get_everything: db.prepare(`SELECT * FROM goods`),
     does_something_like_this_exist: db.prepare(`
         SELECT 1 FROM goods WHERE subcategory_key LIKE ? and key LIKE ?;
-        `)
+        `),
+    get_all_names: db.prepare(`SELECT name, key FROM goods;`)
 }
 function getGoodCategory(good_name) {
     return internal_dboperations.get_good_category.get(good_name);
@@ -22,7 +23,9 @@ export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
     return rows;
 }
-
+export function getAllGoods(){
+    return internal_dboperations.get_all_names.all();
+}
 function validateNewObject(newGood) {
     let errors = [];
     const fields = ["name", "key", "kilogram_price", "category"];
@@ -70,5 +73,6 @@ export default {
     validateNewObject,
     addNewObject,
     goodsConstructor,
-    exportViews
+    exportViews,
+    getAllGoods
 }

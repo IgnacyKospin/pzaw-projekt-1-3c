@@ -1,3 +1,6 @@
+/**
+ * projekt chyba lamie regulacje tematyki gdyz jest sprzeczny z artykulem 20 konstytucji ale trudno
+ */
 import express from "express";
 import morgan from "morgan";
 import createDatabase from "./models/database_creation.js";
@@ -64,6 +67,15 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
+                    contents: tabs
+                });
+                break;
+            case("production_methods"):
+                res.render("tabProductionMethods", {
+                    category: tabs.category_key,
+                    title: tabs.name,
+                    tab_id: tabs.key,
+                    goodsList: goods.getAllGoods(), //so that i didnt have to check in the new pm wether the goods existed it will provide a dropdown. might be inconvenient when its a bigger scale. Too Bad!
                     contents: tabs
                 });
                 break;

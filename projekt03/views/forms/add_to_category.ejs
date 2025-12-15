@@ -2,4 +2,6 @@
         <%- include('addGood.ejs') %>
     <% } else if(category === "population_centres") { %>
         <%- include('addPopulationCentre.ejs')%>
-    <% } %>
+    <% } else if(category === "production_methods") {%>
+        <%- include('addProductionMethod.ejs')%>
+    <%}%>
