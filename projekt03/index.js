@@ -49,12 +49,25 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     //console.log(tabs);
     if (tabs) {
-        res.render("tab", {
-            category: tabs.category_key,
-            title: tabs.name,
-            tab_id: tabs.key,
-            contents: tabs
-        });
+        console.log(tabs);
+        switch(tabs.category_key){
+            case("goods"):
+                res.render("tabGoods", {
+                    category: tabs.category_key,
+                    title: tabs.name,
+                    tab_id: tabs.key,
+                    contents: tabs
+                });
+                break;
+            case("population_centres"):
+                res.render("tabPopCentres", {
+                    category: tabs.category_key,
+                    title: tabs.name,
+                    tab_id: tabs.key,
+                    contents: tabs
+                });
+                break;
+        }
     } else {
         res.sendStatus(404);
     }

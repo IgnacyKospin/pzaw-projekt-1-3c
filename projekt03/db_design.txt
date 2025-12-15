@@ -1,4 +1,4 @@
-cities:
+population_centres:
 - category_key = should connect to economic_categories, with the key corresponding to population centres
 - name - city name
 - key - name of the city without spaces
@@ -7,8 +7,8 @@ cities:
 economic categories - to store the containers (population centres, goods, etc)
 - contents are self explainable by name i think
 
-facilities - to store facilities in cities
-- city_id = connects to id from cities, which city is the facility in
+facilities - to store facilities in population_centres
+- city_id = connects to id from population_centres, which city is the facility in
 - facility key and name - name of facility
 - production_method_key - connects to production_methods key column to connect the type of pm used
 

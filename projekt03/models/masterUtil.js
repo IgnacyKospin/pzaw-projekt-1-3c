@@ -38,6 +38,9 @@ export function handleNew(tab, newData, res) {
             newData.subcategory_key = tab.subcategory_key;
             totalHandler.errors = goodsImport.validateNewObject(newData);
             break;
+        case "population_centres":
+            totalHandler.errors = populationCentresImport.validateNewObject(newData);
+            break;
     }
     if (totalHandler.errors.length === 0) {
         switch (newData.category) {

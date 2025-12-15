@@ -34,16 +34,17 @@ function createGoods(){
     db.exec(queryCreateGoods);
 }
 function createPopulationCentres(){
-    const queryCreateCities = `
-    CREATE TABLE IF NOT EXISTS "cities" (
+    const queryCreatepopulation_centres = `
+    CREATE TABLE IF NOT EXISTS "population_centres" (
         "category_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
         "id"	INTEGER NOT NULL,
         "key"	TEXT NOT NULL UNIQUE,
+        "population" INTEGER NOT NULL,
         PRIMARY KEY("id"),
         CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key")
     );`;
-    db.exec(queryCreateCities);
+    db.exec(queryCreatepopulation_centres);
     const queryCreateFacilities = `
     CREATE TABLE IF NOT EXISTS "facilities" (
         "city_id"	INTEGER NOT NULL,
@@ -51,7 +52,7 @@ function createPopulationCentres(){
         "facility_name" TEXT NOT NULL,
         "production_method_key"	TEXT NOT NULL,
         "facility_amount"	INTEGER NOT NULL,
-        CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "cities"("id"),
+        CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "population_centres"("id"),
         CONSTRAINT "connectToProductionMethod" FOREIGN KEY("production_method_key") REFERENCES "production_methods"("key")
     );`;
     db.exec(queryCreateFacilities);

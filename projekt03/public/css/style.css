@@ -7,3 +7,18 @@ html {
 h2 {
     text-align: center;
 }
+.smallTextForMetaData{
+    font-size: smaller;
+    text-align: center;
+    background-color: grey;
+    padding: 25px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+summary {
+    text-align: center;
+    background-color: rgb(185, 138, 138);
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}

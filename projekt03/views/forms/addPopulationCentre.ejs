@@ -1,0 +1,42 @@
+  <form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
+        <div>
+      <label for="good_kru">Good Key</label>
+      <input
+        type="text"
+        name="key"
+        id="good_key"
+        required
+        minlength="1"
+        maxlength="500"
+        value="<%= locals.name || '' %>"
+      />
+    </div>
+    <div>
+      <label for="good_name">Good Name</label>
+      <input
+        type="text"
+        name="name"
+        id="good_name"
+        required
+        minlength="1"
+        maxlength="500"
+        value="<%= locals.name || '' %>"
+      />
+    </div>
+    <div>
+      <label for="good_price">Good Price Per Kilogram</label>
+      <input
+        type="number"
+        name="kilogram_price"
+        step="any"
+        id="good_price"
+        required
+        value="<%= locals.kilogram_price || '' %>"
+      />
+    </div>
+    <input type="hidden" name="category" value="<%= category %>">
+
+    <div>
+      <button type="submit">Add this good...</button>
+    </div>
+  </form>
