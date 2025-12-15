@@ -4,9 +4,10 @@ import populationCentresImport from "./population_centres.js";
 import productionMethodsImport from "./production_methods.js";
 export function getTab(tabCategory, tabId) {
     const query1 = ("SELECT * FROM " + tabCategory + " WHERE key = '" + tabId + "';");
-    //console.log(query1);
     const query = db.prepare(query1);
     const result = query.get();
+    console.log("kwerenda result:");
+    console.log(result);
     return result;
     
 }
@@ -30,18 +31,21 @@ export function viewFormatter(objectName) {
 }
 export function handleNew(tab, newData, res) {
     let totalHandler = {};
-    switch (tab.category) {
+    console.log("Nowe dane");
+    console.log(newData);
+    switch (newData.category) {
         case "goods":
-            totalHandler.errors = goodsImport.validateNewObject(newData);
+            totalHandler.errors = goodsImport.validateNewObject(newData, tab);
             break;
     }
     if (totalHandler.errors.length === 0) {
-        switch (tab.category) {
+        switch (newData.category) {
             case "goods":
+                newData.subcategory_key = tab.subcategory_key;
                 goodsImport.addNewObject(newData);
                 break;
         }
-        res.redirect(`/tabs/${tab.id}`);
+        res.redirect(`/tabs/${tabId}/${tab.id}`);
     } else {
         res.status(400).render("add_new", {
             errors: totalHandler.errors,

@@ -62,7 +62,7 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
 
 })
 app.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
-    const tabs = masterUtil.getTab(req.params.tab_id);
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });

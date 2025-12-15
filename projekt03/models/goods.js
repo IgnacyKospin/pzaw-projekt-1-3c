@@ -10,7 +10,10 @@ const internal_dboperations = {
     does_category_exist: db.prepare(`
         SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_key = 'goods';
         `),
-    get_everything: db.prepare(`SELECT * FROM goods`)
+    get_everything: db.prepare(`SELECT * FROM goods`),
+    does_something_like_this_exist: db.prepare(`
+        SELECT 1 FROM goods WHERE subcategory_key LIKE ? and key LIKE ?;
+        `)
 }
 function getGoodCategory(good_name) {
     return internal_dboperations.get_good_category.get(good_name);
@@ -20,7 +23,7 @@ export function exportViews() {
     return rows;
 }
 
-function validateNewObject(newGood) {
+function validateNewObject(newGood, oldGood) {
     let errors = [];
     const fields = ["name", "kilogram_price", "category"];
     for (let field of fields) {
@@ -30,19 +33,25 @@ function validateNewObject(newGood) {
             errors.push("Kilogram price not a number");
         }
     }
-    const category = internal_dboperations.does_category_exist.get(newGood.categoryKey);
-    if (category) {
-        const exists = category.goods.some(g => g.name === newGood.name);
-        if (exists) {
+    console.log(newGood);
+    const category = internal_dboperations.does_category_exist.get(oldGood.subcategory_key);
+    if (category[1] == 1) {
+        const exists = internal_dboperations.does_something_like_this_exist.get(oldGood.subcategory_key, newGood.name);
+        console.log(exists);
+        if (exists == null) {
+        }
+        else{
             errors.push(`${newGood.name} already exists in ${category.name}`);
         }
     } else {
         errors.push(`Invalid category: ${newGood.category}`);
     }
+       console.log(category);
     return errors;
 }
 export function addNewObject(newObj){
-    internal_dboperations.insert_good.get(newObj.categoryKey, newObj.name, newObj.key, newObj.kilogram_price);
+    console.log(newObj.category_key, newObj.name, newObj.key, newObj.kilogram_price);
+    internal_dboperations.insert_good.get(newObj.category_key, newObj.name, newObj.key, newObj.kilogram_price);
     console.log("now obj:" + newObj);
 }
 export function goodsConstructor(){
@@ -52,7 +61,7 @@ export function goodsConstructor(){
     const prepareGoods = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
     INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
-    //this is temporary so i can see how this shit works
+    //this is temporary so i can see how this very nice thing works
     const InsertTempData = `
     INSERT OR IGNORE INTO goods VALUES ('goods', 'industrial_goods', 'coal', 'coal', 0, 0, 1); `
     db.exec(InsertTempData);
