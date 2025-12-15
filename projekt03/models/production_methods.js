@@ -97,6 +97,34 @@ export function validateNewObject(newMethod) {
     }
     return errors;
 }
+export function validateEditObject(newMethod) {
+    let errors = [];
+    const fields = ["prodMed_name", "key", "prodMed_employment"];
+    const specialFields = ["outputAmount", "inputAmount"];
+    for (let field of fields) {
+        if (!newMethod[field]) {
+            errors.push(`Missing ${field}`);
+        } else if (field == "prodMed_employment" && isNaN(Number(newMethod.prodMed_employment))) {
+            errors.push("Employment not a number");
+        }
+    }
+    for(let field of specialFields){
+        if(Array.isArray(newMethod[field])){
+            for(let x = 0; x < newMethod[field].length; x++){
+                if(isNaN(Number(newMethod[field][x]))){
+                    console.log(newMethod[field][x]);
+                    errors.push("A good input or output value is not a number")
+                }
+            }
+        }
+        else{
+            if(isNaN(Number(newMethod[field]))){
+                errors.push("A good input or output value is not a number")
+            }
+        }
+    }
+    return errors;
+}
 export function addNewObject(newObj){
     console.log("Nowy obj");
     console.log(newObj);
@@ -105,11 +133,18 @@ export function addNewObject(newObj){
     internal_dboperations.insert_pm.get(newObj.prodMed_name, newObj.key, inputFormat, outputFormat, newObj.prodMed_employment);
     //console.log("now obj:" + newObj);
 }
+export function editObject(newObj){
+    let inputFormat = formatInputOutput(newObj.inputGoods, newObj.inputAmount);
+    let outputFormat = formatInputOutput(newObj.outputGoods, newObj.outputAmount);
+    internal_dboperations.edit.get(newObj.prodMed_name, inputFormat, outputFormat, newObj.prodMed_employment);
+}
 export default {
     exportViews,
     productionMethodsConstructor,
     addNewObject,
     validateNewObject,
     parseInputsOutputs,
-    deletePM
+    deletePM,
+    validateEditObject,
+    editObject
 }

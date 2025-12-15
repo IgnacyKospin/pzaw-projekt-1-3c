@@ -1,18 +1,6 @@
 <details name="addEdit">
-  <summary><h1>Add New Population Centre</h1></summary>
-<form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
-        <div>
-      <label for="key">Population Centre Key</label>
-      <input
-        type="text"
-        name="key"
-        id="key"
-        required
-        minlength="1"
-        maxlength="500"
-        value="<%= locals.name || '' %>"
-      />
-    </div>
+  <summary><h1>edit population centre</h1></summary>
+<form action="/tabs/<%=category%>/<%=tab_id%>/editData" method="POST">
     <div>
       <label for="popCentre_name">Population Centre Name</label>
       <input

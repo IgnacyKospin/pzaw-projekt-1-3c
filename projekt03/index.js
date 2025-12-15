@@ -113,7 +113,11 @@ app.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
-
+app.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    if (!tabs) return res.sendStatus(404);
+    masterUtil.handleEdit(tabs, req.body, res);
+});
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);
 });

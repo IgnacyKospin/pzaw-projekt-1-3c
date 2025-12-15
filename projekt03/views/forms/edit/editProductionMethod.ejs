@@ -1,7 +1,7 @@
 
 <details name="addEdit">
-  <summary><h1>Add New Production Method</h1></summary>
-<form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
+  <summary><h1>Edit Production Method</h1></summary>
+<form action="/tabs/<%=category%>/<%=tab_id%>/editData" method="POST">
     <div id="inputs">
       <h2>Inputs</h1>
       <button type="button" id="addInput">Add another input</button>
@@ -40,20 +40,6 @@
         />
         <br>
       </div>
-  </div> 
-      <hr>
-      <div>
-      <label for="key">Production Method Key</label>
-      <input
-        type="text"
-        name="key"
-        id="key"
-        required
-        minlength="1"
-        maxlength="500"
-        value="<%= locals.name || '' %>"
-      />
-    </div>
     <div>
       <label for="prodMed_name">Production Method Name</label>
       <input

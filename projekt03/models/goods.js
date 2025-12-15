@@ -15,7 +15,8 @@ const internal_dboperations = {
         SELECT 1 FROM goods WHERE key LIKE ?;
         `),
     get_all_names: db.prepare(`SELECT name, key FROM goods;`),
-    kill: db.prepare(`DELETE FROM goods WHERE key = ?;`)
+    kill: db.prepare(`DELETE FROM goods WHERE key = ?;`),
+    edit: db.prepare(`UPDATE goods SET name = ?, perKilogram_price = ? WHERE key = ?;`)
 }
 export function deleteGD(idToKill){
     internal_dboperations.kill.get(idToKill);
@@ -49,9 +50,30 @@ function validateNewObject(newGood) {
        //console.log(category);
     return errors;
 }
+function validateEditObject(newGood) {
+    let errors = [];
+    const fields = ["name", "kilogram_price", "category"];
+    for (let field of fields) {
+        if (!newGood[field]) {
+            errors.push(`Missing ${field}`);
+        } else if (field == "kilogram_price" && isNaN(Number(newGood.kilogram_price))) {
+            errors.push("Kilogram price not a number");
+        }
+    }
+    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
+    if (category[1] == 1) {
+    } else {
+        errors.push(`Invalid category: ${newGood.category}`);
+    }
+    return errors;
+}
 export function addNewObject(newObj){
     internal_dboperations.insert_good.get(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
     //console.log("now obj:" + newObj);
+}
+export function editObject(newObj, key){
+    console.log(newObj.name, newObj.kilogram_price, key);
+    internal_dboperations.edit.get(newObj.name, newObj.kilogram_price, key);
 }
 export function goodsConstructor(){
     /*
@@ -72,5 +94,7 @@ export default {
     goodsConstructor,
     exportViews,
     getAllGoods,
-    deleteGD
+    deleteGD,
+    validateEditObject,
+    editObject
 }

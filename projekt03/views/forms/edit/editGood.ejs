@@ -1,0 +1,34 @@
+<details name="addEdit">
+  <summary><h1>Add New Good</h1></summary>
+  <form action="/tabs/<%=category%>/<%=tab_id%>/editData" method="POST">
+    <div>
+      <label for="good_name">Good Name</label>
+      <input
+        type="text"
+        name="name"
+        id="good_name"
+        required
+        minlength="1"
+        maxlength="500"
+        value="<%= locals.name || '' %>"
+      />
+    </div>
+    <div>
+      <label for="good_price">Good Price Per Kilogram</label>
+      <input
+        type="number"
+        name="kilogram_price"
+        step="any"
+        id="good_price"
+        required
+        value="<%= locals.kilogram_price || '' %>"
+      />
+    </div>
+    <!--there is not meant to be anything else to be added here insofar due to the fact that production and consmuption should be handled by the calculation features-->
+    <input type="hidden" name="category" value="<%= category %>">
+
+    <div>
+      <button type="submit">Edit this good...</button>
+    </div>
+  </form>
+</details>  
