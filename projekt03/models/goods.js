@@ -43,6 +43,7 @@ function validateNewObject(newGood) {
 }
 export function addNewObject(newObj){
     internal_dboperations.insert_good.get(newObj.categoryKey, newObj.name, newObj.key, newObj.kilogram_price);
+    console.log("now obj:" + newObj);
 }
 export function goodsConstructor(){
     /*

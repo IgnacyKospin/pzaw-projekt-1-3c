@@ -45,22 +45,23 @@ app.get("/tabs", (req, res) => {
     }
     );
 });
-
-app.get("/tabs/:tab_id", (req, res) => {
-    const tabs = masterUtil.getTab(req.params.tab_id);
+app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         res.render("tab", {
-            category: tabs.category,
+            superTest: tabs,
+            category: tabs.category_key,
             title: tabs.name,
-            tab_id: tabs.id,
+            tab_id: tabs.key,
             supportAdding: tabs.supportsAdding,
             contents: tabs.contents
         });
     } else {
         res.sendStatus(404);
     }
-});
-app.post("/tabs/:tab_id/addData", (req, res) => {
+
+})
+app.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
     const tabs = masterUtil.getTab(req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
