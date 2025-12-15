@@ -11,36 +11,3 @@ export function fillDatabasesWithBaseInfo(){
 export default{
     fillDatabasesWithBaseInfo
 };
-const test_goods = {
-    coal: {
-        subcategory: "industrial_goods",
-        name: "Coal",
-        key: "coal",
-        perKilogramPrice: 6
-    },
-    steel: {
-        subcategory: "industrial_goods",
-        name: "Steel",
-        key: "steel",
-        perKilogramPrice: 20
-    },
-    iron: {
-        subcategory: "industrial_goods",
-        name: "Iron",
-        key: "iron",
-        perkilogramPrice: 5
-    },
-    grain: {
-        subcategory: "agrarian_goods",
-        name: "Grain",
-        key: "grain",
-        perKilogramPrice: 5
-    }
-}
-if (process.env.FILL_UP) {
-    console.log("Populating with test data");
-    Object.keys(test_goods).forEach(element => {
-        const elementToBrowse = test_goods[element];
-        goods.addNewObject(elementToBrowse.subcategory, elementToBrowse.name, elementToBrowse.key, elementToBrowse.perKilogramPrice);
-    });
-}
