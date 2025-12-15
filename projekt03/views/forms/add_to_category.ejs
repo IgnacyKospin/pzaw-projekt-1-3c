@@ -1,5 +1,5 @@
     <% if (category == "goods") { %>
         <%- include('addGood.ejs') %>
-    <% } else { %>
-        <p>This tab does not support adding, please check other (only Goods support right now).</p>
+    <% } else if(category === "population_centres") { %>
+        <%- include('addPopulationCentre.ejs')%>
     <% } %>

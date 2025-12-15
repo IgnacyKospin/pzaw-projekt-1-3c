@@ -1,10 +1,10 @@
   <form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
         <div>
-      <label for="good_kru">Good Key</label>
+      <label for="key">Population Centre Key</label>
       <input
         type="text"
         name="key"
-        id="good_key"
+        id="key"
         required
         minlength="1"
         maxlength="500"
@@ -12,11 +12,11 @@
       />
     </div>
     <div>
-      <label for="good_name">Good Name</label>
+      <label for="popCentre_name">Population Centre Name</label>
       <input
         type="text"
-        name="name"
-        id="good_name"
+        name="popCentre_name"
+        id="popCentre_name"
         required
         minlength="1"
         maxlength="500"
@@ -24,12 +24,12 @@
       />
     </div>
     <div>
-      <label for="good_price">Good Price Per Kilogram</label>
+      <label for="population">Population</label>
       <input
         type="number"
-        name="kilogram_price"
+        name="popCentre_population"
         step="any"
-        id="good_price"
+        id="popCentre_population"
         required
         value="<%= locals.kilogram_price || '' %>"
       />

@@ -47,8 +47,11 @@ export function handleNew(tab, newData, res) {
             case "goods":
                 goodsImport.addNewObject(newData);
                 break;
+            case "population_centres":
+                console.log(newData);
+                populationCentresImport.addNewObject(newData);
+                break;
         }
-        
         res.redirect(`/tabs/${newData.category}/${newData.key}`);
     } else {
         res.status(400).render("add_new", {
