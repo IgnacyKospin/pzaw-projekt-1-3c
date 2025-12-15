@@ -2,7 +2,7 @@ import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 const internal_dboperations = {
     insert_good: db.prepare(
-        `INSERT INTO goods (category_key, subcategory_key, name, key, perKilogram_price) VALUES ('goods', ?, ?, ?, ?);`
+        `INSERT INTO goods VALUES ('goods', ?, ?, ?, 0, 0, ?);`
     ),
     get_good_category: db.prepare(
         `SELECT subcategory_key FROM goods WHERE name LIKE ?;`

@@ -47,14 +47,13 @@ app.get("/tabs", (req, res) => {
 });
 app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    console.log(tabs);
     if (tabs) {
         res.render("tab", {
-            superTest: tabs,
             category: tabs.category_key,
             title: tabs.name,
             tab_id: tabs.key,
-            supportAdding: tabs.supportsAdding,
-            contents: tabs.contents
+            contents: tabs
         });
     } else {
         res.sendStatus(404);
