@@ -33,11 +33,11 @@ function validateNewObject(newGood) {
             errors.push("Kilogram price not a number");
         }
     }
-    console.log(newGood);
+    //console.log(newGood);
     const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
     if (category[1] == 1) {
         const exists = internal_dboperations.does_something_like_this_exist.get(newGood.subcategory_key, newGood.name);
-        console.log(exists);
+        //console.log(exists);
         if (exists == null) {
         }
         else{
@@ -46,13 +46,12 @@ function validateNewObject(newGood) {
     } else {
         errors.push(`Invalid category: ${newGood.category}`);
     }
-       console.log(category);
+       //console.log(category);
     return errors;
 }
 export function addNewObject(newObj){
-    console.log(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
     internal_dboperations.insert_good.get(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
-    console.log("now obj:" + newObj);
+    //console.log("now obj:" + newObj);
 }
 export function goodsConstructor(){
     /*

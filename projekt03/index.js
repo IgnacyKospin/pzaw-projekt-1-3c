@@ -17,8 +17,8 @@ app.use(express.urlencoded());
 app.use(morgan("dev"));
 
 function log_request(req, res, next) {
-  console.log(`Request ${req.method} ${req.path}`);
-  next();
+    console.log(`Request ${req.method} ${req.path}`);
+    next();
 }
 app.use(log_request);
 app.get("/tabs", (req, res) => {
@@ -47,7 +47,7 @@ app.get("/tabs", (req, res) => {
 });
 app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
-    console.log(tabs);
+    //console.log(tabs);
     if (tabs) {
         res.render("tab", {
             category: tabs.category_key,

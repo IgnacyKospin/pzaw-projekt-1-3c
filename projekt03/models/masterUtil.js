@@ -6,8 +6,8 @@ export function getTab(tabCategory, tabId) {
     const query1 = ("SELECT * FROM " + tabCategory + " WHERE key = '" + tabId + "';");
     const query = db.prepare(query1);
     const result = query.get();
-    console.log("kwerenda result:");
-    console.log(result);
+    //console.log("kwerenda result:");
+    //console.log(result);
     return result;
     
 }
@@ -31,8 +31,8 @@ export function viewFormatter(objectName) {
 }
 export function handleNew(tab, newData, res) {
     let totalHandler = {};
-    console.log("Nowe dane");
-    console.log(newData);
+    //console.log("Nowe dane");
+    //console.log(newData);
     switch (newData.category) {
         case "goods":
             newData.subcategory_key = tab.subcategory_key;
