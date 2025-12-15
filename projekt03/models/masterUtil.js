@@ -41,6 +41,9 @@ export function handleNew(tab, newData, res) {
         case "population_centres":
             totalHandler.errors = populationCentresImport.validateNewObject(newData);
             break;
+        case "production_methods":
+            totalHandler.errors = productionMethodsImport.validateNewObject(newData);
+            break;
     }
     if (totalHandler.errors.length === 0) {
         switch (newData.category) {
@@ -50,6 +53,10 @@ export function handleNew(tab, newData, res) {
             case "population_centres":
                 console.log(newData);
                 populationCentresImport.addNewObject(newData);
+                break;
+            case "production_methods":
+                console.log(newData);
+                productionMethodsImport.addNewObject(newData);
                 break;
         }
         res.redirect(`/tabs/${newData.category}/${newData.key}`);
