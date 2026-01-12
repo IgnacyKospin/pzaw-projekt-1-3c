@@ -1,0 +1,11 @@
+<%- include("head.part.ejs") %>
+
+<main>
+  <h1><%= title %></h1>
+  <ul id="errors">
+    <% errors.forEach(function(error){ %>
+    <li><%= error %></li>
+    <% }) %>
+  </ul>
+  <%- include("forms/edit/edit_category.ejs") %>
+</main>

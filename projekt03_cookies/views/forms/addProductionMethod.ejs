@@ -1,0 +1,139 @@
+
+<details name="addEdit">
+  <summary><h1>Add New Production Method</h1></summary>
+<form action="/tabs/<%=category%>/<%=tab_id%>/addData" method="POST">
+    <div id="inputs">
+      <h2>Inputs</h1>
+      <button type="button" id="addInput">Add another input</button>
+      <div>
+        <select name="inputGoods">
+          <% goodsList.forEach(function(cat){ %>
+            <option value="<%= cat.key %>"><%= cat.name %></option>
+          <% }) %>
+        </select>
+        <input
+          type="number"
+          name="inputAmount"
+          step="any"
+          id="inputAmount"
+          required
+        />
+        <br>
+    </div>
+  </div>  
+  <!--OUTPUTS-->
+  <div id="outputs">
+    <h2>Outputs</h1>
+    <button type="button" id="addOutput">Add another output</button>
+      <div>
+        <select name="outputGoods">
+          <% goodsList.forEach(function(cat){ %>
+            <option value="<%= cat.key %>"><%= cat.name %></option>
+          <% }) %>
+        </select>
+        <input
+          type="number"
+          name="outputAmount"
+          step="any"
+          id="outputAmount"
+          required
+        />
+        <br>
+      </div>
+  </div> 
+      <hr>
+      <div>
+      <label for="key">Production Method Key</label>
+      <input
+        type="text"
+        name="key"
+        id="key"
+        required
+        minlength="1"
+        maxlength="500"
+        value="<%= locals.name || '' %>"
+      />
+    </div>
+    <div>
+      <label for="prodMed_name">Production Method Name</label>
+      <input
+        type="text"
+        name="prodMed_name"
+        id="prodMed_name"
+        required
+        minlength="1"
+        maxlength="500"
+        value="<%= locals.name || '' %>"
+      />
+    </div>
+    <div>
+      <label for="prodMed_employment">Expected Employment</label>
+      <input
+        type="number"
+        name="prodMed_employment"
+        step="any"
+        id="prodMed_employment"
+        required
+        value="<%= locals.kilogram_price || '' %>"
+      />
+    </div>
+    <input type="hidden" name="category" value="<%= category %>">
+
+    <div>
+      <button type="submit">Add this good...</button>
+    </div>
+  </form>
+</details>
+
+  <template id="inputTemplate">  <!--i think this was the simplest way to do this. many such cases.-->
+    <div>
+      <select name="inputGoods">
+        <% goodsList.forEach(function(cat){ %>
+          <option value="<%= cat.key %>"><%= cat.name %></option>
+        <% }) %>
+        </select>
+        <input
+          type="number"
+          name="inputAmount"
+          step="any"
+          id="inputAmount"
+          required
+        />
+        <br>
+    </div>
+  </template>
+
+  <template id="outputTemplate">  <!--i think this was the simplest way to do this. many such cases.-->
+    <div>
+      <select name="outputGoods">
+        <% goodsList.forEach(function(cat){ %>
+          <option value="<%= cat.key %>"><%= cat.name %></option>
+        <% }) %>
+        </select>
+        <input
+          type="number"
+          name="outputAmount"
+          step="any"
+          id="outputAmount"
+          required
+        />
+        <br>
+    </div>
+  </template>
+
+<script>
+  /*
+  this is so that an additional dropdown can be added
+  no removing live with your mistakes
+  */
+  document.getElementById('addInput').addEventListener("click", () => {
+    const template = document.getElementById("inputTemplate");
+    const clone = template.content.cloneNode(true);
+    document.getElementById("inputs").appendChild(clone);
+  })
+    document.getElementById('addOutput').addEventListener("click", () => {
+    const template = document.getElementById("outputTemplate");
+    const clone = template.content.cloneNode(true);
+    document.getElementById("outputs").appendChild(clone);
+  })
+</script>

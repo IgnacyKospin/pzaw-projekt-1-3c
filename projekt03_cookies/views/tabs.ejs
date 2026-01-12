@@ -1,0 +1,13 @@
+<%- include("head.part.ejs") %>
+
+<main>
+    <h1><%= title %></h1>
+    <ul id="econCategories">
+        <%listOfTabs.forEach(function(tabs){ %>
+            <h2><%= tabs.title %></h1>
+            <% tabs.contents.forEach(function(cat){ %>
+            <li><a href="/tabs/<%=cat.category_key%>/<%= cat.key %>"><%= cat.name %></a></li>
+            <% }) %>
+        <%})%>
+    </ul>
+</main>

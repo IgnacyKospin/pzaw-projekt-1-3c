@@ -1,0 +1,96 @@
+import masterUtil from "./masterUtil.js";
+import db from "./database.js";
+const internal_dboperations = {
+    insert_good: db.prepare(
+        `INSERT INTO goods VALUES ('goods', ?, ?, ?, 0, 0, ?);`
+    ),
+    get_good_category: db.prepare(
+        `SELECT subcategory_key FROM goods WHERE name LIKE ?;`
+    ),
+    does_category_exist: db.prepare(`
+        SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_key = 'goods';
+        `),
+    get_everything: db.prepare(`SELECT * FROM goods`),
+    does_something_like_this_exist: db.prepare(`
+        SELECT 1 FROM goods WHERE key LIKE ?;
+        `),
+    get_all_names: db.prepare(`SELECT name, key FROM goods;`),
+    kill: db.prepare(`DELETE FROM goods WHERE key = ?;`),
+    edit: db.prepare(`UPDATE goods SET name = ?, perKilogram_price = ? WHERE key = ?;`)
+}
+export function deleteGD(idToKill){
+    internal_dboperations.kill.get(idToKill);
+}
+export function exportViews() {
+    const rows = internal_dboperations.get_everything.all();
+    return rows;
+}
+export function getAllGoods(){
+    return internal_dboperations.get_all_names.all();
+}
+function validateNewObject(newGood) {
+    let errors = [];
+    const fields = ["name", "key", "kilogram_price", "category"];
+    if((internal_dboperations.does_something_like_this_exist.get(newGood.key)) !== undefined){
+        errors.push("A key like this already exists");
+    }
+    for (let field of fields) {
+        if (!newGood[field]) {
+            errors.push(`Missing ${field}`);
+        } else if (field == "kilogram_price" && isNaN(Number(newGood.kilogram_price))) {
+            errors.push("Kilogram price not a number");
+        }
+    }
+    //console.log(newGood);
+    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
+    if (category[1] == 1) {
+    } else {
+        errors.push(`Invalid category: ${newGood.category}`);
+    }
+       //console.log(category);
+    return errors;
+}
+function validateEditObject(newGood) {
+    let errors = [];
+    const fields = ["name", "kilogram_price", "category"];
+    for (let field of fields) {
+        if (!newGood[field]) {
+            errors.push(`Missing ${field}`);
+        } else if (field == "kilogram_price" && isNaN(Number(newGood.kilogram_price))) {
+            errors.push("Kilogram price not a number");
+        }
+    }
+    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
+    if (category[1] == 1) {
+    } else {
+        errors.push(`Invalid category: ${newGood.category}`);
+    }
+    return errors;
+}
+export function addNewObject(newObj){
+    internal_dboperations.insert_good.get(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
+    //console.log("now obj:" + newObj);
+}
+export function editObject(newObj, key){
+    console.log(newObj.name, newObj.kilogram_price, key);
+    internal_dboperations.edit.get(newObj.name, newObj.kilogram_price, key);
+}
+export function goodsConstructor(){
+    /*
+    trying to call this creation in this file resulted in errors so I have decided to outsource category creation to the master db file
+    */
+    const prepareGoods = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
+    INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
+    db.exec(prepareGoods);
+}
+export default {
+    validateNewObject,
+    addNewObject,
+    goodsConstructor,
+    exportViews,
+    getAllGoods,
+    deleteGD,
+    validateEditObject,
+    editObject
+}

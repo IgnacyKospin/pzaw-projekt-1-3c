@@ -1,0 +1,39 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: blanchedalmond;
+    display: flex;
+    justify-content: center;
+}
+h2 {
+    text-align: center;
+}
+.smallTextForMetaData{
+    font-size: smaller;
+    text-align: center;
+    background-color: grey;
+    padding: 25px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+summary {
+    text-align: center;
+    background-color: rgb(185, 138, 138);
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.newFacility {
+    margin: 15px;
+}
+.contentsPop{
+    background-color: grey;
+    padding: 15px;
+}
+.subContentsPOp{
+    background-color: rgb(114, 108, 101);
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+
+}

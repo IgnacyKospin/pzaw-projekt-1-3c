@@ -1,0 +1,33 @@
+<%- include("head.part.ejs") %> 
+<main> 
+<!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
+<ul id="contents">
+    <details >
+        <summary>
+            <p>Production Method: <%=contents.name%></p>
+            <h2>Inputs:</h2>
+            <% for (let key in formattedInputs) { %>
+                <p><%= key %>: <%=formattedInputs[key]%></p>
+            <% } %>
+            <h2>Outputs:</h2>
+            <% for (let key in formattedOutputs) { %>
+                <p><%= key %>: <%=formattedOutputs[key]%></p>
+            <% } %>
+            <h2>Expected employment:</h2>
+            <%=contents.expected_employment%>
+        </summary>
+        <div class="smallTextForMetaData">
+            <p style="font-weight: bolder;">technical information</p>
+            <% for (let key in contents) { %>
+                <p><%= key %>: <%=contents[key]%></p>
+            <% } %>
+        </div>
+    </details>
+    <div>
+        <a href="/tabs/<%=category%>/<%=contents.key%>/delete" onclick="return confirm('are you sure?')">ABANDON(this production method)</a>
+        <h1>new</h1>
+                <%- include("forms/add_to_category.ejs") %>
+        <%- include("forms/edit/edit_category.ejs") %>
+    </div>
+</ul>
+</main>
