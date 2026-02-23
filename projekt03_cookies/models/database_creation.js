@@ -70,6 +70,20 @@ function createProductionMethods(){
     );`;
     db.exec(queryCreateProductionMethods);
 }
+function createSessions(){
+    const queryCreateSessions = `CREATE TABLE IF NOT EXISTS meta_session (4)`
+}
+function createUsers(){
+    const queryCreateUsers = `CREATE TABLE IF NOT EXISTS meta_users (
+        id INTEGER PIMARY KEY,
+        username TEXT UNIQUE,
+        passhash TEXT,
+        created_at TEXt
+    )`;
+    db.exec(queryCreateUsers);
+}
+    createSessions();
+    createUsers();
     createCategories();
     createGoods();
     createPopulationCentres();

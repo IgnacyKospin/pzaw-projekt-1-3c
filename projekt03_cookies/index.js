@@ -24,6 +24,12 @@ function log_request(req, res, next) {
     next();
 }
 app.use(log_request);
+app.get("/login", (req, res) => {
+
+});
+app.post("/login", (req, res) => {
+    
+})
 app.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
@@ -89,7 +95,7 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     }
 
 })
-app.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided to do this by get
+app.delete("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided to do this by get
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         switch(tabs.category_key){
