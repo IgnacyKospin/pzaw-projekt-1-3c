@@ -3,6 +3,8 @@
  */
 import express from "express";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
+
 import createDatabase from "./models/database_creation.js";
 createDatabase.createDatabases();
 import databaseOps from "./models/database_fill.js";
@@ -12,12 +14,17 @@ import goods from "./models/goods.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
+import settings from "./models/settings.js";
+
 const port = 8000;
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
 app.use(morgan("dev"));
+app.use(cookieParser());
+
+const settingsRouter = express.Router();
 
 function log_request(req, res, next) {
     console.log(`Request ${req.method} ${req.path}`);

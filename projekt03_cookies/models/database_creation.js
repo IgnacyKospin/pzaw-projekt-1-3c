@@ -71,7 +71,11 @@ function createProductionMethods(){
     db.exec(queryCreateProductionMethods);
 }
 function createSessions(){
-    const queryCreateSessions = `CREATE TABLE IF NOT EXISTS meta_session (4)`
+    const queryCreateSessions = `CREATE TABLE IF NOT EXISTS meta_session (
+        id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        created_at INTEGER
+    ) STRICT`;
 }
 function createUsers(){
     const queryCreateUsers = `CREATE TABLE IF NOT EXISTS meta_users (
