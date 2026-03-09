@@ -1,4 +1,4 @@
-import db from "./database.js";
+import db from "../database.js";
 import { randomBytes } from "node:crypto";
 
 const SESSION_COOKIE = "__Host-id";
@@ -16,7 +16,7 @@ export function createSession(user, res){
     let sessionId = randomBytes(8).readBigInt64BE();
     let created_at = Date.now();
     let session = internal_dboperations.create_session.get(sessionId, user, created_at);
-    res.local.session = session;
+    res.locals.session = session;
     res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WEEK, httpOnly: true, secure: true,});
     return session;
 }
@@ -38,4 +38,8 @@ function sessionHandler(req, res, next){
     }
 
 
+}
+export default {
+    createSession,
+    sessionHandler
 }

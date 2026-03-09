@@ -3,5 +3,5 @@
  */
 const db_path = "./db.sqlite";
 import { DatabaseSync } from "node:sqlite";
-const db = new DatabaseSync(db_path);
+const db = new DatabaseSync(db_path, {readBigInts: true});
 export default db;
