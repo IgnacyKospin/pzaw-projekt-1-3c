@@ -15,9 +15,17 @@ import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
 import settings from "./models/settings.js";
-
-const port = 8000;
+/**
+ * welcome to the const zone
+ */
+const port = process.env.PORT || 6767; //because i forgot i ran laravel on the same localhost
 const app = express();
+const SECRET = process.env.SECRET;
+if (SECRET == null){
+    console.error("Generate a secret variable thee unhonourable unreader of documentation or ye shall be cast down to the bowels of the earth and pecked by birds");
+    process.exit(1);
+}
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());

@@ -76,6 +76,7 @@ function createSessions(){
         user_id INTEGER,
         created_at INTEGER
     ) STRICT`;
+     db.exec(queryCreateSessions);
 }
 function createUsers(){
     const queryCreateUsers = `CREATE TABLE IF NOT EXISTS meta_users (
