@@ -82,17 +82,22 @@ function createUsers(){
     const queryCreateUsers = `CREATE TABLE IF NOT EXISTS meta_users (
         id INTEGER PIMARY KEY,
         username TEXT UNIQUE,
+        permissions TEXT DEFAULT NULL,
+        departments TEXT DEFAULT NULL,
         passhash TEXT,
         created_at TEXt
     )`;
+    /**
+     * the design philosophy iwth the access controls is that we can have a person who works only on goods, and has editing rights. so they only have the editing rights on the associated department.
+     */
     db.exec(queryCreateUsers);
 }
-    createSessions();
-    createUsers();
-    createCategories();
-    createGoods();
-    createPopulationCentres();
-    createProductionMethods();
+createSessions();
+createUsers();
+createCategories();
+createGoods();
+createPopulationCentres();
+createProductionMethods();
 function createDatabases(){
     console.log("Because apparently import statements execute first I had to figure out a method to get the DB created first so I had to resort to not making the creation a function. So here is a log to show the effects that the greed of mankind brings.\n 'there where i have stood the grass [code] will never grow [make sense] again' - attilla the hun")
 }

@@ -3,27 +3,20 @@
 <!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
 <div>
     <div class="contentsPop">
-    <details >
-        <summary>
-            <p>Good Name: <%=contents.name%></p>
-        </summary>
-        <div class="smallTextForMetaData">
-            <p style="font-weight: bolder;">technical information</p>
-            <% for (let key in contents) { %>
-                <p><%= key %>: <%=contents[key]%></p>
-            <% } %>
-        </div>
-    </details>
+    <div>
+            <p>Population centre name: <%=contents.name%></p>
+            <p>Population: <%=contents.population%></p>
+    </div>
         <div class="subContentsPOp">
             <details id="facilities">
                 <summary>
                     <p>Facilities in this Population Centre</p>
                 </summary>
-                <!--these are undeletable because this is a planned economy and everything is subsidized (aka i didnt have time)-->
+                <!--these are undeletable because this is a planned economy and everything is subsidized (i didnt have time)-->
                 <div class="smallTextForMetaData">
                         <% facilities.forEach(function(facilities) { %>
                             <h1>Facility Name: <%=facilities.facility_name%></h1>
-                            <p>Production Method Key: <%=facilities.production_method_key%></p>
+                            <p>Production Method: <%=facilities.production_method_key%></p>
                             <p>Facility Amount: <%=facilities.facility_amount%></p>
                         <% }); %>
                 </div>
