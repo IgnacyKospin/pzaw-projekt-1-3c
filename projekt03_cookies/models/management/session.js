@@ -4,6 +4,7 @@ import { randomBytes } from "node:crypto";
 const SESSION_COOKIE = "__Host-id";
 const ONE_WEEK = 7*24*60*60*1000;
 const ONE_DAY = 1000*60*60*24;
+const ONE_WORK_SHIFT = 1000*60*60*8;
 const internal_dboperations = {
     create_session: db.prepare(
         `INSERT INTO meta_session (id, user_id, created_at)
@@ -18,7 +19,7 @@ export function createSession(user, res){
     let created_at = Date.now();
     let session = internal_dboperations.create_session.get(sessionId, user, created_at);
     res.locals.session = session;
-    res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WEEK, httpOnly: true, secure: true,});
+    res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
     return session;
 }
 function sessionHandler(req, res, next){
@@ -39,7 +40,7 @@ function sessionHandler(req, res, next){
     if(session != null){
         console.log("Session found.");
         res.locals.session = session;
-        res.cookie(SESSION_COOKIE, res.locals.session.id.toString(), { maxAge: ONE_DAY, httpOnly: true, secure: true,});
+        res.cookie(SESSION_COOKIE, res.locals.session.id.toString(), { maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
     }
     else{
         console.log("New session being created");

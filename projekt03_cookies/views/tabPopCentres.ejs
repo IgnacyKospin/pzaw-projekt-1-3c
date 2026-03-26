@@ -14,11 +14,24 @@
                 </summary>
                 <!--these are undeletable because this is a planned economy and everything is subsidized (i didnt have time)-->
                 <div class="smallTextForMetaData">
-                        <% facilities.forEach(function(facilities) { %>
-                            <h1>Facility Name: <%=facilities.facility_name%></h1>
-                            <p>Production Method: <%=facilities.production_method_key%></p>
-                            <p>Facility Amount: <%=facilities.facility_amount%></p>
-                        <% }); %>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Facility Name</th>
+                                <th>Production Method</th>
+                                <th>Facility Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% facilities.forEach(function(facilities) { %>
+                                <tr>
+                                    <td><%=facilities.facility_name%></td>
+                                    <td><a href='/tabs/production_methods/<%=facilities.production_method_key%>'><%=facilities.production_method_key%></a></td>
+                                    <td><%=facilities.facility_amount%></td>
+                                </tr>
+                            <% }); %>   
+                        </tbody>
+                    </table>
                 </div>
                 <%-include ("forms/addFacility.ejs")%>
             </details>

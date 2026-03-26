@@ -5,12 +5,14 @@
     <div>
             <h1><%=contents.name%></h1>
             <table>
-                <tbody>
+                <thead>
                     <tr><th colspan="2">Inputs</th></tr>
                     <tr>
                         <th>Good</th>
                         <th>Amount</th>
                     </tr>
+                </thead>
+                <tbody>
                     <% for (let key in formattedInputs) { %>
                         <tr><td><%= key %></td><td><%=formattedInputs[key]%></td></tr>
                     <% } %>
