@@ -16,7 +16,7 @@ const internal_dboperations = {
     edit: db.prepare(`UPDATE population_centres SET name = ?, population = ? WHERE key = ?`),
     get_matching_facilities: db.prepare(`SELECT * FROM facilities where city_id = ?`),
     get_city_by_key: db.prepare(`SELECT id from population_centres WHERE key = ?`),
-    insert_facility: db.prepare(`INSERT INTO facilities VALUES (?, ?, ?, ?, ?)`) //ive decided to have it here since its only used for pop centres
+    insert_facility: db.prepare(`INSERT INTO facilities (city_id, facility_name, production_method_key, facility_amount) VALUES (?, ?, ?, ?)`) //ive decided to have it here since its only used for pop centres
 }
 export function exportViews(){
         const rows = internal_dboperations.get_everything.all();
@@ -71,7 +71,7 @@ export function handleNewFacility(parameters, newObj, res){
      * this doesn't have verification because i managed my time very badly
      */
     const targetCity = internal_dboperations.get_city_by_key.get(parameters.tab_id);
-    internal_dboperations.insert_facility.get(targetCity.id, newObj.key, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
+    internal_dboperations.insert_facility.get(targetCity.id, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
     res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
 }
 export default {

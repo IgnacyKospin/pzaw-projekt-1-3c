@@ -48,12 +48,12 @@ function createPopulationCentres(){
     const queryCreateFacilities = `
     CREATE TABLE IF NOT EXISTS "facilities" (
         "city_id"	INTEGER NOT NULL,
-        "facility_key" TEXT NOT NULL,
+        "facility_id" INTEGER PRIMARY KEY,
         "facility_name" TEXT NOT NULL,
         "production_method_key"	TEXT NOT NULL,
         "facility_amount"	INTEGER NOT NULL,
         CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "population_centres"("id") on delete cascade on update cascade, 
-        CONSTRAINT "connectToProductionMethod" FOREIGN KEY("production_method_key") REFERENCES "production_methods"("key") on delete cascade on update cascade 
+        CONSTRAINT "connectToProductionMethod" FOREIGN KEY("production_method_key") REFERENCES "production_methods"("key") on delete cascade on update cascade
     );`;
     db.exec(queryCreateFacilities);
 }
@@ -80,24 +80,40 @@ function createSessions(){
 }
 function createUsers(){
     const queryCreateUsers = `CREATE TABLE IF NOT EXISTS meta_users (
-        id INTEGER PIMARY KEY,
+        id INTEGER PRIMARY KEY,
         username TEXT UNIQUE,
         permissions TEXT DEFAULT NULL,
-        departments TEXT DEFAULT NULL,
+        department INTEGER,
         passhash TEXT,
-        created_at TEXt
+        created_at TEXT,
+        CONSTRAINT "departmentConnection" FOREIGN KEY("department") REFERENCES "meta_departments"("id") on delete cascade on update cascade
     )`;
     /**
      * the design philosophy iwth the access controls is that we can have a person who works only on goods, and has editing rights. so they only have the editing rights on the associated department.
      */
     db.exec(queryCreateUsers);
 }
-createSessions();
-createUsers();
+function createDepartments(){
+    /**
+     * many-to-many relationship table. since a department can have multiple jurisdictions, and so can a field of economics.
+     */
+    const queryCreateDepts = `CREATE TABLE IF NOT EXISTS meta_departments (id INTEGER PRIMARY KEY, department_name TEXT UNIQUE);`
+    const queryCreatePivotDeptsToCategories = `CREATE TABLE IF NOT EXISTS meta_department_relations (
+    department_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    CONSTRAINT "connectToCategory" FOREIGN KEY("category_id") REFERENCES "economic_categories"("id") on delete cascade on update cascade, 
+    CONSTRAINT "connectToDepartment" FOREIGN KEY("department_id") REFERENCES "meta_departments"("id") on delete cascade on update cascade
+    );`;
+    db.exec(queryCreateDepts);
+    db.exec(queryCreatePivotDeptsToCategories);
+}
 createCategories();
-createGoods();
-createPopulationCentres();
 createProductionMethods();
+createPopulationCentres();
+createGoods();
+createDepartments();
+createUsers();
+createSessions();
 function createDatabases(){
     console.log("Because apparently import statements execute first I had to figure out a method to get the DB created first so I had to resort to not making the creation a function. So here is a log to show the effects that the greed of mankind brings.\n 'there where i have stood the grass [code] will never grow [make sense] again' - attilla the hun")
 }
