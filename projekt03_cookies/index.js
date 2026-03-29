@@ -16,6 +16,7 @@ import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
 import session from "./models/management/session.js";
 import settings from "./models/settings.js";
+import auth from "./controllers/auth.js";
 /**
  * welcome to the const zone
  */
@@ -35,7 +36,8 @@ app.use(morgan("dev"));
 app.use(cookieParser(SECRET));
 app.use(session.sessionHandler);
 const settingsRouter = express.Router();
-
+const actualAccessRouter = express.Router(); //ok since im making everything require login i've decided to just place it all under a router because it doesnt have the better middleware handling of laravel. then individual checks will be placed on top to verify department editing rights.
+actualAccessRouter.use(auth.login_needed);
 function log_request(req, res, next) {
     console.log(`Request ${req.method} ${req.path}`);
     next();
@@ -47,7 +49,7 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
     
 })
-app.get("/tabs", (req, res) => {
+actualAccessRouter.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
         title: "Economic Categories",
@@ -71,7 +73,7 @@ app.get("/tabs", (req, res) => {
     }
     );
 });
-app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
+actualAccessRouter.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     //console.log(tabs);
     if (tabs) {
@@ -112,7 +114,7 @@ app.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     }
 
 })
-app.delete("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided to do this by get
+actualAccessRouter.delete("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided to do this by get
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         switch(tabs.category_key){
@@ -133,19 +135,20 @@ app.delete("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided t
         res.sendStatus(404);
     }
 })
-app.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
+actualAccessRouter.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
-app.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
+actualAccessRouter.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleEdit(tabs, req.body, res);
 });
-app.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
+actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
     populationCentres.handleNewFacility(req.params, req.body, res);
 });
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);
 });
+app.use('/', actualAccessRouter);

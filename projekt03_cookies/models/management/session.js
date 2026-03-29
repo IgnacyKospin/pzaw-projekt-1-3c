@@ -19,6 +19,7 @@ export function createSession(user, res){
     let created_at = Date.now();
     let session = internal_dboperations.create_session.get(sessionId, user, created_at);
     res.locals.session = session;
+    res.locals.user = session.user_id != null ? getUser(session.user_id):null;
     res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
     return session;
 }

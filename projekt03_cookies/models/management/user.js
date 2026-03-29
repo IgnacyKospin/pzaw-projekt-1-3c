@@ -12,5 +12,9 @@ const HASH_PARAMS = {
 
 const internal_dboperations = {
     create_user: db.prepare(`INSERT INTO meta_users (username, passhash, created_at) VALUES (?, ?, ?) returning user_id as id;`),
-    
+    get_user: db.prepare(`SELECT id, username from meta_users where id = ?;`)
+
+}
+export function get_user(id) {
+    return internal_dboperations.get_user().get(id);
 }
