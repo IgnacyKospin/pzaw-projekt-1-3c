@@ -14,8 +14,15 @@ export function verify_department_access(user_department_id, tab_category){
   let user_department = dept.id_to_key(user_department_id).key;
   return dept.verify_department_access(user_department, tab_category);
 }
-export function verify_editing_access(user_id){
-  
+export function verify_access(user_id){
+  const permissions = user.get_permissions(user_id);
+  var perms = {
+    admin: permissions.admin,
+    create: permissions.create,
+    update: permissions.update,
+    delete: permissions.delete
+  }
+  return perms;
 }
 export async function login_handle(req, res) {
   let nextUrl = req.query.next;
@@ -47,5 +54,6 @@ export default {
     login_needed,
     login_handle,
     signup_handle,
-    verify_department_access
+    verify_department_access,
+    verify_access
 }

@@ -127,6 +127,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //f
         return res.sendStatus(403);
     }
     console.log("User department can do CRUD on this category. Going further.");
+    
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         switch(tabs.category_key){
