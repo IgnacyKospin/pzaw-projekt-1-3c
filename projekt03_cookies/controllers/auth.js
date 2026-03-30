@@ -10,6 +10,15 @@ export function login_needed (req, res, next) {
     }
     next();
 }
+export function admin_gate(req, res, next) {
+  if(admin_only(res)){
+    next();
+  }
+  else{
+    console.log("user tried to go to admin only. failed.");
+    return res.status(403).send();
+  }
+}
 export function verify_department_access(user_department_id, tab_category){
   let user_department = dept.id_to_key(user_department_id);
   return dept.verify_department_access(user_department, tab_category);
@@ -28,6 +37,12 @@ export function verify_update_access(permissions){
 }
 export function verify_delete_access(permissions){
   if(permissions.admin == "yes" || permissions.delete == "yes"){
+    return true;
+  }
+  return false;
+}
+function admin_only(res) {
+  if (res.locals.user.permissions.admin == "yes"){
     return true;
   }
   return false;
@@ -76,6 +91,7 @@ export function logout(res){
 }
 export default {
   login_needed,
+  admin_gate,
   login_handle,
   signup_handle,
   verify_department_access,
@@ -83,5 +99,5 @@ export default {
   verify_update_access,
   verify_delete_access,
   verify_form_permissions,
-  logout
+  logout,
 }

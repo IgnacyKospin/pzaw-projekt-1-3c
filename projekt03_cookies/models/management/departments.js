@@ -2,7 +2,11 @@ import db from "../database.js";
 const internal_dboperations = {
     verify_department_access_to_category: db.prepare(`SELECT 1 FROM meta_department_relations WHERE department_key = ? AND category_key = ?`),    
     get_department_key_by_id: db.prepare(`SELECT key FROM meta_departments WHERE id = ?`),
-    get_department_name_by_id: db.prepare(`SELECT department_name from meta_departments WHERE id = ?`)
+    get_department_name_by_id: db.prepare(`SELECT department_name from meta_departments WHERE id = ?`),
+    get_all_departments: db.prepare(`SELECT id, department_name FROM meta_departments`)
+}
+export function get_all_departments(){
+    return internal_dboperations.get_all_departments.all();
 }
 export function verify_department_access(department_key, category_key){
     console.log(department_key);
@@ -21,6 +25,7 @@ export function id_to_key(id){
         return result.key
     }
 }
+
 export function id_to_name(id){
     let result =  internal_dboperations.get_department_name_by_id.get(id);
     if(!result || result.department_name === undefined){
@@ -33,5 +38,6 @@ export function id_to_name(id){
 export default {
     verify_department_access,
     id_to_key,
-    id_to_name
+    id_to_name,
+    get_all_departments
 }

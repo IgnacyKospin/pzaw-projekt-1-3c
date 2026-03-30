@@ -16,7 +16,9 @@ import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
 import session from "./models/management/session.js";
 import settings from "./models/settings.js";
+import users from "./models/management/user.js";
 import auth from "./controllers/auth.js";
+import departments from "./models/management/departments.js";
 /**
  * welcome to the const zone
  */
@@ -195,6 +197,15 @@ actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res)
     }
     console.log("User succeeded in both department and personal checks. Request approved");
     populationCentres.handleNewFacility(req.params, req.body, res);
+});
+/**
+ * admin zone
+ */
+actualAccessRouter.get("/admin/users", auth.admin_gate, (req, res) => {
+    res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users()})
+})
+actualAccessRouter.post("/admin/users", (req, res) => {
+
 });
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);

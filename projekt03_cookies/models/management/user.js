@@ -22,7 +22,8 @@ const internal_dboperations = {
     alter_permissions: db.prepare(`UPDATE meta_users SET permissions = ? WHERE id = ?`),
     get_idpasshash: db.prepare(`SELECT id, passhash from meta_users where username = ?`),
     get_by_name: db.prepare(`SELECT id, username from meta_users where username = ?`),
-    get_permissions: db.prepare(`SELECT permissions from meta_users where id = ?`)
+    get_permissions: db.prepare(`SELECT permissions from meta_users where id = ?`),
+    get_all: db.prepare(`SELECT id, username, department, permissions, created_at from meta_users`)
 }
 export function get_user(id) {
 
@@ -52,6 +53,14 @@ export function get_permissions(id){
     const permissions = internal_dboperations.get_permissions.get(id);
     return process_permissions(permissions);
 }
+export function get_all_users(){
+    const users = internal_dboperations.get_all.all();
+    return users.map(user => ({
+        ...user,
+        permissions: process_permissions(user.permissions),
+        department_id: user.department
+    }));
+}
 /**
  * 
  * either processes a object into a database-ready format, or the database format into an object. assumes the data is provided correctly in case of string->object
@@ -70,5 +79,6 @@ export default {
     get_user,
     checkPassword,
     create_user,
-    get_permissions
+    get_permissions,
+    get_all_users
 }
