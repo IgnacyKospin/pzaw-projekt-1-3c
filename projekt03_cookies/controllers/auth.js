@@ -3,9 +3,9 @@ import user from "../models/management/user.js";
 import session from "../models/management/session.js";
 export function login_needed (req, res, next) {
     if(res.locals.user == null){
-        //res.redirect("http://localhost:1234/");
+        res.redirect("http://localhost:1234/");
         console.log("unauthorised! depart post haste my good sir and login thyself!");
-        //return;
+        return;
     }
     next();
 }
@@ -23,14 +23,14 @@ export async function login_handle(req, res) {
     console.log(form.username);
     let user_id = await user.checkPassword(form.username, form.password);
     if (user_id == null) {
-      form.errors["username"] = "Incorrect username and or password";
+      console.log("Incorrect username and or password");
     } else {
       session.createSession(user_id, res);
       res.redirect(nextUrl);
       return;
     }
   }
-  res.render("auth_login", { title: "Logowanie", form, nextUrl });
+  res.render("login/login");
 }
 
 export async function signup_handle(req, res){

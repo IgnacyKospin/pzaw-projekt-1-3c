@@ -2,8 +2,6 @@ import db from "../database.js";
 import { randomBytes } from "node:crypto";
 import userImport from "./user.js";
 const SESSION_COOKIE = "__Host-id";
-const ONE_WEEK = 7*24*60*60*1000;
-const ONE_DAY = 1000*60*60*24;
 const ONE_WORK_SHIFT = 1000*60*60*8;
 const internal_dboperations = {
     create_session: db.prepare(
@@ -20,7 +18,16 @@ export function createSession(user, res){
     let created_at = Date.now();
     let session = internal_dboperations.create_session.get(sessionId, user, csrfToken, created_at);
     res.locals.session = session;
-    res.locals.user = session.user_id != null ? userImport.get_user(session.user_id):null;
+    if(session.user_id == null){
+        console.log("null user id.");
+        session.user = null;
+    }
+    else {
+        console.log("Not null user id, equivalent to " + session.user_id);
+        let test = userImport.get_user(session.user_id);
+        console.log(test);
+        session.user = test;
+    }
     res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
     return session;
 }
@@ -42,6 +49,12 @@ function sessionHandler(req, res, next){
     if(session != null){
         console.log("Existing session assigned.");
         res.locals.session = session;
+        if (session.user_id) {
+            console.log("Found user id. Assigning user.");
+            res.locals.user = userImport.get_user(session.user_id);
+        } else {
+            res.locals.user = null;
+        }
         res.cookie(SESSION_COOKIE, res.locals.session.id.toString(), { maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
     }
     else{
@@ -57,7 +70,7 @@ function sessionHandler(req, res, next){
         "Session:",
         session.id,
         "user:",
-        session.user,
+        res.locals.user,
         "created at:",
         new Date(Number(session.created_at)).toISOString()
         );
