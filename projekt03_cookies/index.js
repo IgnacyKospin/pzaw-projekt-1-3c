@@ -81,7 +81,7 @@ actualAccessRouter.get("/tabs", (req, res) => {
     }
     );
 });
-actualAccessRouter.get("/tabs/:tab_category/:tab_id", (req, res) =>{
+actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissions, (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     //console.log(tabs);
     if (tabs) {

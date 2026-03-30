@@ -11,8 +11,11 @@ export function login_needed (req, res, next) {
     next();
 }
 export function verify_department_access(user_department_id, tab_category){
-  let user_department = dept.id_to_key(user_department_id).key;
-  return dept.verify_department_access(user_department, tab_category);
+  let user_department = dept.id_to_key(user_department_id);
+  if(!user_department || user_department.key === undefined){
+    return false;
+  }
+  return dept.verify_department_access(user_department.key, tab_category);
 }
 export function verify_create_access(permissions){
   if(permissions.admin == "yes" || permissions.create == "yes"){
@@ -31,6 +34,16 @@ export function verify_delete_access(permissions){
     return true;
   }
   return false;
+}
+/**
+ * 
+ * assigns 'can do [x]' params that take into consideration department and permissions. to either display or not display forms.
+ */
+export function verify_form_permissions(req, res, next){
+  res.locals.canUpdateHere = (verify_department_access(res.locals.user.department, req.params.tab_category) && verify_update_access(res.locals.user.permissions));
+  res.locals.canCreateHere = (verify_department_access(res.locals.user.department, req.params.tab_category) && verify_create_access(res.locals.user.permissions));
+  res.locals.canDeleteHere = (verify_department_access(res.locals.user.department, req.params.tab_category) && verify_delete_access(res.locals.user.permissions));
+  next();
 }
 export async function login_handle(req, res) {
   let nextUrl = req.query.next;
@@ -72,5 +85,6 @@ export default {
   verify_create_access,
   verify_update_access,
   verify_delete_access,
+  verify_form_permissions,
   logout
 }

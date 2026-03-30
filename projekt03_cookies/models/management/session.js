@@ -67,9 +67,7 @@ function sessionHandler(req, res, next){
         session = createSession(null, res);
     }
     setImmediate(printUserSession);
-
     next();
-
     function printUserSession() {
         console.info(
         "Session:",
