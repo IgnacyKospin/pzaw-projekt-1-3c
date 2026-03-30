@@ -206,9 +206,9 @@ actualAccessRouter.get("/admin/users", auth.admin_gate, (req, res) => {
     res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users(), title: "Admim Page Users"})
 })
 actualAccessRouter.post("/admin/users", auth.admin_gate, (req, res) => {
-    console.log("wall of text below hopefully");
+    //console.log("wall of text below hopefully");
     const convertedwalloftext = qs.parse(req.body);
-    console.log(convertedwalloftext);
+    //console.log(convertedwalloftext);
     handle_update(convertedwalloftext);
     res.redirect("/admin/users");
 });
