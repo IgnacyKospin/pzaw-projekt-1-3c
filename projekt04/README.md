@@ -7,4 +7,6 @@ To install:
 - run "npm run create_roles". This is neccessary for letting users have access to actions. you must have started the server t least once, as the server creates the tables neccessary.
 - to fill with dummy data run "npm run fill_db"
 
-The only admin account available is "admin" with the password "ManILoveEconomicPlanning". It is created upon running the server.
+The only admin account available is "admin" with the password "ManILoveEconomicPlanning". It is created upon running the server. You must login through it to give users permissions for editing/etc.
+
+Editing, adding requires existing entries because it just does.
