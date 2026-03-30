@@ -74,6 +74,7 @@ function createSessions(){
     const queryCreateSessions = `CREATE TABLE IF NOT EXISTS meta_session (
         id INTEGER PRIMARY KEY,
         user_id INTEGER,
+        csrf_token TEXT NOT NULL,
         created_at INTEGER
     ) STRICT`;
      db.exec(queryCreateSessions);

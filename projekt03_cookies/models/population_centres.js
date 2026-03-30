@@ -1,6 +1,7 @@
 
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
+import csrfCheck from "../utils/validation.js";
 export function populationCentresConstructor(){
     const preparePopCent = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;
@@ -28,10 +29,16 @@ export function getFacilities(cityId){
 export function deletePC(idToKill){
     internal_dboperations.kill.get(idToKill);
 }
-export function validateNewObject(newCentre) {
+export function validateNewObject(newCentre, res) {
     let errors = [];
     const fields = ["popCentre_name", "key", "popCentre_population"];
-    if((internal_dboperations.does_something_like_this_already_exist.get(newCentre.key))[1] !== undefined){
+        if (!csrfCheck(newCentre.csrf_token, res)){
+            errors.push("Failed csrf verification.");
+        }
+        else{
+            console.log("CSRF validation succesful for " + newCentre.csrf_token);
+        }
+    if((internal_dboperations.does_something_like_this_already_exist.get(newCentre.key)) !== undefined){
         errors.push("A key like this already exists");
     }
     for (let field of fields) {

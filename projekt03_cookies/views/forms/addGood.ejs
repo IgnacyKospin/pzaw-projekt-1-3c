@@ -35,6 +35,7 @@
         required
         value="<%= locals.kilogram_price || '' %>"
       />
+      <input type="hidden" name="csrf_token" id="csrf_token" value="<%-session.csrf_token%>">
     </div>
     <!--there is not meant to be anything else to be added here insofar due to the fact that production and consmuption should be handled by the calculation features-->
     <input type="hidden" name="category" value="<%= category %>">

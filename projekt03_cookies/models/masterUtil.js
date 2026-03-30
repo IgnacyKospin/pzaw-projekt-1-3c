@@ -36,13 +36,13 @@ export function handleNew(tab, newData, res) {
     switch (newData.category) {
         case "goods":
             newData.subcategory_key = tab.subcategory_key;
-            totalHandler.errors = goodsImport.validateNewObject(newData);
+            totalHandler.errors = goodsImport.validateNewObject(newData, res);
             break;
         case "population_centres":
-            totalHandler.errors = populationCentresImport.validateNewObject(newData);
+            totalHandler.errors = populationCentresImport.validateNewObject(newData, res);
             break;
         case "production_methods":
-            totalHandler.errors = productionMethodsImport.validateNewObject(newData);
+            totalHandler.errors = productionMethodsImport.validateNewObject(newData, res);
             break;
     }
     if (totalHandler.errors.length === 0) {

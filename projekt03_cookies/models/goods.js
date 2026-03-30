@@ -1,4 +1,5 @@
 import masterUtil from "./masterUtil.js";
+import csrfCheck from "../utils/validation.js";
 import db from "./database.js";
 const internal_dboperations = {
     insert_good: db.prepare(
@@ -28,9 +29,15 @@ export function exportViews() {
 export function getAllGoods(){
     return internal_dboperations.get_all_names.all();
 }
-function validateNewObject(newGood) {
+function validateNewObject(newGood, res) {
     let errors = [];
     const fields = ["name", "key", "kilogram_price", "category"];
+    if (!csrfCheck(newGood.csrf_token, res)){
+        errors.push("Failed csrf verification.");
+    }
+    else{
+        console.log("CSRF validation succesful for " + newGood.csrf_token);
+    }
     if((internal_dboperations.does_something_like_this_exist.get(newGood.key)) !== undefined){
         errors.push("A key like this already exists");
     }

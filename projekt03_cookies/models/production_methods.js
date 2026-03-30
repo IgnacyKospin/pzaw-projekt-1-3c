@@ -1,5 +1,6 @@
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
+import csrfCheck from "../utils/validation.js";
 export function productionMethodsConstructor(){
     const prepareProdMet = `
     INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;
@@ -60,11 +61,17 @@ export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
     return rows;
 }
-export function validateNewObject(newMethod) {
+export function validateNewObject(newMethod, res) {
     let errors = [];
     const fields = ["prodMed_name", "key", "prodMed_employment"];
     const specialFields = ["outputAmount", "inputAmount"];
-    if((internal_dboperations.does_something_like_this_exist.get(newMethod.key)[1]) !== undefined){
+            if (!csrfCheck(newMethod.csrf_token, res)){
+                errors.push("Failed csrf verification.");
+            }
+            else{
+                console.log("CSRF validation succesful for " + newMethod.csrf_token);
+            }
+    if((internal_dboperations.does_something_like_this_exist.get(newMethod.key)) !== undefined){
         errors.push("A key like this already exists");
         }
     for (let field of fields) {

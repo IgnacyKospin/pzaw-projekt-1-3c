@@ -37,7 +37,7 @@
       />
     </div>
     <input type="hidden" name="category" value="<%= category %>">
-
+      <input type="hidden" name="csrf_token" id="csrf_token" value="<%-session.csrf_token%>">
     <div>
       <button type="submit">Add this good...</button>
     </div>
