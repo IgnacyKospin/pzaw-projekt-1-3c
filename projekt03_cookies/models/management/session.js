@@ -28,7 +28,6 @@ export function createSession(user, res){
         console.log("Not null user id, equivalent to " + session.user_id);
         let test = userImport.get_user(session.user_id);
         test.department_name = dept.id_to_name(test.department);
-        console.log(test);
         session.user = test;
     }
     res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
@@ -55,8 +54,7 @@ function sessionHandler(req, res, next){
         if (session.user_id) {
             console.log("Found user id. Assigning user.");
             res.locals.user = userImport.get_user(session.user_id);
-            let department_name = dept.id_to_name(res.locals.user.department);
-            res.locals.user.department_name = department_name;
+            res.locals.user.department_name = dept.id_to_name(res.locals.user.department);
         } else {
             res.locals.user = null;
         }
