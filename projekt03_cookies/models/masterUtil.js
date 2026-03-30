@@ -106,6 +106,7 @@ export function handleEdit(tab, newData, res) {
         });
     }
 }
+
 export default {
     getTab,
     viewFormatter,

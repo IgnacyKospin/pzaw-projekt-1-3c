@@ -13,9 +13,10 @@ const HASH_PARAMS = {
 const internal_dboperations = {
     create_user: db.prepare(`INSERT INTO meta_users (username, passhash, created_at) VALUES (?, ?, ?) returning id as id;`),
     get_user: db.prepare(`SELECT id, username, department from meta_users where id = ?;`),
-    alter_permissions_and_dept: db.prepare(`UPDATE meta_users SET department = ?, permissions = ? WHERE id = ?`),
+    alter_permissions: db.prepare(`UPDATE meta_users SET permissions = ? WHERE id = ?`),
     get_idpasshash: db.prepare(`SELECT id, passhash from meta_users where username = ?`),
-    get_by_name: db.prepare(`SELECT id, username from meta_users where username = ?`)
+    get_by_name: db.prepare(`SELECT id, username from meta_users where username = ?`),
+    get_permissions: db.prepare(`SELECT permissions from meta_users where id = ?`)
 }
 export function get_user(id) {
     return internal_dboperations.get_user.get(id);
@@ -36,6 +37,24 @@ export async function create_user(username, password){
     const created_at = Date.now();
     const passhash = await argon2.hash(password, HASH_PARAMS);
     return internal_dboperations.create_user.get(username, passhash, created_at);
+}
+export function get_permissions(id){
+    const permissions = internal_dboperations.get_permissions.get(id);
+    return process_permissions(permissions);
+}
+/**
+ * 
+ * either processes a object into a database-ready format, or the database format into an object. assumes the data is provided correctly in case of string->object
+ */
+function process_permissions(permissions){
+    var result;
+    if(typeof permissions === "object"){
+        result = Object.entries(obj).map(([key, value]) => `${key}:${value}`).join(";");
+    }
+    else{
+        result = Object.fromEntries(str.split(";").map(pair => {const [key, value] = pair.split(":"); return [key, value];}));
+    }
+    return result;
 }
 export default {
     get_user,

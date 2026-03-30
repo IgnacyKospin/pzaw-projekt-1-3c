@@ -1,6 +1,7 @@
 import dept from "../models/management/departments.js";
 import user from "../models/management/user.js";
 import session from "../models/management/session.js";
+import { verify } from "argon2";
 export function login_needed (req, res, next) {
     if(res.locals.user == null){
         res.redirect("../login");
@@ -9,8 +10,12 @@ export function login_needed (req, res, next) {
     }
     next();
 }
-function verify_editing_access(req, res, next){
-  return dept.verify_department_access(res.locals.user.department, req.params.tab_category);
+export function verify_department_access(user_department_id, tab_category){
+  let user_department = dept.id_to_key(user_department_id).key;
+  return dept.verify_department_access(user_department, tab_category);
+}
+export function verify_editing_access(user_id){
+  
 }
 export async function login_handle(req, res) {
   let nextUrl = req.query.next;
@@ -41,5 +46,6 @@ export async function signup_handle(req, res){
 export default {
     login_needed,
     login_handle,
-    signup_handle
+    signup_handle,
+    verify_department_access
 }

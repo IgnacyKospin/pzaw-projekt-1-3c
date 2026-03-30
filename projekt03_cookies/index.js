@@ -76,7 +76,7 @@ actualAccessRouter.get("/tabs", (req, res) => {
                 contents: productionMethods.exportViews()
             }
                 
-        ]
+        ],
     }
     );
 });
@@ -122,6 +122,11 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", (req, res) =>{
 
 })
 actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //forgor that delete can only be sent through other means.. such as by hit api testing application insomnia
+    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return res.sendStatus(403);
+    }
+    console.log("User department can do CRUD on this category. Going further.");
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         switch(tabs.category_key){
@@ -143,16 +148,31 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //f
     }
 })
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
+    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return res.sendStatus(403);
+    }
+    console.log("User department can do CRUD on this category. Going further.");
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
+    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return res.sendStatus(403);
+    }
+    console.log("User department can do CRUD on this category. Going further.");
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleEdit(tabs, req.body, res);
 });
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
+    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return res.sendStatus(403);
+    }
+    console.log("User department can do CRUD on this category. Going further.");
     populationCentres.handleNewFacility(req.params, req.body, res);
 });
 app.listen(port, () => {
