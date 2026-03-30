@@ -100,10 +100,10 @@ function createDepartments(){
      */
     const queryCreateDepts = `CREATE TABLE IF NOT EXISTS meta_departments (id INTEGER PRIMARY KEY, department_name TEXT UNIQUE);`
     const queryCreatePivotDeptsToCategories = `CREATE TABLE IF NOT EXISTS meta_department_relations (
-    department_key TEXT NOT NULL,
+    department_name TEXT NOT NULL,
     category_key TEXT NOT NULL,
     CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key") on delete cascade on update cascade, 
-    CONSTRAINT "connectToDepartment" FOREIGN KEY("department_key") REFERENCES "meta_departments"("key") on delete cascade on update cascade
+    CONSTRAINT "connectToDepartment" FOREIGN KEY("department_name") REFERENCES "meta_departments"("department_name") on delete cascade on update cascade
     );`;
     db.exec(queryCreateDepts);
     db.exec(queryCreatePivotDeptsToCategories);

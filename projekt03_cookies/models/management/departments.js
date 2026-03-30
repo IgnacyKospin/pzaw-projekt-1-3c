@@ -1,9 +1,9 @@
 import db from "../database.js";
 const internal_dboperations = {
-    verify_department_access_to_category: db.prepare(`SELECT 1 FROM meta_department_relations WHERE department_key = ? AND category_key = ?`),    
+    verify_department_access_to_category: db.prepare(`SELECT 1 FROM meta_department_relations WHERE department_name = ? AND category_key = ?`),    
 }
-export function verify_department_access(department_id, category_id){
-    if(internal_dboperations.verify_department_access_to_category().get(department_id, category_id)){
+export function verify_department_access(department_name, category_key){
+    if(internal_dboperations.verify_department_access_to_category().get(department_name, category_key)){
         return true;
     }
     return false;
