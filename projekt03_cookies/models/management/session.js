@@ -1,4 +1,5 @@
 import db from "../database.js";
+import dept from "./departments.js";
 import { randomBytes } from "node:crypto";
 import userImport from "./user.js";
 const SESSION_COOKIE = "__Host-id";
@@ -10,7 +11,8 @@ const internal_dboperations = {
     ),
     get_session: db.prepare(
         `SELECT id, user_id, csrf_token, created_at from meta_session WHERE id = ?;`
-    )
+    ),
+    delete_session: db.prepare(`DELETE FROm meta_session WHERE id = ?`)
 }
 export function createSession(user, res){
     let sessionId = randomBytes(8).readBigInt64BE();
@@ -25,6 +27,7 @@ export function createSession(user, res){
     else {
         console.log("Not null user id, equivalent to " + session.user_id);
         let test = userImport.get_user(session.user_id);
+        test.department_name = dept.id_to_name(test.department);
         console.log(test);
         session.user = test;
     }
@@ -52,6 +55,8 @@ function sessionHandler(req, res, next){
         if (session.user_id) {
             console.log("Found user id. Assigning user.");
             res.locals.user = userImport.get_user(session.user_id);
+            let department_name = dept.id_to_name(res.locals.user.department);
+            department_name === undefined ? res.locals.user.department_name =  null : res.locals.user.department_name = department_name;
         } else {
             res.locals.user = null;
         }
@@ -76,7 +81,18 @@ function sessionHandler(req, res, next){
         );
     }
 }
+export function murder_session(res) {
+  let sessionId = res.locals.session.id;
+  internal_dboperations.delete_session.run(sessionId);
+  res.cookie(SESSION_COOKIE, sessionId.toString(), {
+    maxAge: 0,
+    httpOnly: true,
+    secure: true,
+  });
+  console.log("Session executed");
+}
 export default {
     createSession,
-    sessionHandler
+    sessionHandler,
+    murder_session
 }

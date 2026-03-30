@@ -56,6 +56,7 @@ app.get("/signup", (req, res) =>{
 app.post("/signup", (req, res) => {
     auth.signup_handle(req, res);
 })
+app.get("/logout", (req, res) => auth.logout(res));
 actualAccessRouter.get("/tabs", (req, res) => {
     res.render("tabs", 
     {

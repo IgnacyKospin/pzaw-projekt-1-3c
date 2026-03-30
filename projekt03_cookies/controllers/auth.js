@@ -58,6 +58,12 @@ export async function signup_handle(req, res){
     let userr = await user.create_user(form.username, form.password);
     return userr;
 }
+export function logout(res){
+  if (res.locals.user != null) {
+    session.murder_session(res);
+  }
+  res.redirect("/");
+}
 export default {
   login_needed,
   login_handle,
@@ -65,5 +71,6 @@ export default {
   verify_department_access,
   verify_create_access,
   verify_update_access,
-  verify_delete_access
+  verify_delete_access,
+  logout
 }

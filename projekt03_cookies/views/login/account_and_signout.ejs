@@ -1,0 +1,10 @@
+<h3>Welcome, Employee <%= locals.user.username%></h3>
+<h4>
+    <% if(locals.user.department_name != null){ %>
+        <%=locals.user.department_name%> Department
+    <%} else {%>
+        <%="You do not have any department assigned. Consult your administrator."%>
+    <%}%>
+
+</h4>
+<a href="/logout">End your misery</a>
