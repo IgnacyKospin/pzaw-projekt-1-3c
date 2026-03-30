@@ -20,7 +20,7 @@ import auth from "./controllers/auth.js";
 /**
  * welcome to the const zone
  */
-const port = process.env.PORT || 6767; //because i forgot i ran laravel on the same localhost
+const port = process.env.PORT || 6767;
 const SECRET = process.env.SECRET;
 if (SECRET == null){
     console.error("Generate a secret variable thee unhonourable unreader of documentation or ye shall be cast down to the bowels of the earth and pecked by birds");
@@ -35,7 +35,7 @@ app.use(express.urlencoded());
 app.use(morgan("dev"));
 app.use(cookieParser(SECRET));
 app.use(session.sessionHandler);
-const settingsRouter = express.Router();
+// const settingsRouter = express.Router(); //settings are a myth invented by big setting to make you waste time
 const actualAccessRouter = express.Router(); //ok since im making everything require login i've decided to just place it all under a router because it doesnt have the better middleware handling of laravel. then individual checks will be placed on top to verify department editing rights.
 actualAccessRouter.use(auth.login_needed);
 function log_request(req, res, next) {
@@ -44,7 +44,7 @@ function log_request(req, res, next) {
 }
 app.use(log_request);
 app.get("/login", (req, res) => {
-
+    res.render("login/login");
 });
 app.post("/login", (req, res) => {
     
@@ -114,7 +114,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", (req, res) =>{
     }
 
 })
-actualAccessRouter.delete("/tabs/:tab_category/:tab_id/delete", (req, res) => { //ive decided to do this by get
+actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //forgor that delete can only be sent through other means.. such as by hit api testing application insomnia
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         switch(tabs.category_key){
