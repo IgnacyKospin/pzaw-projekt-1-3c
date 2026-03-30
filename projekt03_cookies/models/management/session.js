@@ -1,6 +1,6 @@
 import db from "../database.js";
 import { randomBytes } from "node:crypto";
-import user from "./user.js";
+import userImport from "./user.js";
 const SESSION_COOKIE = "__Host-id";
 const ONE_WEEK = 7*24*60*60*1000;
 const ONE_DAY = 1000*60*60*24;
@@ -20,7 +20,7 @@ export function createSession(user, res){
     let created_at = Date.now();
     let session = internal_dboperations.create_session.get(sessionId, user, csrfToken, created_at);
     res.locals.session = session;
-    res.locals.user = session.user_id != null ? user.get_user(session.user_id):null;
+    res.locals.user = session.user_id != null ? userImport.get_user(session.user_id):null;
     res.cookie(SESSION_COOKIE, session.id.toString(), {maxAge: ONE_WORK_SHIFT, httpOnly: true, secure: true,});
     return session;
 }

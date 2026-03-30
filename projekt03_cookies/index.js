@@ -47,7 +47,14 @@ app.get("/login", (req, res) => {
     res.render("login/login");
 });
 app.post("/login", (req, res) => {
-    
+    auth.login_handle(req, res);
+});
+
+app.get("/signup", (req, res) =>{
+    res.render("login/signup");
+})
+app.post("/signup", (req, res) => {
+    auth.signup_handle(req, res);
 })
 actualAccessRouter.get("/tabs", (req, res) => {
     res.render("tabs", 
