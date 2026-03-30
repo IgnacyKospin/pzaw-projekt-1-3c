@@ -1,6 +1,6 @@
 <%- include("head.part.ejs") %> 
 <main> 
-<!--gdyz tak zuniwersalizowalem format, musi byc taka logika-->
+    <%- include("with_forms_header.ejs")%>
 <ul id="contents">
     <div>
             <h1><%=contents.name%></h1>
@@ -33,10 +33,16 @@
             <p>Expected employment: <%=contents.expected_employment%></p>
     </div>
     <div>
+        <%if(canDeleteHere){%>
         <a href="/tabs/<%=category%>/<%=contents.key%>/delete" onclick="return confirm('are you sure?')">ABANDON(this production method)</a>
-        <h1>new</h1>
-                <%- include("forms/add_to_category.ejs") %>
-        <%- include("forms/edit/edit_category.ejs") %>
+        <%}%>
+        <% if(canCreateHere){%>
+            <h1>new</h1>
+            <%- include("forms/add_to_category.ejs") %>
+        <%}%>
+        <%if(canUpdateHere){%>
+            <%- include("forms/edit/edit_category.ejs") %>
+        <%}%>
     </div>
 </ul>
 </main>
