@@ -13,10 +13,22 @@ export function verify_department_access(department_key, category_key){
     return false;
 }
 export function id_to_key(id){
-    return internal_dboperations.get_department_key_by_id.get(id);
+    var result = internal_dboperations.get_department_key_by_id.get(id);
+    if(!result || result.key === undefined){
+        return null;
+    }
+    else{
+        return result.key
+    }
 }
 export function id_to_name(id){
-    return internal_dboperations.get_department_name_by_id.get(id);
+    let result =  internal_dboperations.get_department_name_by_id.get(id);
+    if(!result || result.department_name === undefined){
+        return null;
+    }
+    else{
+        return result.department_name
+    }
 }
 export default {
     verify_department_access,

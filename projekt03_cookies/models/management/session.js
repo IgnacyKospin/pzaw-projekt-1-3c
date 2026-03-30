@@ -56,7 +56,7 @@ function sessionHandler(req, res, next){
             console.log("Found user id. Assigning user.");
             res.locals.user = userImport.get_user(session.user_id);
             let department_name = dept.id_to_name(res.locals.user.department);
-            department_name === undefined ? res.locals.user.department_name =  null : res.locals.user.department_name = department_name;
+            res.locals.user.department_name = department_name;
         } else {
             res.locals.user = null;
         }

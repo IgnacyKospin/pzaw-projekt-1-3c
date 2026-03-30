@@ -1,0 +1,17 @@
+<h4>
+    <% if(canCreateHere){ %>
+        <p>You <b>may</b> create here</p>
+    <% } else { %>
+        <p>You may not create here</p>
+    <% } %>
+    <% if(canUpdateHere){ %>
+        <p>You may update here</p>
+    <% } else { %>
+        <p>You may not update here</p>
+    <% } %>
+    <% if(canDeleteHere){ %>
+        <p>You may delete here</p>
+    <% } else { %>
+        <p>You may not delete here</p>
+    <% } %>
+</h4>

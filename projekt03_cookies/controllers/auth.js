@@ -12,10 +12,7 @@ export function login_needed (req, res, next) {
 }
 export function verify_department_access(user_department_id, tab_category){
   let user_department = dept.id_to_key(user_department_id);
-  if(!user_department || user_department.key === undefined){
-    return false;
-  }
-  return dept.verify_department_access(user_department.key, tab_category);
+  return dept.verify_department_access(user_department, tab_category);
 }
 export function verify_create_access(permissions){
   if(permissions.admin == "yes" || permissions.create == "yes"){
