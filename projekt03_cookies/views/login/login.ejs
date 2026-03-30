@@ -1,3 +1,4 @@
+<a href="signup">Signup instead.</a>
 <form method="POST" action="/login">
     <label for="username">Username</label>
     <input type="text" name="username">
@@ -5,3 +6,6 @@
     <input type="password" name="password">
     <input type="submit">
 </form>
+<% if(typeof error !== "undefined" && error){%>
+<h4>Incorrect username or password.</h4>
+    <%}%>

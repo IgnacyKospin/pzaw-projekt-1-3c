@@ -1,6 +1,7 @@
 import goods from "../models/goods.js";
 import population_centres from "../models/population_centres.js";
 import production_methods from "../models/production_methods.js";
+import user from "../models/management/user.js";
 const test_goods = {
     coal: {
         subcategory_key: "industrial_goods",

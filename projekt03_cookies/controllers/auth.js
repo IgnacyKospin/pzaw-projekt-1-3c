@@ -58,30 +58,45 @@ export function verify_form_permissions(req, res, next){
   next();
 }
 export async function login_handle(req, res) {
-  let nextUrl = req.query.next;
   const form = req.body;
-  if (nextUrl) {
-    form.action = `/login?next=${encodeURIComponent(nextUrl)}`;
-  }
-
+  var error = false;
   if (form) {
     console.log(form.username);
     let user_id = await user.checkPassword(form.username, form.password);
     if (user_id == null) {
       console.log("Incorrect username and or password");
+      error = true;
     } else {
       session.createSession(user_id, res);
-      res.redirect(nextUrl);
+      res.redirect("/tabs");
       return;
     }
   }
-  res.render("login/login");
+  res.render("login/login", ({error: error}));
 }
 
 export async function signup_handle(req, res){
     const form = req.body;
+    var err = [];
+    if(form){
+      if(!form.username.match(/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/)){
+        err.push("INcorrect username");
+      }
+      if(!form.password.match(/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/)){
+        err.push("Incorrect password");
+      }
+      if(user.get_by_name(form.username)){
+        err.push("Username taken.");
+      }
+    }
+
+    if(err.length > 0){
+      res.render("login/signup", ({errors: err}));
+    }
     let userr = await user.create_user(form.username, form.password);
-    return userr;
+    console.log(userr);
+    session.createSession(userr.id, res);
+    res.redirect("/tabs");
 }
 export function logout(res){
   if (res.locals.user != null) {

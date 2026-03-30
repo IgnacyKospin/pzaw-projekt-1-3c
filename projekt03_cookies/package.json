@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "run_server": "node --watch --env-file .env index.js",
     "create_env": "./utils/generate_env.sh > .env",
-    "create_roles": "./utils/setup_permissions.js",
-    "fill_db": "./utils/fill_db.js"
+    "create_roles": "node ./utils/setup_permissions.js",
+    "fill_db": "node ./utils/fillDB.js"
   },
   "keywords": [],
   "author": "Ignacy Kospin",

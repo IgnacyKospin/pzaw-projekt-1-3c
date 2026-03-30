@@ -41,8 +41,14 @@ export async function checkPassword(username, password) {
   }
   return null;
 }
-export async function create_user(username, password){
-    const permissions_db_format = process_permissions(DEFAULT_PERMISSIONS);
+export async function create_user(username, password, perms_optional){
+    var permissions_db_format;
+    if(perms_optional == null){
+        permissions_db_format = process_permissions(DEFAULT_PERMISSIONS);    
+    }
+    else{
+        permissions_db_format = process_permissions(perms_optional);
+    }
     if(internal_dboperations.get_by_name.get(username)){
         return null;
     }
@@ -78,11 +84,14 @@ export function handle_update(theGreatWallOfUpdates){
     });
     console.log("updates done");
 }
+export function get_by_name(username){
+    return internal_dboperations.get_by_name.get(username);
+}
 /**
  * 
  * either processes a object into a database-ready format, or the database format into an object. assumes the data is provided correctly in case of string->object
  */
-function process_permissions(permissions){
+export function process_permissions(permissions){
     var result;
     if(typeof permissions === "object"){
         const mergedperms = {...DEFAULT_PERMISSIONS, ...permissions}; //doing this since update forms only give the changed part
@@ -98,7 +107,9 @@ export default {
     get_user,
     checkPassword,
     create_user,
+    get_by_name,
     get_permissions,
     get_all_users,
-    handle_update
+    handle_update,
+    process_permissions
 }
