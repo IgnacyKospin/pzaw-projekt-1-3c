@@ -203,7 +203,7 @@ actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res)
  */
 actualAccessRouter.use(express.urlencoded( {extended: true}));
 actualAccessRouter.get("/admin/users", auth.admin_gate, (req, res) => {
-    res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users()})
+    res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users(), title: "Admim Page Users"})
 })
 actualAccessRouter.post("/admin/users", auth.admin_gate, (req, res) => {
     console.log("wall of text below hopefully");

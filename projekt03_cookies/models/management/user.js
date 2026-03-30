@@ -24,7 +24,7 @@ const internal_dboperations = {
     get_idpasshash: db.prepare(`SELECT id, passhash from meta_users where username = ?`),
     get_by_name: db.prepare(`SELECT id, username from meta_users where username = ?`),
     get_permissions: db.prepare(`SELECT permissions from meta_users where id = ?`),
-    get_all: db.prepare(`SELECT id, username, department, permissions, created_at from meta_users`)
+    get_all: db.prepare(`SELECT id, username, department, permissions, created_at from meta_users where permissions not like '%admin:yes%'`) //except for admins. since there should only be john admin for now
 }
 export function get_user(id) {
 

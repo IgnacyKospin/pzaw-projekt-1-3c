@@ -5,6 +5,8 @@
     <%} else {%>
         <%="You do not have any department assigned. Consult your administrator (assign department/permission from admin account.)"%>
     <%}%>
-
 </h4>
+<% if(locals.user.permissions.admin == 'yes'){%>
+    <%- include("../admin/admin_header.ejs")%>
+<%}%>
 <a href="/logout">Log out</a>
