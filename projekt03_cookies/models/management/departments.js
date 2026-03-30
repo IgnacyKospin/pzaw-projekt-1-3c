@@ -4,6 +4,8 @@ const internal_dboperations = {
     get_department_key_by_id: db.prepare(`SELECT key FROM meta_departments WHERE id = ?`)
 }
 export function verify_department_access(department_key, category_key){
+    console.log(department_key);
+    console.log(category_key);
     if(internal_dboperations.verify_department_access_to_category.get(department_key, category_key)){
         return true;
     }

@@ -14,15 +14,23 @@ export function verify_department_access(user_department_id, tab_category){
   let user_department = dept.id_to_key(user_department_id).key;
   return dept.verify_department_access(user_department, tab_category);
 }
-export function verify_access(user_id){
-  const permissions = user.get_permissions(user_id);
-  var perms = {
-    admin: permissions.admin,
-    create: permissions.create,
-    update: permissions.update,
-    delete: permissions.delete
+export function verify_create_access(permissions){
+  if(permissions.admin == "yes" || permissions.create == "yes"){
+    return true;
   }
-  return perms;
+  return false;
+}
+export function verify_update_access(permissions){
+  if(permissions.admin == "yes" || permissions.update == "yes"){
+    return true;
+  }
+  return false;
+}
+export function verify_delete_access(permissions){
+  if(permissions.admin == "yes" || permissions.delete == "yes"){
+    return true;
+  }
+  return false;
 }
 export async function login_handle(req, res) {
   let nextUrl = req.query.next;
@@ -51,9 +59,11 @@ export async function signup_handle(req, res){
     return userr;
 }
 export default {
-    login_needed,
-    login_handle,
-    signup_handle,
-    verify_department_access,
-    verify_access
+  login_needed,
+  login_handle,
+  signup_handle,
+  verify_department_access,
+  verify_create_access,
+  verify_update_access,
+  verify_delete_access
 }
