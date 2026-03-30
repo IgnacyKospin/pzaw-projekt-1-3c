@@ -4,7 +4,7 @@
 import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-
+import qs from 'qs'; //as ive made a great mistake in doing the user thing i need to parse that
 import createDatabase from "./models/database_creation.js";
 createDatabase.createDatabases();
 import databaseOps from "./models/database_fill.js";
@@ -16,7 +16,7 @@ import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
 import session from "./models/management/session.js";
 import settings from "./models/settings.js";
-import users from "./models/management/user.js";
+import users, { handle_update } from "./models/management/user.js";
 import auth from "./controllers/auth.js";
 import departments from "./models/management/departments.js";
 /**
@@ -201,11 +201,16 @@ actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res)
 /**
  * admin zone
  */
+actualAccessRouter.use(express.urlencoded( {extended: true}));
 actualAccessRouter.get("/admin/users", auth.admin_gate, (req, res) => {
     res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users()})
 })
-actualAccessRouter.post("/admin/users", (req, res) => {
-
+actualAccessRouter.post("/admin/users", auth.admin_gate, (req, res) => {
+    console.log("wall of text below hopefully");
+    const convertedwalloftext = qs.parse(req.body);
+    console.log(convertedwalloftext);
+    handle_update(convertedwalloftext);
+    res.redirect("/admin/users");
 });
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);

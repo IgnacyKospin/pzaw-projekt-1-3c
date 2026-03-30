@@ -20,6 +20,7 @@ const internal_dboperations = {
     create_user: db.prepare(`INSERT INTO meta_users (username, passhash, permissions, created_at) VALUES (?, ?, ?, ?) returning id as id;`),
     get_user: db.prepare(`SELECT id, username, department, permissions from meta_users where id = ?;`),
     alter_permissions: db.prepare(`UPDATE meta_users SET permissions = ? WHERE id = ?`),
+    alter_department: db.prepare(`UPDATE meta_users SET department = ? WHERE id = ?`),
     get_idpasshash: db.prepare(`SELECT id, passhash from meta_users where username = ?`),
     get_by_name: db.prepare(`SELECT id, username from meta_users where username = ?`),
     get_permissions: db.prepare(`SELECT permissions from meta_users where id = ?`),
@@ -61,6 +62,22 @@ export function get_all_users(){
         department_id: user.department
     }));
 }
+export function handle_update(theGreatWallOfUpdates){
+    theGreatWallOfUpdates.users.forEach(user => {
+        if(!(user.selected === undefined) && user.selected == 'yes'){
+            if(user.permissions === undefined){
+                console.log("No permission changes");
+            }
+            else{
+                const newperms = process_permissions(user.permissions);
+                internal_dboperations.alter_permissions.get(newperms, user.id);
+            }
+            internal_dboperations.alter_department.get(user.department_id, user.id);
+            console.log("user cycle finished. moving to the next");
+        }
+    });
+    console.log("updates done");
+}
 /**
  * 
  * either processes a object into a database-ready format, or the database format into an object. assumes the data is provided correctly in case of string->object
@@ -68,10 +85,12 @@ export function get_all_users(){
 function process_permissions(permissions){
     var result;
     if(typeof permissions === "object"){
-        result = Object.entries(permissions).map(([key, value]) => `${key}:${value}`).join(";");
+        const mergedperms = {...DEFAULT_PERMISSIONS, ...permissions}; //doing this since update forms only give the changed part
+        result = Object.entries(mergedperms).map(([key, value]) => `${key}:${value}`).join(";");
     }
     else{
         result = Object.fromEntries(permissions.split(";").map(pair => {const [key, value] = pair.split(":"); return [key, value];}));
+        result = { ...DEFAULT_PERMISSIONS, ...result};
     }
     return result;
 }
@@ -80,5 +99,6 @@ export default {
     checkPassword,
     create_user,
     get_permissions,
-    get_all_users
+    get_all_users,
+    handle_update
 }

@@ -2,6 +2,7 @@
   <table>
     <thead>
       <tr>
+        <th>edit?</th>
         <th>id</th>
         <th>username</th>
         <th>Permissions</th>
@@ -11,42 +12,44 @@
     <tbody>
       <% users.forEach(user => { %>
         <tr>
-          <td>
-            <%= user.id %>
-            <input type="hidden" name="users[<%= user.id %>][id]" value="<%= user.id %>">
-          </td>
-          <td><%= user.username %></td>
-          <td>
-            <label>
-                <input type="checkbox" name="users[<%= user.id %>][permissions][create]" value="yes" <%= user.permissions?.create === 'yes' ? 'checked' : '' %>>
+            <td>
+                <input type="checkbox" name="users[<%= user.id %>][selected]" value="yes">
+            </td>
+            <td>
+                <%= user.id %>
+                <input type="hidden" name="users[<%= user.id %>][id]" value="<%= user.id %>">
+            </td>
+            <td><%= user.username %></td>
+            <td>
+                <label>
+                    <input type="checkbox" name="users[<%= user.id %>][permissions][create]" value="yes" <%= user.permissions?.create === 'yes' ? 'checked' : '' %>>
               create
-            </label>
-            <label>
+                </label>
+                <label>
                 <input type="checkbox" name="users[<%= user.id %>][permissions][update]" value="yes" <%= user.permissions?.update === 'yes' ? 'checked' : '' %>>
                 update
-            </label>
+                </label>
 
-            <label>
+                <label>
                 <input type="checkbox" name="users[<%= user.id %>][permissions][delete]" value="yes" <%= user.permissions?.delete === 'yes' ? 'checked' : '' %>>
                 delete
-            </label>
-          </td>
-          <td>
-            <select name="users[<%= user.id %>][department_id]">
-                <option value="null">Unassigned</option>
-              <% departments.forEach(department => { %>
-                <option value="<%= department.id %>"
-                  <%= user.department_id === department.id ? 'selected' : '' %>>
-                  <%= department.department_name %>
-                </option>
-              <% }) %>
-            </select>
-          </td>
+                </label>
+            </td>
+            <td>
+                <select name="users[<%= user.id %>][department_id]">
+                <% departments.forEach(department => { %>
+                    <option value="<%= department.id %>"
+                    <%= user.department_id === department.id ? 'selected' : '' %>>
+                    <%= department.department_name %>
+                    </option>
+                <% }) %>
+                </select>
+            </td>
         </tr>
-      <% }) %>
+        <% }) %>
     </tbody>
-  </table>
+    </table>
 
-  <br>
-  <button type="submit">save</button>
+    <br>
+    <button type="submit">save</button>
 </form>
