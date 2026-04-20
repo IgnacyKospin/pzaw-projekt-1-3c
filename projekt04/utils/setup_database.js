@@ -1,4 +1,4 @@
-import db from "./database.js";
+import db from "../models/database.js";
 function createCategories(){
     const queryCategories = `
     CREATE TABLE IF NOT EXISTS "economic_categories" (
@@ -108,6 +108,8 @@ function createDepartments(){
     db.exec(queryCreateDepts);
     db.exec(queryCreatePivotDeptsToCategories);
 }
+
+
 createCategories();
 createProductionMethods();
 createPopulationCentres();
@@ -115,9 +117,46 @@ createGoods();
 createDepartments();
 createUsers();
 createSessions();
-function createDatabases(){
-    console.log("Because apparently import statements execute first I had to figure out a method to get the DB created first so I had to resort to not making the creation a function. So here is a log to show the effects that the greed of mankind brings.\n 'there where i have stood the grass [code] will never grow [make sense] again' - attilla the hun")
+
+/**
+ * Now that the database structure was setup, we shall now fill the neccessary information in. since it crashes otherwise. many such cases.
+ */
+function goodsConstructor(){
+    const prepareGoods = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
+    INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
+    db.exec(prepareGoods);
 }
-export default {
-    createDatabases
+function populationCentresConstructor(){
+    const preparePopCent = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;
+    db.exec(preparePopCent);
 }
+function productionMethodsConstructor(){
+    const prepareProdMet = `
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;
+    db.exec(prepareProdMet);
+}
+
+
+function fillDatabasesWithBaseInfo(){
+    goodsConstructor(); 
+    populationCentresConstructor();
+    productionMethodsConstructor();
+}
+
+function createPermissionRelations(){
+    const establish_goods_department = `INSERT INTO meta_departments(department_name, key) VALUES ('Resource Accounting', 'resource_accounting'), ('Process Administration', 'process_administration'), ('Urban Planning', 'urban_planning'), ('Economic Management', 'economic_management'), ('On-Stand', 'filler_job')`;
+    const establish_links_to_categories = `INSERT INTO meta_department_relations VALUES 
+    ('resource_accounting', 'goods'), 
+    ('process_administration', 'production_methods'), 
+    ('urban_planning', 'population_centres'), 
+    ('economic_management', 'population_centres'),
+    ('economic_management', 'goods')`
+
+    db.exec(establish_goods_department);
+    db.exec(establish_links_to_categories);
+}
+
+fillDatabasesWithBaseInfo();
+createPermissionRelations();

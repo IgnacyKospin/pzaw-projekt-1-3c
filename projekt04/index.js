@@ -1,14 +1,7 @@
-/**
- * projekt chyba lamie regulacje tematyki gdyz jest sprzeczny z artykulem 20 konstytucji ale trudno
- */
 import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import qs from 'qs'; //as ive made a great mistake in doing the user thing i need to parse that
-import createDatabase from "./models/database_creation.js";
-createDatabase.createDatabases();
-import databaseOps from "./models/database_fill.js";
-databaseOps.fillDatabasesWithBaseInfo(); //create the databases
 
 import goods from "./models/goods.js";
 import populationCentres from "./models/population_centres.js";

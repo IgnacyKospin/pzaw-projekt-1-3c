@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup_database": "node ./utils/setup_database.js",
+    "create_admin_account": "node --watch --env-file .env ./utils/create_admin_account.js", 
     "run_server": "node --watch --env-file .env index.js",
     "create_env": "./utils/generate_env.sh > .env",
-    "create_roles": "node ./utils/setup_permissions.js",
     "fill_db": "node ./utils/fillDB.js"
   },
   "keywords": [],

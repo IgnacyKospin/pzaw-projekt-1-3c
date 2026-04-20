@@ -82,19 +82,9 @@ export function editObject(newObj, key){
     console.log(newObj.name, newObj.kilogram_price, key);
     internal_dboperations.edit.get(newObj.name, newObj.kilogram_price, key);
 }
-export function goodsConstructor(){
-    /*
-    trying to call this creation in this file resulted in errors so I have decided to outsource category creation to the master db file
-    */
-    const prepareGoods = `
-    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
-    INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
-    db.exec(prepareGoods);
-}
 export default {
     validateNewObject,
     addNewObject,
-    goodsConstructor,
     exportViews,
     getAllGoods,
     deleteGD,

@@ -2,11 +2,6 @@
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 import csrfCheck from "../utils/validation.js";
-export function populationCentresConstructor(){
-    const preparePopCent = `
-    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Population Centres', 'population_centres');`;
-    db.exec(preparePopCent);
-}
 const internal_dboperations = {
     insert_pop_centre: db.prepare(
         `INSERT INTO population_centres (category_key, name, key, population) VALUES ('population_centres', ?, ?, ?);`
@@ -83,7 +78,6 @@ export function handleNewFacility(parameters, newObj, res){
 }
 export default {
     exportViews,
-    populationCentresConstructor,
     validateNewObject,
     addNewObject,
     deletePC,

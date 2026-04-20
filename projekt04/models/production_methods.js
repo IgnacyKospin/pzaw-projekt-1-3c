@@ -1,11 +1,6 @@
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 import csrfCheck from "../utils/validation.js";
-export function productionMethodsConstructor(){
-    const prepareProdMet = `
-    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Production Methods', 'production_methods');`;
-    db.exec(prepareProdMet);
-}
 const internal_dboperations = {
     insert_pm: db.prepare(
         `INSERT INTO production_methods (category_key, name, key, input_goods, output_goods, expected_employment) VALUES ('production_methods', ?, ?, ?, ?, ?);`
@@ -139,7 +134,6 @@ export function editObject(newObj, key){
 }
 export default {
     exportViews,
-    productionMethodsConstructor,
     addNewObject,
     validateNewObject,
     parseInputsOutputs,
