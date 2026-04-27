@@ -69,9 +69,6 @@ export function editObject(newObj, key){
     internal_dboperations.edit.get(newObj.popCentre_name, newObj.popCentre_population, key)
 }
 export function handleNewFacility(parameters, newObj, res){
-    /**
-     * this doesn't have verification because i managed my time very badly
-     */
     const targetCity = internal_dboperations.get_city_by_key.get(parameters.tab_id);
     internal_dboperations.insert_facility.get(targetCity.id, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
     res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);

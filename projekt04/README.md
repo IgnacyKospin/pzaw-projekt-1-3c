@@ -1,5 +1,6 @@
+# Komandkalkulator
 
-To install:
+## To install:
 - run "npm install" in the "projekt04" folder
 - run "npm run create_env". neccessary.
 - "npm run setup_database" to create the database.

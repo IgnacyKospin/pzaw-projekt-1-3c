@@ -7,8 +7,7 @@ import goods from "./models/goods.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
-import session from "./models/management/session.js";
-import settings from "./models/settings.js";
+import session from "./models/management/session.js";   
 import users, { handle_update } from "./models/management/user.js";
 import auth from "./controllers/auth.js";
 import departments from "./models/management/departments.js";
@@ -30,13 +29,13 @@ app.use(express.urlencoded());
 app.use(morgan("dev"));
 app.use(cookieParser(SECRET));
 app.use(session.sessionHandler);
-// const settingsRouter = express.Router(); //settings are a myth invented by big setting to make you waste time
-const actualAccessRouter = express.Router(); //ok since im making everything require login i've decided to just place it all under a router because it doesnt have the better middleware handling of laravel. then individual checks will be placed on top to verify department editing rights.
-actualAccessRouter.use(auth.login_needed);
 function log_request(req, res, next) {
     console.log(`Request ${req.method} ${req.path}`);
     next();
 }
+/**
+ * The routes below do not require login.
+ */
 app.use(log_request);
 app.get("/login", (req, res) => {
     res.render("login/login");
@@ -52,6 +51,12 @@ app.post("/signup", (req, res) => {
     auth.signup_handle(req, res);
 })
 app.get("/logout", (req, res) => auth.logout(res));
+/**
+ * The routes below require login, and thus are regulated via the actualaccessrouter.
+ * 
+ */
+const actualAccessRouter = express.Router();
+actualAccessRouter.use(auth.login_needed);
 actualAccessRouter.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
@@ -191,10 +196,11 @@ actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res)
     console.log("User succeeded in both department and personal checks. Request approved");
     populationCentres.handleNewFacility(req.params, req.body, res);
 });
-/**
- * admin zone
- */
 actualAccessRouter.use(express.urlencoded( {extended: true}));
+
+/**
+ * The routes below require the user to be an admin.
+ */
 actualAccessRouter.get("/admin/users", auth.admin_gate, (req, res) => {
     res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users(), title: "Admim Page Users"})
 })
