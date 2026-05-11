@@ -19,9 +19,9 @@ export function admin_gate(req, res, next) {
     return res.status(403).send();
   }
 }
-export function verify_department_access(user_department_id, tab_category){
-  let user_department = dept.id_to_key(user_department_id);
-  return dept.verify_department_access(user_department, tab_category);
+export function verify_department_access(user, tab_category){
+  let user_department = dept.id_to_key(user.department);
+  return user.permissions.admin == "yes" || dept.verify_department_access(user_department, tab_category);
 }
 export function verify_create_access(permissions){
   if(permissions.admin == "yes" || permissions.create == "yes"){
@@ -52,9 +52,9 @@ function admin_only(res) {
  * assigns 'can do [x]' params that take into consideration department and permissions. to either display or not display forms.
  */
 export function verify_form_permissions(req, res, next){
-  res.locals.canUpdateHere = (verify_department_access(res.locals.user.department, req.params.tab_category) && verify_update_access(res.locals.user.permissions));
-  res.locals.canCreateHere = (verify_department_access(res.locals.user.department, req.params.tab_category) && verify_create_access(res.locals.user.permissions));
-  res.locals.canDeleteHere = (verify_department_access(res.locals.user.department, req.params.tab_category) && verify_delete_access(res.locals.user.permissions));
+  res.locals.canUpdateHere = (verify_department_access(res.locals.user, req.params.tab_category) && verify_update_access(res.locals.user.permissions));
+  res.locals.canCreateHere = (verify_department_access(res.locals.user, req.params.tab_category) && verify_create_access(res.locals.user.permissions));
+  res.locals.canDeleteHere = (verify_department_access(res.locals.user, req.params.tab_category) && verify_delete_access(res.locals.user.permissions));
   next();
 }
 export async function login_handle(req, res) {
@@ -104,6 +104,45 @@ export function logout(res){
   }
   res.redirect("/");
 }
+export function create_check(user, tab_category){
+    if(!verify_department_access(user, tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return false;
+    }
+    console.log("User department can do CRUD on this category. Going further.");
+    if(!verify_create_access(user.permissions)){
+        console.log("User does not have creation rights.")
+        return false;
+    }
+    console.log("User succeeded in both department and personal checks. Request approved");
+    return true;
+}
+export function update_check(user, tab_category){
+    if(!verify_department_access(user, tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return false;
+    }
+    console.log("User department can do CRUD on this category. Going further.");
+    if(!verify_update_access(user.permissions)){
+        console.log("User does not have deletion rights.")
+        return false;
+    }
+    console.log("User succeeded in both department and personal checks. Request approved");
+    return true;
+}
+export function delete_check(user, tab_category){
+    if(!verify_department_access(user, tab_category)){
+        console.log("User department can not do CRUD on this category.");
+        return false;
+    }
+    console.log("User department can do CRUD on this category. Going further.");
+    if(!verify_delete_access(user.permissions)){
+        console.log("User does not have deletion rights.")
+        return false;
+    }
+    console.log("User succeeded in both department and personal checks. Request approved");
+    return true;
+}
 export default {
   login_needed,
   admin_gate,
@@ -115,4 +154,7 @@ export default {
   verify_delete_access,
   verify_form_permissions,
   logout,
+  create_check,
+  update_check,
+  delete_check
 }

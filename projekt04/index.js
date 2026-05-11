@@ -123,16 +123,9 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
 
 })
 actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //forgor that delete can only be sent through other means.. such as by hit api testing application insomnia
-    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
-        console.log("User department can not do CRUD on this category.");
-        return res.sendStatus(403);
+    if(!auth.delete_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
     }
-    console.log("User department can do CRUD on this category. Going further.");
-    if(!auth.verify_delete_access(res.locals.user.permissions)){
-        console.log("User does not have deletion rights.")
-        return res.sendStatus(403);
-    }
-    console.log("User succeeded in both department and personal checks. Request approved");
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (tabs) {
         switch(tabs.category_key){
@@ -154,46 +147,25 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //f
     }
 })
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
-    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
-        console.log("User department can not do CRUD on this category.");
-        return res.sendStatus(403);
+    if(!auth.create_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
     }
-    console.log("User department can do CRUD on this category. Going further.");
-    if(!auth.verify_create_access(res.locals.user.permissions)){
-        console.log("User does not have deletion rights.")
-        return res.sendStatus(403);
-    }
-    console.log("User succeeded in both department and personal checks. Request approved");
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
-    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
-        console.log("User department can not do CRUD on this category.");
-        return res.sendStatus(403);
+    if(!auth.update_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
     }
-    console.log("User department can do CRUD on this category. Going further.");
-    if(!auth.verify_update_access(res.locals.user.permissions)){
-        console.log("User does not have deletion rights.")
-        return res.sendStatus(403);
-    }
-    console.log("User succeeded in both department and personal checks. Request approved");
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     if (!tabs) return res.sendStatus(404);
     masterUtil.handleEdit(tabs, req.body, res);
 });
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
-    if(!auth.verify_department_access(res.locals.user.department, req.params.tab_category)){
-        console.log("User department can not do CRUD on this category.");
-        return res.sendStatus(403);
+    if(!auth.create_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
     }
-    console.log("User department can do CRUD on this category. Going further.");
-    if(!auth.verify_create_access(res.locals.user.permissions)){
-        console.log("User does not have deletion rights.")
-        return res.sendStatus(403);
-    }
-    console.log("User succeeded in both department and personal checks. Request approved");
     populationCentres.handleNewFacility(req.params, req.body, res);
 });
 actualAccessRouter.use(express.urlencoded( {extended: true}));

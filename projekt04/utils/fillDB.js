@@ -1,7 +1,6 @@
 import goods from "../models/goods.js";
 import population_centres from "../models/population_centres.js";
 import production_methods from "../models/production_methods.js";
-import user from "../models/management/user.js";
 const test_goods = {
     coal: {
         subcategory_key: "industrial_goods",
@@ -51,11 +50,14 @@ const test_production_methods = {
         const elementToBrowse = test_goods[element];
         goods.addNewObject(elementToBrowse);
     });
+    console.log("goods populated!");
     Object.keys(test_population_centres).forEach(element => {
         const elementToBrowse = test_population_centres[element];
         population_centres.addNewObject(elementToBrowse);
     });
+    console.log("population centres populated!");
     Object.keys(test_production_methods).forEach(element => {
         const elementToBrowse = test_production_methods[element];
         production_methods.addNewObject(elementToBrowse);
     });
+    console.log("production methods populated!");

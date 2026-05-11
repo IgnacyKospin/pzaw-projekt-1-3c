@@ -22,7 +22,7 @@ export function id_to_key(id){
         return null;
     }
     else{
-        return result.key
+        return result.key;
     }
 }
 

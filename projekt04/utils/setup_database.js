@@ -27,7 +27,7 @@ function createGoods(){
         "key" TEXT NOT NULL UNIQUE,
         "yearly_production"	NUMERIC,
         "yearly_consumption"	NUMERIC,
-        "perKilogram_price"	NUMERIC NOT NULL,
+        "unit_price"	NUMERIC NOT NULL,
         CONSTRAINT "connectTocategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key"),
         CONSTRAINT "connectToSubcategory" FOREIGN KEY("subcategory_key") REFERENCES "subcategories"("subcategory_key")
     );`;

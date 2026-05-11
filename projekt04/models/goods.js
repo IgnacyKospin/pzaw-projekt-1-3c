@@ -17,7 +17,7 @@ const internal_dboperations = {
         `),
     get_all_names: db.prepare(`SELECT name, key FROM goods;`),
     kill: db.prepare(`DELETE FROM goods WHERE key = ?;`),
-    edit: db.prepare(`UPDATE goods SET name = ?, perKilogram_price = ? WHERE key = ?;`)
+    edit: db.prepare(`UPDATE goods SET name = ?, unit_price = ? WHERE key = ?;`)
 }
 export function deleteGD(idToKill){
     internal_dboperations.kill.get(idToKill);
