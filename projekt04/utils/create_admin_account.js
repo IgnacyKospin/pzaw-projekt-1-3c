@@ -1,6 +1,7 @@
 import user from "../models/management/user.js";
-let username = "John Administrator";
-let password = "ManILoveEconomicPlanning";
+var args = process.argv.slice(2);
+let username = args[0] || "John Administrator";
+let password = args[1] || "ManILoveEconomicPlanning";
 var perms = {
     admin: "yes"
 }
