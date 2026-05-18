@@ -1,0 +1,189 @@
+import express from "express";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import qs from 'qs'; //as ive made a great mistake in doing the user thing i need to parse that
+
+import goods from "./models/goods.js";
+import populationCentres from "./models/population_centres.js";
+import productionMethods from "./models/production_methods.js";
+import masterUtil from "./models/masterUtil.js";
+import session from "./models/management/session.js";   
+import users, { handle_update } from "./models/management/user.js";
+import auth from "./controllers/auth.js";
+import departments from "./models/management/departments.js";
+/**
+ * welcome to the const zone
+ */
+const port = process.env.PORT || 6767;
+const SECRET = process.env.SECRET;
+if (SECRET == null){
+    console.error("Generate a secret variable thee unhonourable unreader of documentation or ye shall be cast down to the bowels of the earth and pecked by birds");
+    process.exit(1);
+}
+const app = express();
+
+
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+app.use(express.urlencoded());
+app.use(morgan("dev"));
+app.use(cookieParser(SECRET));
+app.use(session.sessionHandler);
+function log_request(req, res, next) {
+    console.log(`Request ${req.method} ${req.path}`);
+    next();
+}
+/**
+ * The routes below do not require login.
+ */
+app.use(log_request);
+app.get("/login", (req, res) => {
+    res.render("login/login");
+});
+app.post("/login", (req, res) => {
+    auth.login_handle(req, res);
+});
+
+app.get("/signup", (req, res) =>{
+    res.render("login/signup");
+})
+app.post("/signup", (req, res) => {
+    auth.signup_handle(req, res);
+})
+app.get("/logout", (req, res) => auth.logout(res));
+/**
+ * The routes below require login, and thus are regulated via the actualaccessrouter.
+ * 
+ */
+const actualAccessRouter = express.Router();
+actualAccessRouter.use(auth.login_needed);
+actualAccessRouter.get("/tabs", (req, res) => {
+    res.render("tabs", 
+    {
+        title: "Economic Categories",
+        listOfTabs: [
+            {
+                title: "Goods",
+                contents: goods.exportViews()
+            },
+            
+            {
+                title: "Population Centres",
+                contents: populationCentres.exportViews()
+            },
+            
+            {
+                title: "Production Methods",
+                contents: productionMethods.exportViews()
+            }
+                
+        ],
+    }
+    );
+});
+actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissions, (req, res) =>{
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    //console.log(tabs);
+    if (tabs) {
+        console.log(tabs);
+        switch(tabs.category_key){
+            case("goods"):
+                res.render("tabGoods", {
+                    category: tabs.category_key,
+                    title: tabs.name,
+                    tab_id: tabs.key,
+                    contents: tabs
+                });
+                break;
+            case("population_centres"):
+                res.render("tabPopCentres", {
+                    category: tabs.category_key,
+                    title: tabs.name,
+                    tab_id: tabs.key,
+                    contents: tabs,
+                    PMList: productionMethods.exportViews(), //so you can have a dropdown.
+                    facilities: populationCentres.getFacilities(tabs.id)
+                });
+                break;
+            case("production_methods"):
+                res.render("tabProductionMethods", {
+                    category: tabs.category_key,
+                    title: tabs.name,
+                    tab_id: tabs.key,
+                    formattedInputs: productionMethods.parseInputsOutputs(tabs.input_goods),
+                    formattedOutputs: productionMethods.parseInputsOutputs(tabs.output_goods),
+                    goodsList: goods.getAllGoods(), //so that i didnt have to check in the new pm wether the goods existed it will provide a dropdown. might be inconvenient when its a bigger scale. Too Bad!
+                    contents: tabs
+                });
+                break;
+        }
+    } else {
+        res.sendStatus(404);
+    }
+
+})
+actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //forgor that delete can only be sent through other means.. such as by hit api testing application insomnia
+    if(!auth.delete_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
+    }
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    if (tabs) {
+        switch(tabs.category_key){
+            case("goods"):
+                goods.deleteGD(req.params.tab_id);
+                res.redirect(`/tabs`);
+                break;
+            case("population_centres"):
+                populationCentres.deletePC(req.params.tab_id);
+                res.redirect(`/tabs`);
+                break;
+            case("production_methods"):
+                productionMethods.deletePM(req.params.tab_id);
+                res.redirect(`/tabs`);
+                break;
+        }
+    } else{
+        res.sendStatus(404);
+    }
+})
+actualAccessRouter.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
+    if(!auth.create_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
+    }
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    if (!tabs) return res.sendStatus(404);
+    masterUtil.handleNew(tabs, req.body, res);
+});
+actualAccessRouter.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {
+    if(!auth.update_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
+    }
+    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
+    if (!tabs) return res.sendStatus(404);
+    masterUtil.handleEdit(tabs, req.body, res);
+});
+actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res) =>{
+    if(!auth.create_check(res.locals.user, req.params.tab_category)){
+        res.sendStatus(403);
+    }
+    populationCentres.handleNewFacility(req.params, req.body, res);
+});
+actualAccessRouter.use(express.urlencoded( {extended: true}));
+
+/**
+ * The routes below require the user to be an admin.
+ */
+actualAccessRouter.get("/admin/users", auth.admin_gate, (req, res) => {
+    res.render("admin/users", {departments: departments.get_all_departments(), users: users.get_all_users(), title: "Admim Page Users"})
+})
+actualAccessRouter.post("/admin/users", auth.admin_gate, (req, res) => {
+    //console.log("wall of text below hopefully");
+    const convertedwalloftext = qs.parse(req.body);
+    //console.log(convertedwalloftext);
+    handle_update(convertedwalloftext);
+    res.redirect("/admin/users");
+});
+app.listen(port, () => {
+    console.log(`Server slucha on http://localhost:${port}`);
+});
+app.use('/', actualAccessRouter);

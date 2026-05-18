@@ -1,0 +1,3 @@
+- insertion - read name
+- deletion - read name
+- editing - read name

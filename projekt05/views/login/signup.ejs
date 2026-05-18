@@ -1,0 +1,13 @@
+<%- include("../head.login.ejs") %>
+<a href="login">Login instead.</a>
+<form method="POST" action="/signup">
+    <label for="username">Username</label>
+    <input type="text" name="username">
+    <label for="password">Password</label>
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+<%if(typeof errors !== 'undefined'){%>
+    <% errors.forEach(function(error){ %>
+    <li><%= error %></li>
+    <% })}%>

@@ -1,0 +1,7 @@
+    <% if (category == "goods") { %>
+        <%- include('editGood.ejs') %>
+    <% } else if(category === "population_centres") { %>
+        <%- include('editPopulationCentre.ejs')%>
+    <% } else if(category === "production_methods") {%>
+        <%- include('editProductionMethod.ejs')%>
+    <%}%>

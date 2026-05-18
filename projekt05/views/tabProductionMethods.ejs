@@ -1,0 +1,48 @@
+<%- include("head.part.ejs") %> 
+<main> 
+    <%- include("with_forms_header.ejs")%>
+<ul id="contents">
+    <div>
+            <h1><%=contents.name%></h1>
+            <table>
+                <thead>
+                    <tr><th colspan="2">Inputs</th></tr>
+                    <tr>
+                        <th>Good</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let key in formattedInputs) { %>
+                        <tr><td><%= key %></td><td><%=formattedInputs[key]%></td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+                    <tr><th colspan="2">Outputs</th></tr>
+                    <tr>
+                        <th>Good</th>
+                        <th>Amount</th>
+                    </tr>
+                    <% for (let key in formattedOutputs) { %>
+                        <tr><td><%= key %></td><td><%=formattedOutputs[key]%></td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <p>Expected employment: <%=contents.expected_employment%></p>
+    </div>
+    <div>
+        <%if(canDeleteHere){%>
+        <a href="/tabs/<%=category%>/<%=contents.key%>/delete" onclick="return confirm('are you sure?')">ABANDON(this production method)</a>
+        <%}%>
+        <% if(canCreateHere){%>
+            <h1>new</h1>
+            <%- include("forms/add_to_category.ejs") %>
+        <%}%>
+        <%if(canUpdateHere){%>
+            <%- include("forms/edit/edit_category.ejs") %>
+        <%}%>
+    </div>
+</ul>
+</main>

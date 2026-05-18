@@ -1,0 +1,56 @@
+<%- include("head.part.ejs") %> 
+<main> 
+    <%- include("with_forms_header.ejs")%>
+<div>
+    <div class="contentsPop">
+    <div>
+            <p>Population centre name: <%=contents.name%></p>
+            <p>Population: <%=contents.population%></p>
+    </div>
+        <div class="subContentsPOp">
+            <details id="facilities">
+                <summary>
+                    <p>Facilities in this Population Centre</p>
+                </summary>
+                <!--these are undeletable because this is a planned economy and everything is subsidized (i didnt have time)-->
+                <div class="smallTextForMetaData">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Facility Name</th>
+                                <th>Production Method</th>
+                                <th>Facility Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% facilities.forEach(function(facilities) { %>
+                                <tr>
+                                    <td><%=facilities.facility_name%></td>
+                                    <td><a href='/tabs/production_methods/<%=facilities.production_method_key%>'><%=facilities.production_method_key%></a></td>
+                                    <td><%=facilities.facility_amount%></td>
+                                </tr>
+                            <% }); %>   
+                        </tbody>
+                    </table>
+                </div>
+                <% if(canCreateHere){%>
+                    <%- include("forms/addFacility.ejs") %>
+                <%}%>
+            </details>
+        </div>
+    </div>
+    <br>
+    <div>
+        <% if(canDeleteHere){%>
+            <a href="/tabs/<%=category%>/<%=contents.key%>/delete" onclick="return confirm('are you sure?')">KILL(this population centre)</a>
+        <%}%>
+        <% if(canCreateHere){%>
+            <h1>new</h1>
+               <%- include("forms/add_to_category.ejs") %>
+        <%}%>
+        <%if(canUpdateHere){%>
+        <%- include("forms/edit/edit_category.ejs") %>
+        <%}%>
+    </div>
+</div>
+</main>

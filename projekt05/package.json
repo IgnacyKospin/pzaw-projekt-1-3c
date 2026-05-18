@@ -1,0 +1,25 @@
+{
+  "name": "projekt02",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup_database": "node ./utils/setup_database.js",
+    "create_admin_account": "node --watch --env-file .env ./utils/create_admin_account.js", 
+    "run_server": "node --watch --env-file .env index.js",
+    "create_env": "./utils/generate_env.sh > .env",
+    "fill_db": "node ./utils/fillDB.js"
+  },
+  "keywords": [],
+  "author": "Ignacy Kospin",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "cookie-parser": "^1.4.7",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "qs": "^6.15.0"
+  }
+}
