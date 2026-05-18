@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import qs from 'qs'; //as ive made a great mistake in doing the user thing i need to parse that
 
 import goods from "./models/goods.js";
+import intercategorial_tools from "./models/intercategorial.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
@@ -61,26 +62,21 @@ actualAccessRouter.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
         title: "Economic Categories",
-        listOfTabs: [
-            {
-                title: "Goods",
-                contents: goods.exportViews()
-            },
-            
-            {
-                title: "Population Centres",
-                contents: populationCentres.exportViews()
-            },
-            
-            {
-                title: "Production Methods",
-                contents: productionMethods.exportViews()
-            }
-                
-        ],
+        categories: intercategorial_tools.export_categories()
+        //Inshallah I will fix my tech debt
     }
     );
 });
+actualAccessRouter.get("/tabs/:tab_category", (req, res) => {
+    switch(req.params.tab_category){
+        case 'goods':
+            break;
+        case 'production_methods':
+            break;
+        case 'population_centres':
+            break;
+    }
+})
 actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissions, (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     //console.log(tabs);
