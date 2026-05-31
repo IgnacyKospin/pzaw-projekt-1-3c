@@ -1,6 +1,10 @@
 import db from "./database.js";
 import production_methods from "./production_methods.js";
+import goods from "./goods.js";
 const internal_dboperations = {
+    /**
+     * to ensure proper cartelisation of models, i decided that this should only read. ergo the goods will be polluted with more operations
+     */
     get_all_categories: db.prepare("SELECT name, key FROM economic_categories;"),
     aggregate_facilities_resource_movement: db.prepare("SELECT production_method_key, expected_employment, input_goods, output_goods, SUM(facility_amount) as amount_sum FROM facilities JOIN production_methods ON facilities.production_method_key = production_methods.key GROUP BY production_method_key")
 }
@@ -26,8 +30,22 @@ function theGreatEconomicUpdater(){
                 total_inputs[key] = value * multiplier;
             }
         });
+        Object.entries(outputs).forEach(([key, value]) => {
+            if (key in total_outputs) {
+                total_outputs[key] += value * multiplier;
+            } else {
+                total_outputs[key] = value * multiplier;
+            }
+        });
     });
+        Object.entries(total_inputs).forEach(([key, value]) => {
+            goods.set_consumption(key, value)
+        });
+        Object.entries(total_outputs).forEach(([key, value]) => {
+            goods.set_production(key, value)
+        });
     console.log(total_inputs);
+    console.log(total_outputs);
 }
 export function test_tester(){
     theGreatEconomicUpdater();

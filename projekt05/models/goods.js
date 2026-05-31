@@ -5,6 +5,8 @@ const internal_dboperations = {
     insert_good: db.prepare(
         `INSERT INTO goods VALUES ('goods', ?, ?, 0, 0, ?);`
     ),
+    set_production: db.prepare("UPDATE goods SET yearly_production = ? WHERE key = ?;"),
+    set_consumption: db.prepare("UPDATE goods SET yearly_consumption = ? WHERE key = ?;"),
     get_everything: db.prepare(`SELECT * FROM goods`),
     does_something_like_this_exist: db.prepare(`
         SELECT 1 FROM goods WHERE key LIKE ?;
@@ -15,6 +17,12 @@ const internal_dboperations = {
 }
 export function deleteGD(idToKill){
     internal_dboperations.kill.get(idToKill);
+}
+export function set_production(key, production){
+    internal_dboperations.set_production.get(production, key);
+}
+export function set_consumption(key, consumption){
+    internal_dboperations.set_consumption.get(consumption, key);
 }
 export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
@@ -72,5 +80,7 @@ export default {
     getAllGoods,
     deleteGD,
     validateEditObject,
-    editObject
+    editObject,
+    set_production,
+    set_consumption
 }
