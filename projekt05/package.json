@@ -7,7 +7,7 @@
     "setup_database": "node ./utils/setup_database.js",
     "create_admin_account": "node --watch --env-file .env ./utils/create_admin_account.js", 
     "run_server": "node --watch --env-file .env index.js",
-    "create_env": "./utils/generate_env.sh > .env",
+    "create_env": "bash ./utils/generate_env.sh > .env",
     "fill_db": "node ./utils/fillDB.js"
   },
   "keywords": [],
