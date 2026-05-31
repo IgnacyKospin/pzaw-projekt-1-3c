@@ -70,7 +70,12 @@ actualAccessRouter.get("/tabs", (req, res) => {
 actualAccessRouter.get("/tabs/:tab_category", auth.verify_form_permissions, (req, res) => {
     switch(req.params.tab_category){
         case 'goods':
-            res.render("goods/goods_list", {goods: goods.exportViews(), title: "Goods", category: "goods"});
+            res.render("goods/goods_list", 
+                {
+                    goods: goods.exportViews(), 
+                    title: "Goods", 
+                    category: "goods"
+                });
             break;
         case 'production_methods':
             res.render("production_methods/production_methods_list", 
@@ -82,6 +87,13 @@ actualAccessRouter.get("/tabs/:tab_category", auth.verify_form_permissions, (req
                 });
             break;
         case 'population_centres':
+            res.render("population_centres/population_centres_list", 
+                {
+                    population_centres: populationCentres.exportViews(),
+                    title: "population_centres",
+                    category: "population_centres",
+                }
+            );
             break;
     }
 })
