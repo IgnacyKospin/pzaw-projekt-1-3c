@@ -3,14 +3,8 @@ import csrfCheck from "../utils/validation.js";
 import db from "./database.js";
 const internal_dboperations = {
     insert_good: db.prepare(
-        `INSERT INTO goods VALUES ('goods', ?, ?, ?, 0, 0, ?);`
+        `INSERT INTO goods VALUES ('goods', ?, ?, 0, 0, ?);`
     ),
-    get_good_category: db.prepare(
-        `SELECT subcategory_key FROM goods WHERE name LIKE ?;`
-    ),
-    does_category_exist: db.prepare(`
-        SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_key = 'goods';
-        `),
     get_everything: db.prepare(`SELECT * FROM goods`),
     does_something_like_this_exist: db.prepare(`
         SELECT 1 FROM goods WHERE key LIKE ?;
@@ -49,12 +43,6 @@ function validateNewObject(newGood, res) {
         }
     }
     //console.log(newGood);
-    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
-    if (category[1] == 1) {
-    } else {
-        errors.push(`Invalid category: ${newGood.category}`);
-    }
-       //console.log(category);
     return errors;
 }
 function validateEditObject(newGood) {
@@ -67,15 +55,10 @@ function validateEditObject(newGood) {
             errors.push("Kilogram price not a number");
         }
     }
-    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
-    if (category[1] == 1) {
-    } else {
-        errors.push(`Invalid category: ${newGood.category}`);
-    }
     return errors;
 }
 export function addNewObject(newObj){
-    internal_dboperations.insert_good.get(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
+    internal_dboperations.insert_good.get(newObj.name, newObj.key, newObj.kilogram_price);
     //console.log("now obj:" + newObj);
 }
 export function editObject(newObj, key){

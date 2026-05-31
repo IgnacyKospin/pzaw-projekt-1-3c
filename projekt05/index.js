@@ -67,9 +67,10 @@ actualAccessRouter.get("/tabs", (req, res) => {
     }
     );
 });
-actualAccessRouter.get("/tabs/:tab_category", (req, res) => {
+actualAccessRouter.get("/tabs/:tab_category", auth.verify_form_permissions, (req, res) => {
     switch(req.params.tab_category){
         case 'goods':
+            res.render("goods/goods_list", {goods: goods.exportViews(), title: "Goods", category: "goods"});
             break;
         case 'production_methods':
             break;
@@ -142,12 +143,12 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //f
         res.sendStatus(404);
     }
 })
-actualAccessRouter.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
+actualAccessRouter.post("/tabs/:tab_category/addData", (req, res) => {
     if(!auth.create_check(res.locals.user, req.params.tab_category)){
         res.sendStatus(403);
     }
-    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
-    if (!tabs) return res.sendStatus(404);
+    const tabs = masterUtil.getTab(req.params.tab_category);
+    //if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {

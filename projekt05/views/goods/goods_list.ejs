@@ -1,6 +1,23 @@
-<table>
-    <tr>
-        <th>Name</th>
-        <th></th>
-    </tr>
-</table>
+<%- include("../head.part.ejs") %>
+<main>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Per Unit Price</th>
+            <th>Yearly Production</th>
+            <th>Yearly Consumption</th>
+        </tr>
+        <% goods.forEach(function(good){ %>
+            <tr>
+                <td><a href="./goods/<%=good.key%>"><%=good.name %></a></td>
+                <td><%= good.unit_price %></td>
+                <td><%= good.yearly_production %></td>
+                <td><%= good.yearly_consumption %></td>
+            </tr>
+        <% }) %>
+    </table>
+        <% if(canCreateHere){%>
+            <h1>new</h1>
+            <%- include("../forms/add_to_category.ejs") %>
+        <%}%>
+</main>
