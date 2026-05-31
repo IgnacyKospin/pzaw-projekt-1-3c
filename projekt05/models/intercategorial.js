@@ -47,10 +47,13 @@ function theGreatEconomicUpdater(){
     console.log(total_inputs);
     console.log(total_outputs);
 }
-export function test_tester(){
+/**
+ * this is a unified wrapper for updating balance
+ */
+export function update_goods_balance(){
     theGreatEconomicUpdater();
 }
 export default {
     export_categories,
-    test_tester
+    update_goods_balance,
 }

@@ -1,2 +1,2 @@
 import intercategorial from "../models/intercategorial.js";
-intercategorial.test_tester();
+intercategorial.update_goods_balance();
