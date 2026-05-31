@@ -1,6 +1,7 @@
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 import csrfCheck from "../utils/validation.js";
+import intercategorial from "./intercategorial.js";
 const internal_dboperations = {
     insert_pm: db.prepare(
         `INSERT INTO production_methods (category_key, name, key, input_goods, output_goods, expected_employment) VALUES ('production_methods', ?, ?, ?, ?, ?);`
@@ -16,7 +17,7 @@ const internal_dboperations = {
         `
     )
 }
-function formatInputOutput(arrNames, arrNumbers){
+export function formatInputOutput(arrNames, arrNumbers){
     //arrays -> storage format
     if(typeof arrNames !== 'object'){
         arrNames = [arrNames];
@@ -48,7 +49,7 @@ export function parseInputsOutputs(contents){
     let objectToReturn = {}
     for(let i = 0; i < array.length; i++){
             let temp = array[i].split(":");
-            objectToReturn[temp[0]] = temp[1];
+            objectToReturn[temp[0]] = parseFloat(temp[1]);
     }
     return objectToReturn;
 }
@@ -130,6 +131,7 @@ export function addNewObject(newObj){
 export function editObject(newObj, key){
     let inputFormat = formatInputOutput(newObj.inputGoods, newObj.inputAmount);
     let outputFormat = formatInputOutput(newObj.outputGoods, newObj.outputAmount);
+    intercategorial.update_goods_balance(); //update existing production to account for potential change. probably inefficient. too bad. only users with editing rights can do this anyways, so not like an easy ddos way exists
     const res = internal_dboperations.edit.get(newObj.prodMed_name, inputFormat, outputFormat, newObj.prodMed_employment, key);
 }
 export default {
@@ -139,5 +141,6 @@ export default {
     parseInputsOutputs,
     deletePM,
     validateEditObject,
-    editObject
+    editObject,
+    formatInputOutput
 }

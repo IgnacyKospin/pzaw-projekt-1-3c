@@ -2,6 +2,7 @@
 import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 import csrfCheck from "../utils/validation.js";
+import intercategorial from "./intercategorial.js";
 const internal_dboperations = {
     insert_pop_centre: db.prepare(
         `INSERT INTO population_centres (category_key, name, key, population) VALUES ('population_centres', ?, ?, ?);`
@@ -71,6 +72,7 @@ export function editObject(newObj, key){
 export function handleNewFacility(parameters, newObj, res){
     const targetCity = internal_dboperations.get_city_by_key.get(parameters.tab_id);
     internal_dboperations.insert_facility.get(targetCity.id, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
+    intercategorial.update_goods_balance(); //this might be inefficient to update it all everytime a new facility is added but alas. such is life. i can optimise later
     res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
 }
 export default {

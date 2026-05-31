@@ -1,0 +1,19 @@
+<%- include("../head.part.ejs") %>
+<main>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Population</th>
+        </tr>
+        <% population_centres.forEach(function(pop_centre){ %>
+            <tr>
+                <td><a href="./population_centres/<%=pop_centre.key%>"><%=pop_centre.name %></a></td>
+                <td><%= pop_centre.population %></td>
+            </tr>
+        <% }) %>
+    </table>
+        <% if(canCreateHere){%>
+            <h1>new</h1>
+            <%- include("../forms/add_to_category.ejs") %>
+        <%}%>
+</main>

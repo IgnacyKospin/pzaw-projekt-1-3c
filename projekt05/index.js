@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import qs from 'qs'; //as ive made a great mistake in doing the user thing i need to parse that
 
 import goods from "./models/goods.js";
+import intercategorial_tools from "./models/intercategorial.js";
 import populationCentres from "./models/population_centres.js";
 import productionMethods from "./models/production_methods.js";
 import masterUtil from "./models/masterUtil.js";
@@ -61,26 +62,41 @@ actualAccessRouter.get("/tabs", (req, res) => {
     res.render("tabs", 
     {
         title: "Economic Categories",
-        listOfTabs: [
-            {
-                title: "Goods",
-                contents: goods.exportViews()
-            },
-            
-            {
-                title: "Population Centres",
-                contents: populationCentres.exportViews()
-            },
-            
-            {
-                title: "Production Methods",
-                contents: productionMethods.exportViews()
-            }
-                
-        ],
+        categories: intercategorial_tools.export_categories()
+        //Inshallah I will fix my tech debt
     }
     );
 });
+actualAccessRouter.get("/tabs/:tab_category", auth.verify_form_permissions, (req, res) => {
+    switch(req.params.tab_category){
+        case 'goods':
+            res.render("goods/goods_list", 
+                {
+                    goods: goods.exportViews(), 
+                    title: "Goods", 
+                    category: "goods"
+                });
+            break;
+        case 'production_methods':
+            res.render("production_methods/production_methods_list", 
+                {
+                    production_methods: productionMethods.exportViews(), 
+                    title: "Production Methods", 
+                    category: "production_methods", 
+                    goodsList: goods.getAllGoods()
+                });
+            break;
+        case 'population_centres':
+            res.render("population_centres/population_centres_list", 
+                {
+                    population_centres: populationCentres.exportViews(),
+                    title: "population_centres",
+                    category: "population_centres",
+                }
+            );
+            break;
+    }
+})
 actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissions, (req, res) =>{
     const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
     //console.log(tabs);
@@ -88,7 +104,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
         console.log(tabs);
         switch(tabs.category_key){
             case("goods"):
-                res.render("tabGoods", {
+                res.render("goods/tabGoods", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
@@ -96,7 +112,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
                 });
                 break;
             case("population_centres"):
-                res.render("tabPopCentres", {
+                res.render("population_centres/tabPopCentres", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
@@ -106,7 +122,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
                 });
                 break;
             case("production_methods"):
-                res.render("tabProductionMethods", {
+                res.render("production_methods/tabProductionMethods", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
@@ -146,12 +162,12 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id/delete", (req, res) => { //f
         res.sendStatus(404);
     }
 })
-actualAccessRouter.post("/tabs/:tab_category/:tab_id/addData", (req, res) => {
+actualAccessRouter.post("/tabs/:tab_category/addData", (req, res) => {
     if(!auth.create_check(res.locals.user, req.params.tab_category)){
         res.sendStatus(403);
     }
-    const tabs = masterUtil.getTab(req.params.tab_category, req.params.tab_id);
-    if (!tabs) return res.sendStatus(404);
+    const tabs = masterUtil.getTab(req.params.tab_category);
+    //if (!tabs) return res.sendStatus(404);
     masterUtil.handleNew(tabs, req.body, res);
 });
 actualAccessRouter.post("/tabs/:tab_category/:tab_id/editData", (req, res) => {

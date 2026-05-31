@@ -3,14 +3,10 @@ import csrfCheck from "../utils/validation.js";
 import db from "./database.js";
 const internal_dboperations = {
     insert_good: db.prepare(
-        `INSERT INTO goods VALUES ('goods', ?, ?, ?, 0, 0, ?);`
+        `INSERT INTO goods VALUES ('goods', ?, ?, 0, 0, ?);`
     ),
-    get_good_category: db.prepare(
-        `SELECT subcategory_key FROM goods WHERE name LIKE ?;`
-    ),
-    does_category_exist: db.prepare(`
-        SELECT 1 FROM subcategories WHERE subcategory_key LIKE ? AND category_key = 'goods';
-        `),
+    set_production: db.prepare("UPDATE goods SET yearly_production = ? WHERE key = ?;"),
+    set_consumption: db.prepare("UPDATE goods SET yearly_consumption = ? WHERE key = ?;"),
     get_everything: db.prepare(`SELECT * FROM goods`),
     does_something_like_this_exist: db.prepare(`
         SELECT 1 FROM goods WHERE key LIKE ?;
@@ -21,6 +17,12 @@ const internal_dboperations = {
 }
 export function deleteGD(idToKill){
     internal_dboperations.kill.get(idToKill);
+}
+export function set_production(key, production){
+    internal_dboperations.set_production.get(production, key);
+}
+export function set_consumption(key, consumption){
+    internal_dboperations.set_consumption.get(consumption, key);
 }
 export function exportViews() {
     const rows = internal_dboperations.get_everything.all();
@@ -49,12 +51,6 @@ function validateNewObject(newGood, res) {
         }
     }
     //console.log(newGood);
-    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
-    if (category[1] == 1) {
-    } else {
-        errors.push(`Invalid category: ${newGood.category}`);
-    }
-       //console.log(category);
     return errors;
 }
 function validateEditObject(newGood) {
@@ -67,15 +63,10 @@ function validateEditObject(newGood) {
             errors.push("Kilogram price not a number");
         }
     }
-    const category = internal_dboperations.does_category_exist.get(newGood.subcategory_key);
-    if (category[1] == 1) {
-    } else {
-        errors.push(`Invalid category: ${newGood.category}`);
-    }
     return errors;
 }
 export function addNewObject(newObj){
-    internal_dboperations.insert_good.get(newObj.subcategory_key, newObj.name, newObj.key, newObj.kilogram_price);
+    internal_dboperations.insert_good.get(newObj.name, newObj.key, newObj.kilogram_price);
     //console.log("now obj:" + newObj);
 }
 export function editObject(newObj, key){
@@ -89,5 +80,7 @@ export default {
     getAllGoods,
     deleteGD,
     validateEditObject,
-    editObject
+    editObject,
+    set_production,
+    set_consumption
 }

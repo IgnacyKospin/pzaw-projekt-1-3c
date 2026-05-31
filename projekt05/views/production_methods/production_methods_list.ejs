@@ -1,0 +1,19 @@
+<%- include("../head.part.ejs") %>
+<main>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Expected Employment</th>
+        </tr>
+        <% production_methods.forEach(function(pm){ %>
+            <tr>
+                <td><a href="./production_methods/<%=pm.key%>"><%=pm.name %></a></td>
+                <td><%= pm.expected_employment %></td>
+            </tr>
+        <% }) %>
+    </table>
+        <% if(canCreateHere){%>
+            <h1>new</h1>
+            <%- include("../forms/add_to_category.ejs") %>
+        <%}%>
+</main>

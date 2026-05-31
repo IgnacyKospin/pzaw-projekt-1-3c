@@ -8,28 +8,17 @@ function createCategories(){
         PRIMARY KEY("id" AUTOINCREMENT)
     );`;
     db.exec(queryCategories);
-    const querySubcategories = `
-    CREATE TABLE IF NOT EXISTS "subcategories" (
-        "category_key"	TEXT NOT NULL,
-        "subcategory_key"	TEXT NOT NULL UNIQUE,
-        "subcategory_name"	TEXT NOT NULL,
-        PRIMARY KEY("subcategory_key"),
-        CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key")
-    );`;
-    db.exec(querySubcategories);
 }
 function createGoods(){
     const queryCreateGoods = `
     CREATE TABLE IF NOT EXISTS "goods" (
         "category_key"	TEXT,
-        "subcategory_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
         "key" TEXT NOT NULL UNIQUE,
         "yearly_production"	NUMERIC,
         "yearly_consumption"	NUMERIC,
         "unit_price"	NUMERIC NOT NULL,
-        CONSTRAINT "connectTocategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key"),
-        CONSTRAINT "connectToSubcategory" FOREIGN KEY("subcategory_key") REFERENCES "subcategories"("subcategory_key")
+        CONSTRAINT "connectTocategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key")
     );`;
     db.exec(queryCreateGoods);
 }
@@ -123,8 +112,7 @@ createSessions();
  */
 function goodsConstructor(){
     const prepareGoods = `
-    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');
-    INSERT OR IGNORE INTO subcategories VALUES ('goods', 'industrial_goods', 'Industrial Goods'), ('goods', 'agrarian_goods', 'Agrarian Goods');`;
+    INSERT OR IGNORE INTO economic_categories (name, key) VALUES ('Goods', 'goods');`;
     db.exec(prepareGoods);
 }
 function populationCentresConstructor(){

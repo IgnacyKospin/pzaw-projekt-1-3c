@@ -1,6 +1,6 @@
 <details name="addEdit">
   <summary><h1>Add New Good</h1></summary>
-  <form action="/tabs/goods/<%=tab_id%>/addData" method="POST">
+  <form action="/tabs/goods/addData" method="POST">
         <div>
       <label for="good_key">Good Key</label>
       <input
@@ -39,7 +39,6 @@
     </div>
     <!--there is not meant to be anything else to be added here insofar due to the fact that production and consmuption should be handled by the calculation features-->
     <input type="hidden" name="category" value="<%= category %>">
-
     <div>
       <button type="submit">Add this good...</button>
     </div>

@@ -31,11 +31,11 @@ export function viewFormatter(objectName) {
 }
 export function handleNew(tab, newData, res) {
     let totalHandler = {};
+    console.log(newData);
     //console.log("Nowe dane");
     //console.log(newData);
     switch (newData.category) {
         case "goods":
-            newData.subcategory_key = tab.subcategory_key;
             totalHandler.errors = goodsImport.validateNewObject(newData, res);
             break;
         case "population_centres":
@@ -73,7 +73,6 @@ export function handleEdit(tab, newData, res) {
     //the validate edits are exactly the same as adding except they dont check for keys. could I maybe merge them into one by adding a conditional for that check? yes. should i? yes. will i? no
     switch (newData.category) {
         case "goods":
-            newData.subcategory_key = tab.subcategory_key;
             totalHandler.errors = goodsImport.validateEditObject(newData);
             break;
         case "population_centres":
