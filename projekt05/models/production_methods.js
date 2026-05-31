@@ -16,7 +16,7 @@ const internal_dboperations = {
         `
     )
 }
-function formatInputOutput(arrNames, arrNumbers){
+export function formatInputOutput(arrNames, arrNumbers){
     //arrays -> storage format
     if(typeof arrNames !== 'object'){
         arrNames = [arrNames];
@@ -48,7 +48,7 @@ export function parseInputsOutputs(contents){
     let objectToReturn = {}
     for(let i = 0; i < array.length; i++){
             let temp = array[i].split(":");
-            objectToReturn[temp[0]] = temp[1];
+            objectToReturn[temp[0]] = parseFloat(temp[1]);
     }
     return objectToReturn;
 }
@@ -139,5 +139,6 @@ export default {
     parseInputsOutputs,
     deletePM,
     validateEditObject,
-    editObject
+    editObject,
+    formatInputOutput
 }
