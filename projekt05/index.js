@@ -92,7 +92,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
         console.log(tabs);
         switch(tabs.category_key){
             case("goods"):
-                res.render("tabGoods", {
+                res.render("goods/tabGoods", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
@@ -100,7 +100,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
                 });
                 break;
             case("population_centres"):
-                res.render("tabPopCentres", {
+                res.render("population_centres/tabPopCentres", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
@@ -110,7 +110,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
                 });
                 break;
             case("production_methods"):
-                res.render("tabProductionMethods", {
+                res.render("production_methods/tabProductionMethods", {
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
