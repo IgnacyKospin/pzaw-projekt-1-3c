@@ -73,6 +73,13 @@ actualAccessRouter.get("/tabs/:tab_category", auth.verify_form_permissions, (req
             res.render("goods/goods_list", {goods: goods.exportViews(), title: "Goods", category: "goods"});
             break;
         case 'production_methods':
+            res.render("production_methods/production_methods_list", 
+                {
+                    production_methods: productionMethods.exportViews(), 
+                    title: "Production Methods", 
+                    category: "production_methods", 
+                    goodsList: goods.getAllGoods()
+                });
             break;
         case 'population_centres':
             break;
