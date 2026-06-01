@@ -78,11 +78,8 @@ export async function signup_handle(req, res){
     const form = req.body;
     var err = [];
     if(form){
-      if(!form.username.match(/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/)){
-        err.push("INcorrect username");
-      }
-      if(!form.password.match(/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/)){
-        err.push("Incorrect password");
+      if(!form.username.match(/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/) || !form.password.match(/^[a-zA-Z0-9 !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/)){
+        err.push("INcorrect username or password");
       }
       if(user.get_by_name(form.username)){
         err.push("Username taken.");
