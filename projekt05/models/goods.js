@@ -13,6 +13,7 @@ const internal_dboperations = {
         `),
     get_all_names: db.prepare(`SELECT name, key FROM goods;`),
     kill: db.prepare(`DELETE FROM goods WHERE key = ?;`),
+    get_name: db.prepare(`SELECT name FROM goods WHERE key = ?;`),
     edit: db.prepare(`UPDATE goods SET name = ?, unit_price = ? WHERE key = ?;`)
 }
 export function deleteGD(idToKill){
@@ -73,6 +74,14 @@ export function editObject(newObj, key){
     console.log(newObj.name, newObj.kilogram_price, key);
     internal_dboperations.edit.get(newObj.name, newObj.kilogram_price, key);
 }
+export function substituteKeysForName(theGreatObject){
+    Object.keys(theGreatObject).forEach(function(key) {
+        console.log(key);
+        theGreatObject[internal_dboperations.get_name.get(key).name] = theGreatObject[key];
+        delete theGreatObject[key];
+    });
+    return theGreatObject;
+}
 export default {
     validateNewObject,
     addNewObject,
@@ -82,5 +91,6 @@ export default {
     validateEditObject,
     editObject,
     set_production,
-    set_consumption
+    set_consumption,
+    substituteKeysForName
 }

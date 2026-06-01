@@ -126,8 +126,8 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
                     category: tabs.category_key,
                     title: tabs.name,
                     tab_id: tabs.key,
-                    formattedInputs: productionMethods.parseInputsOutputs(tabs.input_goods),
-                    formattedOutputs: productionMethods.parseInputsOutputs(tabs.output_goods),
+                    formattedInputs: goods.substituteKeysForName(productionMethods.parseInputsOutputs(tabs.input_goods)),
+                    formattedOutputs: goods.substituteKeysForName(productionMethods.parseInputsOutputs(tabs.output_goods)),
                     goodsList: goods.getAllGoods(), //so that i didnt have to check in the new pm wether the goods existed it will provide a dropdown. might be inconvenient when its a bigger scale. Too Bad!
                     contents: tabs
                 });
@@ -198,6 +198,9 @@ actualAccessRouter.post("/admin/users", auth.admin_gate, (req, res) => {
     //console.log(convertedwalloftext);
     handle_update(convertedwalloftext);
     res.redirect("/admin/users");
+});
+actualAccessRouter.use((req, res, next) => {
+    res.sendStatus(404);
 });
 app.listen(port, () => {
     console.log(`Server slucha on http://localhost:${port}`);
