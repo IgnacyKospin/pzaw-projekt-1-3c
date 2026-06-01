@@ -2,12 +2,20 @@
 <main> 
     <%- include("../with_forms_header.ejs")%>
 <ul id="contents">
-    <div >
-        <p>Good Name: <%=contents.name%></p>
-        <p>Yearly Production: <%=contents.yearly_production%></p>
-        <p>Yearly Consumption: <%=contents.yearly_consumption%></p>
-        <p>Price per kilogram: <%=contents.unit_price%></p>
-    </div>
+    <table>
+        <tr>
+            <th>Good Name</th>
+            <th>Unit Price</th>
+            <th>Yearly Production</th>
+            <th>Yearly Consumption</th>
+        </tr>
+        <tr>
+            <td><%=contents.name%></td>
+            <td><%=contents.unit_price%></td>
+            <td><%=contents.yearly_production%></td>
+            <td><%=contents.yearly_consumption%></td>
+        </tr>
+    </table>
     <div>
         <% if(canDeleteHere){%>
             <a href="/tabs/<%=category%>/<%=contents.key%>/delete" onclick="return confirm('are you sure?')">THROW AWAY(this good)</a>
