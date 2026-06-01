@@ -12,6 +12,7 @@ import session from "./models/management/session.js";
 import users, { handle_update } from "./models/management/user.js";
 import auth from "./controllers/auth.js";
 import departments from "./models/management/departments.js";
+import macroeconomic from "./models/macroeconomic.js";
 /**
  * welcome to the const zone
  */
@@ -183,6 +184,12 @@ actualAccessRouter.post("/tabs/:tab_category/:tab_id/addFacilityData", (req,res)
         res.sendStatus(403);
     }
     populationCentres.handleNewFacility(req.params, req.body, res);
+});
+/**
+ * This tells you the general state of your planned economy.
+ */
+actualAccessRouter.get("/overview", (req,res) => {
+    res.render("overview", {title: "Overview", data: macroeconomic.return_macroeconomic_overview()});
 });
 actualAccessRouter.use(express.urlencoded( {extended: true}));
 

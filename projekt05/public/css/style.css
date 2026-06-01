@@ -45,3 +45,6 @@ table {
     width: 100%;
     background-color: aliceblue;
 }
+.red_cell {
+    background-color: red;
+}
