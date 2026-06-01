@@ -68,11 +68,10 @@ export async function login_handle(req, res) {
       error = true;
     } else {
       session.createSession(user_id, res);
-      res.redirect("/tabs");
-      return;
+      return res.redirect("/tabs");
     }
   }
-  res.render("login/login", ({error: error}));
+  return res.render("login/login", ({error: error}));
 }
 
 export async function signup_handle(req, res){
