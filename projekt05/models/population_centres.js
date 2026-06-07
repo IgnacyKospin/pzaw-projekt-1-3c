@@ -52,8 +52,8 @@ export function validateEditObject(newCentre) {
     for (let field of fields) {
         if (!newCentre[field]) {
             errors.push(`Missing ${field}`);
-        } else if (field == "popCentre_population" && isNaN(Number(newCentre.popCentre_population))) {
-            errors.push("Population not a number");
+        } else if (field == "popCentre_population" && (isNaN(Number(newCentre.popCentre_population))) || Number(newCentre.popCentre_population) < 0) {
+            errors.push("Population not a number or is negative");
         }
     }
     return errors;
@@ -70,8 +70,8 @@ export function editObject(newObj, key){
     internal_dboperations.edit.get(newObj.popCentre_name, newObj.popCentre_population, key)
 }
 export function handleNewFacility(parameters, newObj, res){
-    if(newObj.productionMethod_key === undefined || newObj.productionMethod_key === null || production_methods.does_this_production_method_exist(newObj.productionMethod_key)){
-        res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
+    if(newObj.facility_amount < 1 || newObj.productionMethod_key === undefined || newObj.productionMethod_key === null || production_methods.does_this_production_method_exist(newObj.productionMethod_key)){
+        res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`); //frankly i've decided the user does not deserve the mercy of error messages if they choose to tamper with the html requirements. this should crash the user computer but alas i dont think i can do that on a website
     }
     internal_dboperations.insert_facility.get(parameters.tab_id, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
     intercategorial.update_goods_balance(); //this might be inefficient to update it all everytime a new facility is added but alas. such is life. i can optimise later

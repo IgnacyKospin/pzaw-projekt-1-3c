@@ -2,8 +2,8 @@ import db from "./database.js";
 import goods from "./goods.js";
 const internal_dboperations = {
     goods_amount: db.prepare("SELECT COUNT(*) as sum FROM goods;"),
-    get_most_valuable: db.prepare("SELECT key, name, unit_price, yearly_production, yearly_consumption, yearly_production*unit_price AS worth FROM goods ORDER BY worth LIMIT ?;"),
-    get_highest_deficit: db.prepare("SELECT key, name, unit_price, yearly_production, yearly_consumption, (yearly_production - yearly_consumption) as yearly_balance from goods order by yearly_balance ASC limit ?")
+    get_most_valuable: db.prepare("SELECT key, name, unit_price, yearly_production, yearly_consumption, yearly_production*unit_price AS worth FROM goods WHERE worth > 0 ORDER BY worth DESC LIMIT ?;"),
+    get_highest_deficit: db.prepare("SELECT key, name, unit_price, yearly_production, yearly_consumption, (yearly_production - yearly_consumption) as yearly_balance from goods where yearly_balance < 0 order by yearly_balance ASC limit ?")
 };
 /**
  * 

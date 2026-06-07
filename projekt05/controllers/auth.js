@@ -90,7 +90,8 @@ export async function signup_handle(req, res){
       return res.render("login/signup", ({errors: err}));
     }
     let userr = await user.create_user(form.username, form.password);
-    console.log("New signup" + userr);
+    console.log("New signup detected as");
+    console.log(userr);
       session.createSession(userr.id, res);
     
     res.redirect("/tabs");

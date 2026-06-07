@@ -101,8 +101,8 @@ export function validateEditObject(newMethod) {
     for (let field of fields) {
         if (!newMethod[field]) {
             errors.push(`Missing ${field}`);
-        } else if (field == "prodMed_employment" && isNaN(Number(newMethod.prodMed_employment))) {
-            errors.push("Employment not a number");
+        } else if (field == "prodMed_employment" && (isNaN(Number(newMethod.prodMed_employment))) || Number(newMethod.prodMed_employment < 0)) {
+            errors.push("Employment not a number or is less than zeroe");
         }
     }
     for(let field of specialFields){
