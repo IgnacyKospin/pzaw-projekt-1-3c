@@ -18,7 +18,7 @@ There is no functionality to add departments through the website, though you can
 ## Installation and configuration:
 1. run "npm install" in this folder to install modules
 2. run "npm run create_env". neccessary. This require you to be able to run bash natively.
- - If you cannot run bash natively, start git bash in the project directory and run this `./utils/generate_env.sh > .env`
+ - If you cannot run bash natively, start git bash/whatever you have that runs bash in the project directory and run this `./utils/generate_env.sh > .env`
 3. run "npm run setup_database" to create the database. this creates categories and department relations. it is imperative you do this.
 4. to start the server "npm run run_server"
 

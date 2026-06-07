@@ -27,21 +27,20 @@ function createPopulationCentres(){
     CREATE TABLE IF NOT EXISTS "population_centres" (
         "category_key"	TEXT NOT NULL,
         "name"	TEXT NOT NULL,
-        "id"	INTEGER NOT NULL,
         "key"	TEXT NOT NULL UNIQUE,
         "population" INTEGER NOT NULL,
-        PRIMARY KEY("id"),
+        PRIMARY KEY("key"),
         CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key")
     );`;
     db.exec(queryCreatepopulation_centres);
     const queryCreateFacilities = `
     CREATE TABLE IF NOT EXISTS "facilities" (
-        "city_id"	INTEGER NOT NULL,
+        "population_centre_key"	TEXT NOT NULL,
         "facility_id" INTEGER PRIMARY KEY,
         "facility_name" TEXT NOT NULL,
         "production_method_key"	TEXT NOT NULL,
         "facility_amount"	INTEGER NOT NULL,
-        CONSTRAINT "connectToCity" FOREIGN KEY("city_id") REFERENCES "population_centres"("id") on delete cascade on update cascade, 
+        CONSTRAINT "connectToCity" FOREIGN KEY("population_centre_key") REFERENCES "population_centres"("key") on delete cascade on update cascade, 
         CONSTRAINT "connectToProductionMethod" FOREIGN KEY("production_method_key") REFERENCES "production_methods"("key") on delete cascade on update cascade
     );`;
     db.exec(queryCreateFacilities);
@@ -55,6 +54,7 @@ function createProductionMethods(){
         "input_goods"	TEXT,
         "output_goods"	TEXT,
         "expected_employment"	TEXT,
+        PRIMARY KEY("key"),
         CONSTRAINT "connectToCategory" FOREIGN KEY("category_key") REFERENCES "economic_categories"("key")
     );`;
     db.exec(queryCreateProductionMethods);

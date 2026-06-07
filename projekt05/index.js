@@ -119,7 +119,7 @@ actualAccessRouter.get("/tabs/:tab_category/:tab_id", auth.verify_form_permissio
                     tab_id: tabs.key,
                     contents: tabs,
                     PMList: productionMethods.exportViews(), //so you can have a dropdown.
-                    facilities: populationCentres.getFacilities(tabs.id)
+                    facilities: populationCentres.getFacilities(tabs.key)
                 });
                 break;
             case("production_methods"):

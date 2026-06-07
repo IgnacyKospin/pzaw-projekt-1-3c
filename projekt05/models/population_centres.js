@@ -3,6 +3,7 @@ import masterUtil from "./masterUtil.js";
 import db from "./database.js";
 import csrfCheck from "../utils/validation.js";
 import intercategorial from "./intercategorial.js";
+import production_methods from "./production_methods.js";
 const internal_dboperations = {
     insert_pop_centre: db.prepare(
         `INSERT INTO population_centres (category_key, name, key, population) VALUES ('population_centres', ?, ?, ?);`
@@ -11,16 +12,15 @@ const internal_dboperations = {
     does_something_like_this_already_exist: db.prepare(`SELECT 1 from population_centres WHERE key = ?`),
     kill: db.prepare(`DELETE FROM population_centres WHERE key = ?`),
     edit: db.prepare(`UPDATE population_centres SET name = ?, population = ? WHERE key = ?`),
-    get_matching_facilities: db.prepare(`SELECT * FROM facilities where city_id = ?`),
-    get_city_by_key: db.prepare(`SELECT id from population_centres WHERE key = ?`),
-    insert_facility: db.prepare(`INSERT INTO facilities (city_id, facility_name, production_method_key, facility_amount) VALUES (?, ?, ?, ?)`) //ive decided to have it here since its only used for pop centres
+    get_matching_facilities: db.prepare(`SELECT * FROM facilities where population_centre_key = ?`),
+    insert_facility: db.prepare(`INSERT INTO facilities (population_centre_key, facility_name, production_method_key, facility_amount) VALUES (?, ?, ?, ?)`) //ive decided to have it here since its only used for pop centres
 }
 export function exportViews(){
         const rows = internal_dboperations.get_everything.all();
         return rows;
 }
-export function getFacilities(cityId){
-    return internal_dboperations.get_matching_facilities.all(cityId);
+export function getFacilities(key){
+    return internal_dboperations.get_matching_facilities.all(key);
 }
 export function deletePC(idToKill){
     internal_dboperations.kill.get(idToKill);
@@ -70,8 +70,10 @@ export function editObject(newObj, key){
     internal_dboperations.edit.get(newObj.popCentre_name, newObj.popCentre_population, key)
 }
 export function handleNewFacility(parameters, newObj, res){
-    const targetCity = internal_dboperations.get_city_by_key.get(parameters.tab_id);
-    internal_dboperations.insert_facility.get(targetCity.id, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
+    if(newObj.productionMethod_key === undefined || newObj.productionMethod_key === null || production_methods.does_this_production_method_exist(newObj.productionMethod_key)){
+        res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
+    }
+    internal_dboperations.insert_facility.get(parameters.tab_id, newObj.name, newObj.productionMethod_key, newObj.facility_amount);
     intercategorial.update_goods_balance(); //this might be inefficient to update it all everytime a new facility is added but alas. such is life. i can optimise later
     res.redirect(`/tabs/${newObj.category}/${parameters.tab_id}`);
 }

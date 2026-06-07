@@ -134,6 +134,9 @@ export function editObject(newObj, key){
     intercategorial.update_goods_balance(); //update existing production to account for potential change. probably inefficient. too bad. only users with editing rights can do this anyways, so not like an easy ddos way exists
     const res = internal_dboperations.edit.get(newObj.prodMed_name, inputFormat, outputFormat, newObj.prodMed_employment, key);
 }
+export function does_this_production_method_exist(key){
+    return internal_dboperations.does_something_like_this_exist.get(key);
+}
 export default {
     exportViews,
     addNewObject,
@@ -142,5 +145,6 @@ export default {
     deletePM,
     validateEditObject,
     editObject,
-    formatInputOutput
+    formatInputOutput,
+    does_this_production_method_exist
 }

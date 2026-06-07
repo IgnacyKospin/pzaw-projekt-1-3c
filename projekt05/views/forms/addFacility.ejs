@@ -15,7 +15,7 @@
     <div>
       <div>
         <label for="productionMethod_key">Production Method</label>
-        <select name="productionMethod_key">
+        <select required name="productionMethod_key"> //the lion does not concern himself with making custom error pages
           <% PMList.forEach(function(cat){ %>
             <option value="<%= cat.key %>"><%= cat.name %></option>
           <% }) %>

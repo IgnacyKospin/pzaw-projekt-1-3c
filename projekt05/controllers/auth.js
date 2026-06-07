@@ -87,11 +87,12 @@ export async function signup_handle(req, res){
     }
 
     if(err.length > 0){
-      res.render("login/signup", ({errors: err}));
+      return res.render("login/signup", ({errors: err}));
     }
     let userr = await user.create_user(form.username, form.password);
-    console.log(userr);
-    session.createSession(userr.id, res);
+    console.log("New signup" + userr);
+      session.createSession(userr.id, res);
+    
     res.redirect("/tabs");
 }
 export function logout(res){
