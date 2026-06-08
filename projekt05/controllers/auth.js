@@ -94,7 +94,7 @@ export async function signup_handle(req, res){
     console.log(userr);
       session.createSession(userr.id, res);
     
-    res.redirect("/tabs");
+    return res.redirect("/tabs");
 }
 export function logout(res){
   if (res.locals.user != null) {

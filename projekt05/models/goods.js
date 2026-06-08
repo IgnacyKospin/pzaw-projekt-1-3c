@@ -1,6 +1,7 @@
 import masterUtil from "./masterUtil.js";
 import csrfCheck from "../utils/validation.js";
 import db from "./database.js";
+import production_methods from "./production_methods.js";
 const internal_dboperations = {
     insert_good: db.prepare(
         `INSERT INTO goods VALUES ('goods', ?, ?, 0, 0, ?);`
@@ -18,6 +19,8 @@ const internal_dboperations = {
 }
 export function deleteGD(idToKill){
     internal_dboperations.kill.get(idToKill);
+    console.log(idToKill);
+    production_methods.remove_all_traces_of_this_good(idToKill);
 }
 export function set_production(key, production){
     internal_dboperations.set_production.get(production, key);

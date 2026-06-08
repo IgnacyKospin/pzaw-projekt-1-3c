@@ -15,7 +15,11 @@ const internal_dboperations = {
         `
         UPDATE production_methods SET name = ?, input_goods = ?, output_goods = ?, expected_employment = ? WHERE key = ?;
         `
-    )
+    ),
+    update_input: db.prepare(`UPDATE production_methods set input_goods = ? where key = ?`),
+    update_output: db.prepare(`UPDATE production_methods set output_goods = ? where key = ?`),
+    retrieve_production_methods_with_input_good: db.prepare(`SELECT key, input_goods FROM production_methods WHERE input_goods LIKE ?`),
+    retrieve_production_methods_with_output_good: db.prepare(`SELECT key, output_goods FROM production_methods WHERE output_goods LIKE ?`),
 }
 export function formatInputOutput(arrNames, arrNumbers){
     //arrays -> storage format
@@ -94,6 +98,26 @@ export function validateNewObject(newMethod, res) {
     }
     return errors;
 }
+export function remove_all_traces_of_this_good(good_key){
+    var with_input = internal_dboperations.retrieve_production_methods_with_input_good.all(`%${good_key}%`);
+    var with_output = internal_dboperations.retrieve_production_methods_with_output_good.all(`%${good_key}%`);
+    with_input.forEach(element => {
+        var inputs = parseInputsOutputs(element.input_goods);
+        delete inputs[good_key];
+        internal_dboperations.update_input.get(
+            formatInputOutput(Object.keys(inputs), Object.values(inputs)),
+            element.key
+        );
+    });
+        with_output.forEach(element => {
+        var output = parseInputsOutputs(element.output_goods);
+        delete output[good_key];
+        internal_dboperations.update_output.get(
+            formatInputOutput(Object.keys(output), Object.values(output)),
+            element.key
+        );
+    });
+}
 export function validateEditObject(newMethod) {
     let errors = [];
     const fields = ["prodMed_name", "prodMed_employment"];
@@ -146,5 +170,6 @@ export default {
     validateEditObject,
     editObject,
     formatInputOutput,
-    does_this_production_method_exist
+    does_this_production_method_exist,
+    remove_all_traces_of_this_good
 }
