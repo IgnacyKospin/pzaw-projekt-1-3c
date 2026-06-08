@@ -5,7 +5,7 @@ import { verify } from "argon2";
 export function login_needed (req, res, next) {
     if(res.locals.user == null){
         res.redirect("../login");
-        console.log("this here session of the fiend known as" + session.id + " is bloody unauthorised! depart post haste my good sir and login thyself!");
+        console.log("Deporting user '" + session.id + "' from the actual functioning part of the website, as they are bloody unauthorised! For shame!");
         return;
     }
     next();
