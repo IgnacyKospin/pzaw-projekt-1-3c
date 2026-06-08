@@ -19,7 +19,6 @@ const internal_dboperations = {
 }
 export function deleteGD(idToKill){
     internal_dboperations.kill.get(idToKill);
-    console.log(idToKill);
     production_methods.remove_all_traces_of_this_good(idToKill);
 }
 export function set_production(key, production){

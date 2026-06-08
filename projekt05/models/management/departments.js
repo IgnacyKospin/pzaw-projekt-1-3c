@@ -9,8 +9,6 @@ export function get_all_departments(){
     return internal_dboperations.get_all_departments.all();
 }
 export function verify_department_access(department_key, category_key){
-    console.log(department_key);
-    console.log(category_key);
     if(internal_dboperations.verify_department_access_to_category.get(department_key, category_key)){
         return true;
     }
